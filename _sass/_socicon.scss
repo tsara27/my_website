@@ -1,0 +1,67 @@
+@include font-face('si', '../fonts/socicon/socicon');
+ 
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+    @font-face {
+        font-family:si;
+        src: url(PATH_TO/socicon.svg) format(svg);
+    }
+}
+
+.soc {
+    margin:0; padding:0;
+    list-style:none;
+}
+
+.soc li {
+    display:inline-block;
+    *display:inline;
+    zoom:1;
+}
+
+.soc li a {
+    font-family:si!important;
+    font-style:normal;
+    font-weight:400;
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
+    -webkit-box-sizing:border-box;
+    -moz-box-sizing:border-box;
+    -ms-box-sizing:border-box;
+    -o-box-sizing:border-box;
+    box-sizing:border-box;
+-o-transition:.1s; -ms-transition:.1s; -moz-transition:.1s; -webkit-transition:.1s; transition:.1s; -webkit-transition-property: transform; transition-property: transform; -webkit-transform: translateZ(0); transform: translateZ(0);
+
+    overflow:hidden;
+    text-decoration:none;
+    text-align:center;
+    display:block;
+    position: relative;
+    z-index: 1;
+    width: 36px;
+    line-height: 36px;
+    font-size: 19px;
+    -webkit-border-radius: 100px;
+    -moz-border-radius: 100px;
+    border-radius: 100px;
+    margin-right: 10px;
+    color: #ffffff;
+    background-color: #262528;
+}
+.soc a:hover { z-index: 2; -webkit-transform: translateY(-5px); transform: translateY(-5px); }
+
+.soc-icon-last{
+    margin:0 !important;
+}
+
+.soc-twitter:before {
+    content:'a';
+}
+.soc-facebook:before {
+    content:'b';
+}
+.soc-google:before {
+    content:'c';
+}
+.soc-linkedin:before {
+    content:'j';
+}
