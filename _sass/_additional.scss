@@ -1,12 +1,49 @@
+@include font-face('geosanslightregular', '../fonts/geo_sans-light/geosanslight-webfont');
+
 body{
-  background-color: #fcffff;
+  background-color: rgba(252, 255, 255, 0.9);
   background-image: url("http://www.transparenttextures.com/patterns/shattered.png");
   background-repeat: repeat;
 }
 
+.links{
+  text-align: center;
+}
+
+.links a{
+  display: block;
+  text-align: right;
+  font-size: 1.5em;
+  color: #A5A5A5;
+  text-transform: uppercase;
+  margin-right: 1em;
+  @include transition-duration(1.5s);  
+  &:hover{
+    text-decoration: none;
+    color: lighten(#ddd,10%);
+    @include transition-duration(1.5s);  
+  }
+  @include media-query($on-palm) {
+    display: inline-block;
+    @include margin(1.5em 0.3em null 0.3em);
+    width: auto !important;
+    text-align: center;
+    font-size: large;
+  }
+  @include media-query($on-tablet) {
+    display: inline-block;
+    @include margin(1.5em 0.3em null 0.3em);
+    width: auto !important;
+    text-align: center;
+    font-size: larger;
+  }
+}
+
 .sidebar{
     width: 20em;
-    background: $background-sidebar-color;
+    background-image: url("/images/sidebar-background.jpg#blur");
+    // filter: blur(1);
+    opacity: 0.9;
     height: 100%;
     position: fixed;
     @include media-query($on-palm) {
@@ -51,6 +88,14 @@ footer.site-footer{
 #profile-picture{
   text-align: center;
   img{
-    margin-top: 10em;
+    margin-top: 3em;
+    @include media-query($on-palm) {
+      width: 100px;
+      height: 100px;
+    }
+    @include media-query($on-tablet) {
+      width: 100px;
+      height: 100px;
+    }
   }
 }
