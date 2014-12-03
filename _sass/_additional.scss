@@ -18,6 +18,7 @@ body{
   text-transform: uppercase;
   margin-right: 1em;
   @include transition-duration(1.5s);  
+  font-weight: bold;
   &:hover{
     text-decoration: none;
     color: lighten(#ddd,10%);
