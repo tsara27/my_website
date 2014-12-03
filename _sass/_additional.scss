@@ -1,8 +1,7 @@
 @include font-face('geosanslightregular', '../fonts/geo_sans-light/geosanslight-webfont');
 
 body{
-  background-color: rgba(252, 255, 255, 0.9);
-  background-image: url("http://www.transparenttextures.com/patterns/shattered.png");
+  background-image: url("/images/pixel_weave.png");
   background-repeat: repeat;
 }
 
@@ -26,14 +25,14 @@ body{
   }
   @include media-query($on-palm) {
     display: inline-block;
-    @include margin(1.5em 0.3em null 0.3em);
+    @include margin(null 0.3em null 0.3em);
     width: auto !important;
     text-align: center;
     font-size: large;
   }
   @include media-query($on-tablet) {
     display: inline-block;
-    @include margin(1.5em 0.3em null 0.3em);
+    @include margin(null 0.3em null 0.3em);
     width: auto !important;
     text-align: center;
     font-size: larger;
@@ -41,22 +40,25 @@ body{
 }
 
 .sidebar{
-    width: 20em;
-    background-image: url("/images/sidebar-background.jpg#blur");
-    // filter: blur(1);
-    opacity: 0.9;
-    height: 100%;
-    position: fixed;
-    @include media-query($on-palm) {
-        width: 100%;
-        height: 15em;
-        position: static;
-    }
-    @include media-query($on-tablet) {
-        width: 100%;
-        height: 15em;
-        position: static;
-    }
+  width: 20em;
+  background-image: url("/images/ns.jpg#blur");
+  background-size: 1376px;
+  opacity: 0.9;
+  height: 100%;
+  position: fixed;
+  color: #A5A5A5;
+  @include media-query($on-palm) {
+    width: 100%;
+    height: 15em;
+    position: static;
+    background-size: 100% 100%;
+  }
+  @include media-query($on-tablet) {
+      width: 100%;
+      height: 15em;
+      position: static;
+      background-size: 100% 100%;
+  }
 
 }
 
@@ -91,12 +93,35 @@ footer.site-footer{
   img{
     margin-top: 3em;
     @include media-query($on-palm) {
-      width: 100px;
-      height: 100px;
+      margin-top: 1em;
+      width: 75px;
+      height: 750px;
     }
     @include media-query($on-tablet) {
-      width: 100px;
-      height: 100px;
+      margin-top: 1em;
+      width: 75px;
+      height: 75px;
     }
   }
+}
+
+.quotes{
+  @include margin(null 1.5em null 1em);
+  text-align: right;
+  @include media-query($on-palm) {
+    display: none;
+  }
+  @include media-query($on-tablet) {
+    display: none;    
+  }
+}
+
+.social-icons{
+  text-align: center;
+  @include margin(1.5em 0.3em 1.5em 0.3em);
+}
+
+.profile-caption{
+  text-align: center;
+  @include margin(1.5em null null null);
 }
