@@ -25,14 +25,14 @@ body{
   }
   @include media-query($on-palm) {
     display: inline-block;
-    @include margin(1.5em 0.3em null 0.3em);
+    @include margin(null 0.3em null 0.3em);
     width: auto !important;
     text-align: center;
     font-size: large;
   }
   @include media-query($on-tablet) {
     display: inline-block;
-    @include margin(1.5em 0.3em null 0.3em);
+    @include margin(null 0.3em null 0.3em);
     width: auto !important;
     text-align: center;
     font-size: larger;
@@ -93,12 +93,14 @@ footer.site-footer{
   img{
     margin-top: 3em;
     @include media-query($on-palm) {
-      width: 100px;
-      height: 100px;
+      margin-top: 1em;
+      width: 75px;
+      height: 750px;
     }
     @include media-query($on-tablet) {
-      width: 100px;
-      height: 100px;
+      margin-top: 1em;
+      width: 75px;
+      height: 75px;
     }
   }
 }
@@ -106,6 +108,12 @@ footer.site-footer{
 .quotes{
   @include margin(null 1.5em null 1em);
   text-align: right;
+  @include media-query($on-palm) {
+    display: none;
+  }
+  @include media-query($on-tablet) {
+    display: none;    
+  }
 }
 
 .social-icons{
