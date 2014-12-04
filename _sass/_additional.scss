@@ -64,13 +64,16 @@ body{
 
 .page-content{
     float: left;
-    margin-left: 20em;
+    @include margin(null 1.5em null 21.5em);
     max-width: 80%;
+    text-align: justify;
     @include media-query($on-palm) {
-        margin-left: 0;
+      @include margin(null 1.5em null 1.5em);
+      max-width: 100%;
     }
     @include media-query($on-tablet) {
-        margin-left: 0;
+      @include margin(null 1.5em null 1.5em);
+      max-width: 100%;
     }
 }
 
@@ -124,4 +127,8 @@ footer.site-footer{
 .profile-caption{
   text-align: center;
   @include margin(1.5em null null null);
+}
+
+#disqus_thread{
+  @include margin(null 1.5em null 1.5em);
 }
