@@ -9,6 +9,10 @@ baseurl: "" # the subpath of your site, e.g. /blog/
 url: "http://tsara27.github.io" # the base hostname & protocol for your site
 twitter_username: tsara_tf
 github_username:  tsara27
+linkedin_username: tsara-sudrajat
+facebook_username: tsara.tf
+google_plus_username: +TsaraFatmaLarasatiSudrajat
+linkedin_username: tsara-sudrajat
 
 # Build settings
 markdown: kramdown
