@@ -1,6 +1,7 @@
 ---
 layout: post
 title:  "Welcome to Jekyll!"
+author: "Tsara Fatma L"
 date:   2014-12-02 06:20:55
 categories: jekyll update
 ---
