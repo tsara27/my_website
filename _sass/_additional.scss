@@ -69,11 +69,11 @@ body{
     text-align: justify;
     @include media-query($on-palm) {
       @include margin(null 1.5em null 1.5em);
-      max-width: 100%;
+      max-width: 65%;
     }
     @include media-query($on-tablet) {
       @include margin(null 1.5em null 1.5em);
-      max-width: 100%;
+      max-width: 85%;
     }
 }
 
@@ -122,6 +122,9 @@ footer.site-footer{
 .social-icons{
   text-align: center;
   @include margin(1.5em 0.3em 1.5em 0.3em);
+  @include media-query($on-palm) {
+    margin: 0;
+  }
 }
 
 .profile-caption{
