@@ -135,3 +135,11 @@ footer.site-footer{
 #disqus_thread{
   @include margin(null 1.5em null 1.5em);
 }
+a#tag{
+  background: #828282;
+  color: white;
+  font-weight: bold;
+  padding: 3px;
+  border-radius: 3px;
+  font-size: small;
+}

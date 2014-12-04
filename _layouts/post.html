@@ -5,7 +5,8 @@ layout: default
 
   <header class="post-header">
     <h1 class="post-title">{{ page.title }}</h1>
-    <p class="post-meta">{{ page.date | date: "%b %-d, %Y" }}{% if page.author %} • {{ page.author }}{% endif %}{% if page.meta %} • {{ page.meta }}{% endif %}</p>
+    <p class="post-meta"><i class="fa fa-calendar"></i> {{ page.date | date: "%b %-d, %Y" }}{% if page.author %} • <i class="fa fa-user"></i> {{ page.author }}{% endif %}{% if page.tags %} • <i class="fa fa-tags"></i> {% for tag in page.tags %} <a href="/tags/{{ tag }}" id="tag">{{ tag }}</a> {% endfor %}
+ {{ page.meta }}{% endif %}</p>
   </header>
 
   <article class="post-content">
