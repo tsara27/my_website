@@ -3,6 +3,16 @@ title: Learn How to Code with Tsara
 email: tsara.tf@gmail.com
 description: > # this means to ignore newlines until "baseurl:"
   How te get started with Ruby, Ruby on Rails tutorials, IT stuff and her thoughts by Tsara Fatma Larasati Sudrajat.
+keywords:
+  - ruby
+  - ruby on rails
+  - html
+  - css
+  - tutorials
+  - tutorial
+  - practice
+  - guide
+  - blog
 baseurl: "" # the subpath of your site, e.g. /blog/
 
 tag_page_layout: tags
