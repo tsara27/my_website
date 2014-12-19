@@ -22,7 +22,7 @@ module Jekyll
     def generate(site)
       if site.layouts.key? 'category_index'
         site.categories.each_key do |category|
-          site.pages << CategoryPage.new(site, site.source, File.join(category), category)
+          site.pages << CategoryPage.new(site, site.source, File.join('blog',category), category)
         end
       end
     end
