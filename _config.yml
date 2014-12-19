@@ -29,3 +29,4 @@ linkedin_username: tsarasudrajat
 # Build settings
 markdown: kramdown
 permalink: pretty
+excerpt_separator: <!--more-->
