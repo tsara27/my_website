@@ -141,10 +141,41 @@ a#tag{
   padding: 3px;
   border-radius: 3px;
   font-size: small;
+  &:hover{
+    text-decoration: none;
+    color: lighten(#FFF,10%);
+    background-color: lighten(#8B8B8B,5%);
+  }
 }
 .profile-caption, .quotes{
   font-size: larger;
 }
 .post-content{
   font-size: larger;
+}
+.post-list{
+  color: #111;
+}
+a.post-link{
+  @include transition-duration(0.5s);
+  color: #111;  
+  &:hover{
+    text-decoration: none;
+    color: lighten(#2A180F,10%);
+    @include transition-duration(0.5s);  
+  }
+}
+a.read-more{
+  padding: 0.4em;
+  background-color: #828282;
+  padding: 0.3em;
+  margin: 0.4em;
+  color: #E5E5E5;
+  border-radius: 0.3em;
+  font-weight: bold;
+  &:hover{
+    text-decoration: none;
+    color: lighten(#FFF,10%);
+    background-color: lighten(#8B8B8B,5%);
+  }
 }
