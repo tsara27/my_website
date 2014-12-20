@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Learn How to Code with Tsara</title>
+    <description>How te get started with Ruby, Ruby on Rails tutorials, IT stuff and her thoughts by Tsara Fatma Larasati Sudrajat.
+</description>
+    <link>http://tsara27.github.io/</link>
+    <atom:link href="http://tsara27.github.io/feed.xml" rel="self" type="application/rss+xml" />
+    <pubDate>Sat, 20 Dec 2014 14:24:32 +0700</pubDate>
+    <lastBuildDate>Sat, 20 Dec 2014 14:24:32 +0700</lastBuildDate>
+    <generator>Jekyll v2.3.0</generator>
+    
+      <item>
+        <title>How to Sum Numbers inside Array?</title>
+        <description>&lt;p&gt;In developing application you may find a problem where you have to sum numbers inside an array. You may feel confuse of how to do that. Here, I explain how you can solve the problem. Let’s say that we have &lt;code&gt;nums = [1,2,3,4,5]&lt;/code&gt; and the result of sum is 15.&lt;!--more--&gt;&lt;/p&gt;
+
+&lt;p&gt;Basically, if we’re going to sum the numbers up manually it would be like &lt;code&gt;nums[0] + nums[1] + nums[2] + nums[3] + nums[4]&lt;/code&gt; or &lt;code&gt;1 + 2 + 3 + 4 + 5&lt;/code&gt;. But, there’s a fastest way to do this. You may use &lt;a href=&quot;http://apidock.com/ruby/Enumerable/inject&quot; target=&quot;_blank&quot;&gt;inject&lt;/a&gt; method.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;n&quot;&gt;nums&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;nums&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;inject&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;15&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;You can do subtractions, multiplications too. You just have to change the &lt;code&gt;+&lt;/code&gt; with &lt;code&gt;-&lt;/code&gt; or &lt;code&gt;*&lt;/code&gt;. Happy coding!&lt;/p&gt;
+</description>
+        <pubDate>Tue, 02 Dec 2014 13:20:55 +0700</pubDate>
+        <link>http://tsara27.github.io/ruby/2014/12/02/how-to-sum-numbers-inside-array/</link>
+        <guid isPermaLink="true">http://tsara27.github.io/ruby/2014/12/02/how-to-sum-numbers-inside-array/</guid>
+        
+        <category>blog</category>
+        
+        <category>ruby</category>
+        
+        <category>math</category>
+        
+        <category>sum</category>
+        
+        <category>inject</category>
+        
+        
+        <category>ruby</category>
+        
+      </item>
+    
+  </channel>
+</rss>
