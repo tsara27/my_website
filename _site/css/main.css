@@ -600,8 +600,7 @@ a#tag {
   color: white;
   font-weight: bold;
   padding: 3px;
-  border-radius: 3px;
-  font-size: small; }
+  border-radius: 3px; }
   a#tag:hover {
     text-decoration: none;
     color: white;
