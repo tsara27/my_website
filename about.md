@@ -2,6 +2,7 @@
 layout: page
 title: About
 permalink: /about/
+description: Hi! My name is Tsara Fatma Larasati Sudrajat, I know it is a long name. Just call me Tsara. I am a wife, mentor, teacher, and Ruby on Rails developer, and loving all of them so much. Studying in English Education department, but it will never stop me to learn how to be a professional Ruby on Rails developer. I am a traitor of my own major, English Education department. Ruby on Rails is my passion. I was falling in love with Ruby at the first sight even feeling weird to see a line of code without semicolon. 
 ---
 
 Hi! My name is Tsara Fatma Larasati Sudrajat, I know it is a long name. Just call me Tsara. 
