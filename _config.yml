@@ -31,3 +31,6 @@ linkedin_username: tsarasudrajat
 markdown: kramdown
 permalink: pretty
 excerpt_separator: <!--more-->
+
+gems:
+  - jekyll-sitemap
