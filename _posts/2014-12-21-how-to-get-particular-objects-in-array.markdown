@@ -112,5 +112,5 @@ cupcakes.select { |x| x['orders']['min'] == x['orders']['max'] }
 {% endhighlight %}
 </ol>
 
-That's all from me. Thanks for reading! Happy coding!
+That's all from me. Thanks for reading! Happy Coding!
 
