@@ -1,7 +1,8 @@
 @include font-face('geosanslightregular', '../fonts/geo_sans-light/geosanslight-webfont');
 
 body{
-  background-image: url("/images/pixel_weave.png");
+  background-color: #ffffff;
+  background-image: url(http://www.transparenttextures.com/patterns/cubes.png);
   background-repeat: repeat;
   height: 100%;
 }
