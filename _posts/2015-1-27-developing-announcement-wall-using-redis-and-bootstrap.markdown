@@ -234,3 +234,5 @@ end
 We can use method add from Announcement model and pass arguments into it. After it is created, we can see that the announcement is already posted on the website. Voila!
 
 <iframe src="https://docs.google.com/file/d/0B245dSGaMJ5YTVV2NTFMcEx4c3M/preview" style="width: 100%"></iframe>
+
+You can see the source <a href="https://github.com/tsara27/announcement_wall">here</a>. 
