@@ -8,7 +8,13 @@ body{
 }
 
 .wrapper{
-  max-width: 94%;
+  max-width: 85%;
+  @include media-query($on-palm) {
+    max-width: 94%;
+  }
+  @include media-query($on-tablet) {
+    max-width: 94%;
+  }
 }
 
 .links{
