@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "How to Get Particular Objects in Array?"
+title: How to Get Particular Objects in Array?
 date:   2014-12-21 11:02:46
 categories: ruby
 tags: blog ruby object array 

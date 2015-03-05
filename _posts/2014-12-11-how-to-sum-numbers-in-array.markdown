@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "How to Sum Numbers in Array?"
+title: How to Sum Numbers in Array?
 date:   2014-12-11 06:20:55
 categories: ruby
 tags: blog ruby math sum inject
