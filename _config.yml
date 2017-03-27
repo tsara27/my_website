@@ -17,12 +17,16 @@ keywords:
   - learn
   - learning
 baseurl: "" # the subpath of your site, e.g. /blog/
-
 tag_page_layout: tags
 tag_page_dir: tags
 exclude: ['Gemfile', 'Gemfile.lock', 'Rakefile', 'README.md']
 
-url: "http://tsara27.github.io" # the base hostname & protocol for your site
+paginate: 7
+paginate_path: "page:num"
+
+
+
+url: "https://tsara27.github.io" # the base hostname & protocol for your site
 twitter_username: tsara_tf
 github_username:  tsara27
 linkedin_username: tsara-sudrajat

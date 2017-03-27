@@ -1,12 +1,3 @@
-@include font-face('si', '../fonts/socicon/socicon');
- 
-@media screen and (-webkit-min-device-pixel-ratio:0) {
-    @font-face {
-        font-family:si;
-        src: url(PATH_TO/socicon.svg) format(svg);
-    }
-}
-
 .soc {
     margin:0; padding:0;
     list-style:none;
@@ -47,21 +38,8 @@
     color: #ffffff;
     background-color: #262528;
 }
-.soc a:hover { z-index: 2; -webkit-transform: translateY(-5px); transform: translateY(-5px); }
+.soc a:hover { z-index: 2; -webkit-transform: translateY(-2px); transform: translateY(-2px); }
 
 .soc-icon-last{
     margin:0 !important;
-}
-
-.soc-twitter:before {
-    content:'a';
-}
-.soc-facebook:before {
-    content:'b';
-}
-.soc-google:before {
-    content:'c';
-}
-.soc-linkedin:before {
-    content:'j';
 }

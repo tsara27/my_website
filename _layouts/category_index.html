@@ -11,9 +11,9 @@ layout: default
     <ul>
     {% endif %}
       <h4>
-        <a class="post-link" href="{{ post.url | prepend: site.baseurl }}">{{ post.title }}</a>
+        <a class="post-link post-title" href="{{ post.url | prepend: site.baseurl }}">{{ post.title }}</a>
       </h4>
-      <p class="post-meta"><i class="fa fa-calendar"></i> {{ post.date | date: "%b %-d, %Y" }}{% if post.author %} • <i class="fa fa-user"></i> {{ post.author }}{% endif %}{% if post.tags %} • <i class="fa fa-tags"></i> {% for tag in post.tags %} <a href="/tags/{{ tag }}" id="tag">{{ tag }}</a> {% endfor %}{{ page.meta }}{% endif %}</p>
+      <p class="post-meta"><i class="fa fa-calendar"></i> {{ post.date | date: "%b %-d, %Y" }}{% if post.author %} • <i class="fa fa-user"></i> {{ post.author }}{% endif %}{% if post.tags %} • <i class="fa fa-tags"></i> {% for tag in post.tags %} <a href="/tags/{{ tag }}" class="tag">{{ tag }}</a> {% endfor %}{{ page.meta }}{% endif %}</p>
     {% if forloop.last %}
     </ul>
     {% else %}

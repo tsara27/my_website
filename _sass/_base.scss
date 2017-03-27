@@ -1,15 +1,25 @@
 /**
  * Reset some basic elements
  */
-body, h1, h2, h3, h4, h5, h6,
-p, blockquote, pre, hr,
-dl, dd, ol, ul, figure {
+blockquote,
+body,
+dd,
+dl,
+figure,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+hr,
+ol,
+p,
+pre,
+ul {
     margin: 0;
     padding: 0;
 }
-
-
-
 /**
  * Basic styling
  */
@@ -20,22 +30,28 @@ body {
     font-weight: 300;
     color: $text-color;
     background-color: $background-color;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
-
-
-
 /**
  * Set `margin-bottom` to maintain vertycal rhythm
  */
-h1, h2, h3, h4, h5, h6,
-p, blockquote, pre,
-ul, ol, dl, figure,
-%vertical-rhythm {
+%vertical-rhythm,
+blockquote,
+dl,
+figure,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+ol,
+p,
+pre,
+ul {
     margin-bottom: $spacing-unit / 2;
 }
-
-
-
 /**
  * Images
  */
@@ -43,9 +59,6 @@ img {
     max-width: 100%;
     vertical-align: middle;
 }
-
-
-
 /**
  * Figures
  */
@@ -56,34 +69,31 @@ figure > img {
 figcaption {
     font-size: $small-font-size;
 }
-
-
-
 /**
  * Lists
  */
-ul, ol {
+ol,
+ul {
     margin-left: $spacing-unit;
 }
 
 li {
-    > ul,
-    > ol {
-         margin-bottom: 0;
+     > ol,
+    > ul {
+        margin-bottom: 0;
     }
 }
-
-
-
 /**
  * Headings
  */
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
     font-weight: 300;
 }
-
-
-
 /**
  * Links
  */
@@ -100,9 +110,6 @@ a {
         text-decoration: underline;
     }
 }
-
-
-
 /**
  * Blockquotes
  */
@@ -110,22 +117,18 @@ blockquote {
     color: $grey-color;
     border-left: 4px solid $grey-color-light;
     padding-left: $spacing-unit / 2;
-    font-size: 18px;
-    letter-spacing: -1px;
-    font-style: italic;
+    margin-top: 15px;
+    letter-spacing: 0;
 
     > :last-child {
         margin-bottom: 0;
     }
 }
-
-
-
 /**
  * Code formatting
  */
-pre,
-code {
+code,
+pre {
     font-size: 15px;
     border: 1px solid $grey-color-light;
     border-radius: 3px;
@@ -146,20 +149,15 @@ pre {
         padding-left: 0;
     }
 }
-
-
-
 /**
  * Wrapper
  */
 .wrapper {
-    // max-width: -webkit-calc(800px - (#{$spacing-unit} * 2));
-    // max-width:         calc(800px - (#{$spacing-unit} * 2));
-    margin-right: auto;
+    margin: auto;
     padding-right: $spacing-unit;
     padding-left: $spacing-unit;
     @extend %clearfix;
-
+    width: 90%;
     @include media-query($on-laptop) {
         // max-width: -webkit-calc(800px - (#{$spacing-unit}));
         // max-width:         calc(800px - (#{$spacing-unit}));
@@ -167,28 +165,20 @@ pre {
         padding-left: $spacing-unit / 2;
     }
 }
-
-
-
 /**
  * Clearfix
  */
 %clearfix {
-
     &:after {
         content: "";
         display: table;
         clear: both;
     }
 }
-
-
-
 /**
  * Icons
  */
 .icon {
-
     > svg {
         display: inline-block;
         width: 16px;

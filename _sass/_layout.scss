@@ -95,7 +95,6 @@
     border-top: 1px solid $grey-color-light;
     padding: $spacing-unit 0;
     height: 5em;
-    flex: 1
 }
 
 .footer-heading {
@@ -183,6 +182,7 @@
 .post-meta {
     font-size: $small-font-size;
     color: $grey-color;
+    text-align: left;
 }
 
 .post-link {
@@ -203,6 +203,7 @@
     font-size: 42px;
     letter-spacing: -1px;
     line-height: 1;
+    font-weight: bold;
 
     @include media-query($on-laptop) {
         font-size: 36px;

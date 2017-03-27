@@ -141,3 +141,6 @@ DEPENDENCIES
   github-pages
   jekyll-sitemap (~> 0.6.3)
   jekyll-tagging
+
+BUNDLED WITH
+   1.12.5
