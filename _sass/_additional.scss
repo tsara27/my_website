@@ -13,6 +13,8 @@ p {
   @include media-query($on-palm) {
     max-width: 94%;
   }
+
+
   @include media-query($on-tablet) {
     max-width: 94%;
   }
@@ -29,23 +31,34 @@ p {
   color: #A5A5A5;
   text-transform: uppercase;
   margin-right: 1em;
+
   @include transition-duration(1.5s);
+
   font-weight: bold;
+
   &:hover {
     text-decoration: none;
     color: lighten(#ddd, 10%);
+
     @include transition-duration(1.5s);
   }
+
   @include media-query($on-palm) {
     display: inline-block;
+
     @include margin(null 0.3em null 0.3em);
+
     width: auto !important;
     text-align: center;
     font-size: large;
   }
+
+
   @include media-query($on-tablet) {
     display: inline-block;
+
     @include margin(null 0.3em null 0.3em);
+
     width: auto !important;
     text-align: center;
     font-size: larger;
@@ -59,6 +72,7 @@ p {
   position: fixed;
   color: #A5A5A5;
   font-size: medium;
+
   @include media-query($on-palm) {
     width: 100%;
     height: 15em;
@@ -66,6 +80,8 @@ p {
     background-size: 100% 100%;
     background-image: url("/images/horizontal-sidebar.jpg");
   }
+
+
   @include media-query($on-tablet) {
     width: 100%;
     height: 15em;
@@ -77,17 +93,27 @@ p {
 
 .page-content {
   float: left;
+
   @include margin(null 1.5em null 21.5em);
+
   text-align: justify;
   min-height: 70vh;
+  max-width: 80%;
+
   @include media-query($on-palm) {
     @include margin(null 1.5em null 1.5em);
+
     max-width: 65%;
   }
+
+
   @include media-query($on-tablet) {
     @include margin(null 1.5em null 2.5em);
+
     max-width: 85%;
   }
+
+
   p {
     font-size: 1.2em;
     color: #57483C;
@@ -97,9 +123,12 @@ p {
 footer.site-footer {
   float: left;
   margin-left: 21.5em;
+
   @include media-query($on-palm) {
     margin-left: 0;
   }
+
+
   @include media-query($on-tablet) {
     margin-left: 0;
   }
@@ -107,13 +136,17 @@ footer.site-footer {
 
 #profile-picture {
   text-align: center;
+
   img {
     margin-top: 3em;
+
     @include media-query($on-palm) {
       margin-top: 1em;
       width: 75px;
       height: 750px;
     }
+
+
     @include media-query($on-tablet) {
       margin-top: 1em;
       width: 75px;
@@ -125,15 +158,22 @@ footer.site-footer {
 .quotes {
   @include transition-duration(1.5s);
   @include margin(null 1.5em null 1em);
+
   text-align: right;
+
   @include media-query($on-palm) {
     display: none;
   }
+
+
   @include media-query($on-tablet) {
     display: none;
   }
+
+
   &:hover {
     @include transition-duration(1.5s);
+
     text-decoration: none;
     color: #fff;
   }
@@ -141,6 +181,7 @@ footer.site-footer {
 
 .social-icons {
   text-align: center;
+
   @include margin(1.5em 0.3em 1.5em 0.3em);
   @include media-query($on-palm) {
     margin: 0;
@@ -150,10 +191,13 @@ footer.site-footer {
 .profile-caption {
   text-align: center;
   font-weight: bold;
+
   @include margin(1.5em 1em 1em 1em);
   @include media-query($on-palm) {
     margin-top: 0;
   }
+
+
   @include media-query($on-tablet) {
     margin-top: 0;
   }
@@ -170,6 +214,7 @@ a.tag {
   padding: 3px 5px 6px 5px;
   margin: 3px;
   border-radius: 3px;
+
   &:hover {
     text-decoration: none;
     color: lighten(#FFF, 10%);
@@ -177,11 +222,11 @@ a.tag {
   }
 }
 
-.fa-tags+a.tag {
+.fa-tags + a.tag {
   margin-left: 6px;
 }
 
-.fa-calendar+span {
+.fa-calendar + span {
   margin-left: 3px;
 }
 
@@ -189,9 +234,12 @@ a.tag {
 .quotes {
   font-size: larger;
   cursor: default;
+
   @include media-query($on-palm) {
     font-size: 12px;
   }
+
+
   @include media-query($on-tablet) {
     font-size: 14px;
   }
@@ -207,11 +255,14 @@ a.tag {
 
 a.post-link {
   @include transition-duration(0.5s);
+
   color: #111;
   font-size: 36px;
+
   &:hover {
     text-decoration: none;
     color: lighten(#2A180F, 10%);
+
     @include transition-duration(0.5s);
   }
 }
@@ -223,6 +274,7 @@ a.read-more {
   font-weight: bold;
   font-family: Nunito;
   font-size: 0.9em;
+
   &:hover {
     text-decoration: none;
     color: lighten(#dc4126, 10%);
@@ -246,5 +298,24 @@ a.next-button {
   &:hover {
     text-decoration: none;
     color: #e36752 !important;
+  }
+}
+
+.tag-year {
+  font-size: 2.1em;
+}
+
+li.tag-item {
+  list-style: none;
+  display: block;
+  margin-bottom: 30px;
+
+  .post-link {
+    margin-bottom: 15px;
+    font-size: 1.8em;
+  }
+
+  .post-meta {
+    font-size: 1em;
   }
 }
