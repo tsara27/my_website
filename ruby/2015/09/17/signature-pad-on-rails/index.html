@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title>Signature Pad on Rails - Learn How to Code with Tsara </title>
+    <meta name="description" content="In developing world, we would see a lot of applications. Some applications might need a signature pad to sign an agreement or policies that they provide. How do we put the signature pad on Rails app? Now, I am going to explain how to put signature pad on Rails app. I will use jQuery plugin, SignaturePad, by Thomas J Bradley. How te get started with Ruby, Ruby on Rails tutorials, IT stuff and thoughts by Tsara Fatma Larasati Sudrajat.
+">
+    <meta name="keywords" content="ruby,ruby on rails,html,css,tutorials,tutorial,practice,guide,blog,github,learn,learning">
+    <meta name="author" content="Tsara Fatma L">
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:300,600" rel="stylesheet">
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="canonical" href="https://tsara27.github.io/ruby/2015/09/17/signature-pad-on-rails/">
+</head>
+
+
+  <body>
+    <div class="container">
+      <div class="sidebar">
+  <div id="profile-picture">
+    <a href="/"><img src="/images/ruby-256.png" height="125" width="125"></img></a>
+  </div>
+  <div class="profile-caption">
+    I am Tsara | A Wife | Ruby on Rails Developer | Moslem
+  </div>
+  <div class="links">
+    <a href="/">Blog</a>
+    <a href="/new_to_ruby/">New to Ruby?</a>
+    <a href="https://www.upwork.com/fl/tsarafatmalarasatis" target="_blank">Hire Me</a>
+    <a href="/about/">About</a>
+  </div>
+  <blockquote class="quotes">“Simple can be harder than complex: You have to work hard to get your thinking clean to make it simple. But it’s worth it in the end because once you get there, you can move mountains.” - Steve Jobs</blockquote>
+  <div class="social-icons">
+    <ul class="soc">
+      <li><a href="https://twitter.com/tsara_tf"><i class="fa fa-twitter" aria-hidden="true"></i></a></li>
+      <li><a href="https://www.facebook.com/tsara.tf"><i class="fa fa-facebook" aria-hidden="true"></i></a></li>
+      <li><a href="https://github.com/tsara27"><i class="fa fa-github-alt" aria-hidden="true"></i></a></li>
+      <li><a class="soc-icon-last" href="https://id.linkedin.com/in/tsarasudrajat"><i class="fa fa-linkedin" aria-hidden="true"></i></a></li>
+    </ul>
+  </div>
+</div>
+
+      <div class="page-content">
+        <div class="wrapper">
+          <div class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">Signature Pad on Rails</h1>
+    <p class="post-meta"><i class="fa fa-calendar"></i> Sep 17, 2015 • <i class="fa fa-tags"></i>  <a href="/tags/blog" class="tag">blog</a>  <a href="/tags/rails" class="tag">rails</a>  <a href="/tags/ruby" class="tag">ruby</a>  <a href="/tags/signature-pad" class="tag">signature-pad</a>  <a href="/tags/signature" class="tag">signature</a> 
+ </p>
+  </header>
+
+  <article class="post-content">
+    <p>In developing world, we would see a lot of applications. Some applications might need a signature pad to sign an agreement or policies that they provide. How do we put the signature pad on Rails app? Now, I am going to explain how to put signature pad on Rails app. I will use jQuery plugin, SignaturePad, by Thomas J Bradley.<!--more--></p>
+
+<p>Here’s the <a target="_blank" href="http://thomasjbradley.ca/lab/signature-pad">link</a> to the plugin. Download the plugin first, we will need <code>flashcanvas.js</code>, <code>jquery.signaturepad.min.js</code>, and <code>json2.min.js</code>. The stylesheets are included too on the plugin. We will need <code>jquery.signaturepad.css</code>, and <code>pen.cur</code> (cursor for signature).</p>
+
+<p>Let’s create a new rails application. Then, put the files in your <code>app/assets</code>, the js files on the <code>javascripts/signaturepad</code> and the css files with the pen cursor on the <code>stylesheets/signaturepad</code>. Don’t forget to include those files in your application.</p>
+
+<p>We can start the implementation right away. So, here, I am going to implement a simple agreement that needs to be signed. Let’s start with the model first. Create a model named <code>Agreement</code> that has two columns, <code>name</code> with string type and <code>signature</code> with text type which will hold the coordinates from the signature later.</p>
+
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">rails</span> <span class="n">g</span> <span class="n">model</span> <span class="no">Agreement</span> <span class="nb">name</span><span class="ss">:string</span> <span class="ss">signature</span><span class="p">:</span><span class="n">text</span></code></pre></div>
+
+<p>We use <code>text</code>, because the coordinates would be very long. The <code>string</code> may not hold the whole coordinates. Don’t forget to run the migration after you generate the model.</p>
+
+<p>After the model is created and the table is made, we can move to the controller. Create a controller named <code>agreements_controller.rb</code>. Add <code>index</code>, <code>create</code>, and <code>show</code> methods on the controller.</p>
+
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">class</span> <span class="nc">AgreementsController</span> <span class="o">&lt;</span> <span class="no">ApplicationController</span>
+  <span class="k">def</span> <span class="nf">index</span>
+    <span class="vi">@agreement</span> <span class="o">=</span> <span class="no">Agreement</span><span class="o">.</span><span class="n">new</span>
+  <span class="k">end</span>
+
+  <span class="k">def</span> <span class="nf">create</span>
+    <span class="vi">@agreement</span> <span class="o">=</span> <span class="no">Agreement</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">agreement_params</span><span class="p">)</span>
+    <span class="n">render</span> <span class="ss">action</span><span class="p">:</span> <span class="s2">&quot;show&quot;</span> <span class="k">if</span> <span class="vi">@agreement</span><span class="o">.</span><span class="n">persisted?</span>
+  <span class="k">end</span>
+
+  <span class="k">def</span> <span class="nf">show</span>
+    <span class="vi">@agreement</span> <span class="o">=</span> <span class="no">Agreement</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">params</span><span class="o">[</span><span class="ss">:id</span><span class="o">]</span><span class="p">)</span>
+  <span class="k">end</span>
+
+  <span class="kp">private</span>
+
+  <span class="k">def</span> <span class="nf">agreement_params</span>
+    <span class="n">params</span><span class="o">.</span><span class="n">require</span><span class="p">(</span><span class="ss">:agreement</span><span class="p">)</span><span class="o">.</span><span class="n">permit</span><span class="p">(</span><span class="ss">:name</span><span class="p">,</span> <span class="ss">:signature</span><span class="p">)</span>
+  <span class="k">end</span>
+<span class="k">end</span></code></pre></div>
+
+<p>In the create method, we could see that if <code>@agreement</code> is saved, so it would render <code>show</code> method. The show method will hold the agreement that has been created. Let’s create the create the view for index page first. The page will contain a agreement and the signature pad.</p>
+
+<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="c">&lt;!-- app/views/agreements/index.html.erb --&gt;</span>
+<span class="err">&lt;</span>%= form_for @agreement, html: { class: &quot;sigPad&quot; } do |f| %&gt;
+  Your name: <span class="err">&lt;</span>%= f.text_field :name %&gt;<span class="nt">&lt;br</span> <span class="nt">/&gt;</span>
+  <span class="nt">&lt;h5&gt;</span>User Agreement<span class="nt">&lt;/h5&gt;</span>
+  <span class="nt">&lt;p&gt;</span>By signing this agreement, you promise to be a great person.<span class="nt">&lt;/p&gt;</span>
+  <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;sig sigWrapper&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;typed&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
+    <span class="nt">&lt;canvas</span> <span class="na">class=</span><span class="s">&quot;pad&quot;</span> <span class="na">width=</span><span class="s">&quot;298&quot;</span> <span class="na">height=</span><span class="s">&quot;55&quot;</span><span class="nt">&gt;&lt;/canvas&gt;</span>
+    <span class="err">&lt;</span>%= f.hidden_field :signature, class: &quot;output&quot; %&gt;<span class="nt">&lt;br</span> <span class="nt">/&gt;</span>
+  <span class="nt">&lt;/div&gt;</span>
+  <span class="err">&lt;</span>%= f.submit %&gt;
+<span class="err">&lt;</span>% end %&gt;
+
+<span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span><span class="nt">&gt;</span>
+  <span class="nx">$</span><span class="p">(</span><span class="nb">document</span><span class="p">).</span><span class="nx">ready</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+    <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;.sigPad&#39;</span><span class="p">).</span><span class="nx">signaturePad</span><span class="p">({</span> <span class="nx">drawOnly</span><span class="o">:</span><span class="kc">true</span> <span class="p">});</span>
+  <span class="p">});</span>
+<span class="nt">&lt;/script&gt;</span></code></pre></div>
+
+<p>At the form we see that there’s <code>sigPad</code> class on the form tag. The class will help us to initialize the signature pad. <code>sig</code> and <code>sigWrapper</code> class would be used for the signature pad box. Inside that class, there’s a canvas and a hidden field. The canvas that would be the area of signature that can be drawn. The hidden field with class <code>output</code> will hold the coordinates for our signature.</p>
+
+<p>As you can see at the bottom, there’s javascript code to initiate the signature pad. I use <code>drawOnly</code> option, because we only need the drawing are for this time. We can use text field to generate our signature too. You can see the example <a target="_blank" href="https://thomasjbradley.github.io/signature-pad/examples/accept-signature.html">here</a>.</p>
+
+<p>After the view is created, let’s add the routes. Open the <code>config/routes.rb</code> and add this lines.</p>
+
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">root</span> <span class="s1">&#39;agreements#index&#39;</span>
+<span class="n">resources</span> <span class="ss">:agreements</span></code></pre></div>
+
+<p>Run the server and go to the site. The page that we’ve created would look like this.</p>
+
+<iframe src="https://drive.google.com/file/d/0B245dSGaMJ5YbEhqUUNyNVFDa00/preview" style="width: 100%"></iframe>
+
+<p>Let’s create a page to show the agreement that is created.</p>
+
+<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="c">&lt;!-- app/views/agreements/show.html.erb --&gt;</span>
+<span class="nt">&lt;h3&gt;</span>Hello <span class="err">&lt;</span>%= @agreement.name %&gt;<span class="nt">&lt;/h3&gt;</span>
+<span class="nt">&lt;p&gt;</span>Thank you for signing the agreement. You have promised to be a great person!<span class="nt">&lt;/p&gt;</span>
+<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;sigPad sigWrapper&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;typed&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
+  <span class="nt">&lt;canvas</span> <span class="na">class=</span><span class="s">&quot;pad&quot;</span> <span class="na">width=</span><span class="s">&quot;298&quot;</span> <span class="na">height=</span><span class="s">&quot;55&quot;</span><span class="nt">&gt;&lt;/canvas&gt;</span>
+  <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;hidden&quot;</span> <span class="na">name=</span><span class="s">&quot;output&quot;</span> <span class="na">class=</span><span class="s">&quot;output&quot;</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;/div&gt;</span>
+
+<span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span><span class="nt">&gt;</span>
+  <span class="nx">$</span><span class="p">(</span><span class="nb">document</span><span class="p">).</span><span class="nx">ready</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+    <span class="nx">sig</span> <span class="o">=</span> <span class="o">&lt;%=</span> <span class="nx">raw</span> <span class="err">@</span><span class="nx">agreement</span><span class="p">.</span><span class="nx">signature</span> <span class="o">%&gt;</span><span class="p">;</span>
+    <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;.sigPad&#39;</span><span class="p">).</span><span class="nx">signaturePad</span><span class="p">({</span> <span class="nx">displayOnly</span><span class="o">:</span><span class="kc">true</span> <span class="p">}).</span><span class="nx">regenerate</span><span class="p">(</span><span class="nx">sig</span><span class="p">);</span>
+  <span class="p">});</span>
+<span class="nt">&lt;/script&gt;</span></code></pre></div>
+
+<p>You can see that I add <code>sig</code> variable on the js code. The variable contains the <code>@agreement.signature</code> value as text. Then, by using <code>raw</code>, I make the value into JSON data.</p>
+
+<p>When I initiate the signature, I use option <code>displayOnly: true</code> to make the signature pad not drawable. Then, <code>regenerate(sig)</code> is used for generating a signature that is created and kept in <code>sig</code> variable.</p>
+
+<p>Try to add your signature, you’ll see the result just like this.</p>
+
+<iframe src="https://drive.google.com/file/d/0B245dSGaMJ5YdjFlcHQ5Y2dOYWM/preview" style="width: 100%"></iframe>
+
+<p>You can access the app repository <a target="_blank" href="https://github.com/tsara27/sample_signature_pad">here</a>.</p>
+
+<p>Thank you for following this tutorial. Keep learning and happy coding!</p>
+
+  </article>
+  <hr>
+  <div id="disqus_thread"></div>
+</div>
+
+<script>
+
+/**
+*  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+*  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
+/*
+var disqus_config = function () {
+  this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+  this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+};
+*/
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+s.src = 'https://tsara27.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+        </div>
+      </div>
+    </div>
+
+  </body>
+
+</html>

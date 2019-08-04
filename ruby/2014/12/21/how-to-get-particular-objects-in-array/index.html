@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title>How to Get Particular Objects in Array? - Learn How to Code with Tsara </title>
+    <meta name="description" content="Finding particular rows from a table from relational database is commonly used by many developers in developing their application. But, how to find particular objects in array. In my opinion, finding rows from a table on relational database is easier than find particular objects from array which too logical sometimes (haha). I just have to create the query that select particular rows or using active record to fetch the rows. How te get started with Ruby, Ruby on Rails tutorials, IT stuff and thoughts by Tsara Fatma Larasati Sudrajat.
+">
+    <meta name="keywords" content="ruby,ruby on rails,html,css,tutorials,tutorial,practice,guide,blog,github,learn,learning">
+    <meta name="author" content="Tsara Fatma L">
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:300,600" rel="stylesheet">
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="canonical" href="https://tsara27.github.io/ruby/2014/12/21/how-to-get-particular-objects-in-array/">
+</head>
+
+
+  <body>
+    <div class="container">
+      <div class="sidebar">
+  <div id="profile-picture">
+    <a href="/"><img src="/images/ruby-256.png" height="125" width="125"></img></a>
+  </div>
+  <div class="profile-caption">
+    I am Tsara | A Wife | Ruby on Rails Developer | Moslem
+  </div>
+  <div class="links">
+    <a href="/">Blog</a>
+    <a href="/new_to_ruby/">New to Ruby?</a>
+    <a href="https://www.upwork.com/fl/tsarafatmalarasatis" target="_blank">Hire Me</a>
+    <a href="/about/">About</a>
+  </div>
+  <blockquote class="quotes">“Simple can be harder than complex: You have to work hard to get your thinking clean to make it simple. But it’s worth it in the end because once you get there, you can move mountains.” - Steve Jobs</blockquote>
+  <div class="social-icons">
+    <ul class="soc">
+      <li><a href="https://twitter.com/tsara_tf"><i class="fa fa-twitter" aria-hidden="true"></i></a></li>
+      <li><a href="https://www.facebook.com/tsara.tf"><i class="fa fa-facebook" aria-hidden="true"></i></a></li>
+      <li><a href="https://github.com/tsara27"><i class="fa fa-github-alt" aria-hidden="true"></i></a></li>
+      <li><a class="soc-icon-last" href="https://id.linkedin.com/in/tsarasudrajat"><i class="fa fa-linkedin" aria-hidden="true"></i></a></li>
+    </ul>
+  </div>
+</div>
+
+      <div class="page-content">
+        <div class="wrapper">
+          <div class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">How to Get Particular Objects in Array?</h1>
+    <p class="post-meta"><i class="fa fa-calendar"></i> Dec 21, 2014 • <i class="fa fa-tags"></i>  <a href="/tags/blog" class="tag">blog</a>  <a href="/tags/ruby" class="tag">ruby</a>  <a href="/tags/object" class="tag">object</a>  <a href="/tags/array" class="tag">array</a> 
+ </p>
+  </header>
+
+  <article class="post-content">
+    <p>Finding particular rows from a table from relational database is commonly used by many developers in developing their application. But, how to find particular objects in array. In my opinion, finding rows from a table on relational database is easier than find particular objects from array which too logical sometimes (haha). I just have to create the query that select particular rows or using active record to fetch the rows. <!--more--></p>
+
+<p>Why do I share this? Because for the first time I had a test for Rails job recently that forced me to use this method. Let’s see how is the method works.</p>
+
+<p>I have cupcakes variable.</p>
+
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="nx">cupcakes</span> <span class="o">=</span> <span class="p">[{</span>
+  <span class="s2">&quot;name&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;Classic Vanilla&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;taste&quot;</span> <span class="o">=&gt;</span> <span class="p">[</span><span class="s2">&quot;sweet&quot;</span><span class="p">,</span> <span class="s2">&quot;vanilla&quot;</span><span class="p">],</span>
+  <span class="s2">&quot;orders&quot;</span> <span class="o">=&gt;</span> <span class="p">{</span> <span class="s2">&quot;min&quot;</span> <span class="o">=&gt;</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;max&quot;</span> <span class="o">=&gt;</span> <span class="mi">20</span><span class="p">},</span>
+  <span class="s2">&quot;price&quot;</span> <span class="o">=&gt;</span> <span class="mf">5.4</span>
+<span class="p">},</span>
+<span class="p">{</span>
+  <span class="s2">&quot;name&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;Classic Vanilla Chocolate&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;taste&quot;</span> <span class="o">=&gt;</span> <span class="p">[</span><span class="s2">&quot;really sweet&quot;</span><span class="p">,</span> <span class="s2">&quot;vanilla&quot;</span><span class="p">,</span> <span class="s2">&quot;chocolate&quot;</span><span class="p">],</span>
+  <span class="s2">&quot;orders&quot;</span> <span class="o">=&gt;</span> <span class="p">{</span> <span class="s2">&quot;min&quot;</span> <span class="o">=&gt;</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;max&quot;</span> <span class="o">=&gt;</span> <span class="mi">1</span><span class="p">},</span>
+  <span class="s2">&quot;price&quot;</span> <span class="o">=&gt;</span> <span class="mf">5.8</span>
+<span class="p">},</span>
+<span class="p">{</span>
+  <span class="s2">&quot;name&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;Ghirardelli Square&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;taste&quot;</span> <span class="o">=&gt;</span> <span class="p">[</span><span class="s2">&quot;sweet&quot;</span><span class="p">,</span> <span class="s2">&quot;chocolate&quot;</span><span class="p">],</span>
+  <span class="s2">&quot;orders&quot;</span> <span class="o">=&gt;</span> <span class="p">{</span> <span class="s2">&quot;min&quot;</span> <span class="o">=&gt;</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;max&quot;</span> <span class="o">=&gt;</span> <span class="mi">10</span><span class="p">},</span>
+  <span class="s2">&quot;price&quot;</span> <span class="o">=&gt;</span> <span class="mf">5.5</span>
+<span class="p">},</span>
+<span class="p">{</span>
+  <span class="s2">&quot;name&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;Durian Square&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;taste&quot;</span> <span class="o">=&gt;</span> <span class="p">[</span><span class="s2">&quot;little bit salty&quot;</span><span class="p">,</span> <span class="s2">&quot;sweet&quot;</span><span class="p">,</span> <span class="s2">&quot;fantastic&quot;</span><span class="p">],</span>
+  <span class="s2">&quot;orders&quot;</span> <span class="o">=&gt;</span> <span class="p">{</span> <span class="s2">&quot;min&quot;</span> <span class="o">=&gt;</span> <span class="mi">5</span><span class="p">,</span> <span class="s2">&quot;max&quot;</span> <span class="o">=&gt;</span> <span class="mi">5</span><span class="p">},</span>
+  <span class="s2">&quot;price&quot;</span> <span class="o">=&gt;</span> <span class="mi">7</span>
+<span class="p">},</span>
+<span class="p">{</span>
+  <span class="s2">&quot;name&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;Rambutan Unique&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;taste&quot;</span> <span class="o">=&gt;</span> <span class="p">[</span><span class="s2">&quot;sweet&quot;</span><span class="p">,</span> <span class="s2">&quot;fantastic&quot;</span><span class="p">,</span> <span class="s2">&quot;awesome&quot;</span><span class="p">],</span>
+  <span class="s2">&quot;orders&quot;</span> <span class="o">=&gt;</span> <span class="p">{</span> <span class="s2">&quot;min&quot;</span> <span class="o">=&gt;</span> <span class="mi">5</span><span class="p">,</span> <span class="s2">&quot;max&quot;</span> <span class="o">=&gt;</span> <span class="mi">5</span><span class="p">},</span>
+  <span class="s2">&quot;price&quot;</span> <span class="o">=&gt;</span> <span class="mi">10</span>
+<span class="p">}]</span></code></pre></div>
+
+<p>I want to select cupcakes that match this following criteria,</p>
+
+<ol>
+  <li>Cupcake with the most expensive and most bargain price.</li>
+  <li>Cupcakes that have taste of sweet and chocolate.</li>
+  <li>Cupcake that can be ordered with with specific value (eg. minimum order is 5 and the maximum is equal to the minimum order)</li>
+</ol>
+
+<p>These are the answers.</p>
+<ol>
+<li> I use <a href="http://apidock.com/ruby/Enumerable/minmax_by" target="_blank">minmax_by</a> method. You'll see that this method will take least value of price and the highest value of the price. The method will identified each objects as <code>x</code> and take the price objects from each root objects.</li>
+
+
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">cupcakes</span><span class="o">.</span><span class="n">minmax_by</span> <span class="p">{</span><span class="o">|</span><span class="n">x</span><span class="o">|</span> <span class="n">x</span><span class="o">[</span><span class="s1">&#39;price&#39;</span><span class="o">]</span><span class="p">}</span>
+<span class="o">=&gt;</span> <span class="o">[</span><span class="p">{</span><span class="s2">&quot;name&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;Classic Vanilla&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;taste&quot;</span> <span class="o">=&gt;</span> <span class="o">[</span><span class="s2">&quot;sweet&quot;</span><span class="p">,</span> <span class="s2">&quot;vanilla&quot;</span><span class="o">]</span><span class="p">,</span>
+  <span class="s2">&quot;orders&quot;</span> <span class="o">=&gt;</span> <span class="p">{</span> <span class="s2">&quot;min&quot;</span> <span class="o">=&gt;</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;max&quot;</span> <span class="o">=&gt;</span> <span class="mi">20</span><span class="p">},</span>
+  <span class="s2">&quot;price&quot;</span> <span class="o">=&gt;</span> <span class="mi">5</span><span class="o">.</span><span class="mi">4</span>
+<span class="p">},</span>
+<span class="p">{</span>
+  <span class="s2">&quot;name&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;Rambutan Unique&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;taste&quot;</span> <span class="o">=&gt;</span> <span class="o">[</span><span class="s2">&quot;sweet&quot;</span><span class="p">,</span> <span class="s2">&quot;fantastic&quot;</span><span class="p">,</span> <span class="s2">&quot;awesome&quot;</span><span class="o">]</span><span class="p">,</span>
+  <span class="s2">&quot;orders&quot;</span> <span class="o">=&gt;</span> <span class="p">{</span> <span class="s2">&quot;min&quot;</span> <span class="o">=&gt;</span> <span class="mi">5</span><span class="p">,</span> <span class="s2">&quot;max&quot;</span> <span class="o">=&gt;</span> <span class="mi">5</span><span class="p">},</span>
+  <span class="s2">&quot;price&quot;</span> <span class="o">=&gt;</span> <span class="mi">10</span> <span class="p">}</span><span class="o">]</span></code></pre></div>
+
+
+<li>There are two ways in solve this problem but each has different result. The first one is to get cupcakes that have sweet taste and chocolate taste. The second one is to find cupcakes that contain sweet and chocolate (whatever the taste is eg. really sweet, slightly sweet, black chocolate, etc)</li>
+
+Here is the first code. I use <a href="http://www.ruby-doc.org/core-2.1.5/Array.html#method-i-select" target="_blank">select</a> and <a href="http://www.ruby-doc.org/core-2.1.5/Array.html#method-i-include-3F" target="_blank">include?</a> method.
+
+
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">cupcakes</span><span class="o">.</span><span class="n">select</span> <span class="p">{</span> <span class="o">|</span><span class="n">x</span><span class="o">|</span> <span class="n">x</span><span class="o">[</span><span class="s1">&#39;taste&#39;</span><span class="o">].</span><span class="n">include?</span><span class="p">(</span><span class="s1">&#39;sweet&#39;</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="n">x</span><span class="o">[</span><span class="s1">&#39;taste&#39;</span><span class="o">].</span><span class="n">include?</span><span class="p">(</span><span class="s2">&quot;chocolate&quot;</span><span class="p">)</span> <span class="p">}</span>
+<span class="o">=&gt;</span> <span class="o">[</span><span class="p">{</span>
+      <span class="s2">&quot;name&quot;</span><span class="o">=&gt;</span><span class="s2">&quot;Ghirardelli Square&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;taste&quot;</span><span class="o">=&gt;[</span><span class="s2">&quot;sweet&quot;</span><span class="p">,</span> <span class="s2">&quot;chocolate&quot;</span><span class="o">]</span><span class="p">,</span>
+      <span class="s2">&quot;orders&quot;</span><span class="o">=&gt;</span><span class="p">{</span><span class="s2">&quot;min&quot;</span><span class="o">=&gt;</span><span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;max&quot;</span><span class="o">=&gt;</span><span class="mi">10</span><span class="p">},</span>
+      <span class="s2">&quot;price&quot;</span><span class="o">=&gt;</span><span class="mi">5</span><span class="o">.</span><span class="mi">5</span>
+   <span class="p">}</span><span class="o">]</span></code></pre></div>
+
+
+The second method is using <a href="http://ruby-doc.org/core-2.1.5/Enumerable.html#method-i-any-3F">any?</a> (enumerable) and <a href="http://www.ruby-doc.org/core-2.1.5/Array.html#method-i-select" target="_blank">select</a>.
+
+
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">cupcakes</span><span class="o">.</span><span class="n">select</span> <span class="p">{</span> <span class="o">|</span><span class="n">x</span><span class="o">|</span> <span class="n">x</span><span class="o">[</span><span class="s1">&#39;taste&#39;</span><span class="o">].</span><span class="n">any?</span> <span class="p">{</span> <span class="o">|</span><span class="n">w</span><span class="o">|</span> <span class="n">w</span><span class="o">.</span><span class="n">include?</span><span class="p">(</span><span class="s2">&quot;sweet&quot;</span><span class="p">)}</span> <span class="o">&amp;&amp;</span>
+  <span class="n">x</span><span class="o">[</span><span class="s1">&#39;taste&#39;</span><span class="o">].</span><span class="n">any?</span> <span class="p">{</span> <span class="o">|</span><span class="n">w</span><span class="o">|</span> <span class="n">w</span><span class="o">.</span><span class="n">include?</span><span class="p">(</span><span class="s2">&quot;chocolate&quot;</span><span class="p">)</span> <span class="p">}}</span>
+  <span class="o">=&gt;</span> <span class="o">[</span><span class="p">{</span>
+        <span class="s2">&quot;name&quot;</span><span class="o">=&gt;</span><span class="s2">&quot;Classic Vanilla Chocolate&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;taste&quot;</span><span class="o">=&gt;[</span><span class="s2">&quot;really sweet&quot;</span><span class="p">,</span> <span class="s2">&quot;vanilla&quot;</span><span class="p">,</span> <span class="s2">&quot;chocolate&quot;</span><span class="o">]</span><span class="p">,</span>
+        <span class="s2">&quot;orders&quot;</span><span class="o">=&gt;</span><span class="p">{</span><span class="s2">&quot;min&quot;</span><span class="o">=&gt;</span><span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;max&quot;</span><span class="o">=&gt;</span><span class="mi">1</span><span class="p">},</span>
+        <span class="s2">&quot;price&quot;</span><span class="o">=&gt;</span><span class="mi">5</span><span class="o">.</span><span class="mi">8</span>
+      <span class="p">},</span>
+      <span class="p">{</span>
+        <span class="s2">&quot;name&quot;</span><span class="o">=&gt;</span><span class="s2">&quot;Ghirardelli Square&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;taste&quot;</span><span class="o">=&gt;[</span><span class="s2">&quot;sweet&quot;</span><span class="p">,</span> <span class="s2">&quot;chocolate&quot;</span><span class="o">]</span><span class="p">,</span>
+        <span class="s2">&quot;orders&quot;</span><span class="o">=&gt;</span><span class="p">{</span><span class="s2">&quot;min&quot;</span><span class="o">=&gt;</span><span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;max&quot;</span><span class="o">=&gt;</span><span class="mi">10</span><span class="p">},</span>
+        <span class="s2">&quot;price&quot;</span><span class="o">=&gt;</span><span class="mi">5</span><span class="o">.</span><span class="mi">5</span>
+      <span class="p">}</span><span class="o">]</span></code></pre></div>
+
+
+<li>To solve this problem I just need to use <a href="http://www.ruby-doc.org/core-2.1.5/Array.html#method-i-select" target="_blank">select</a> and a comparison operator <code>==</code>. Here's the code.</li>
+
+
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">cupcakes</span><span class="o">.</span><span class="n">select</span> <span class="p">{</span> <span class="o">|</span><span class="n">x</span><span class="o">|</span> <span class="n">x</span><span class="o">[</span><span class="s1">&#39;orders&#39;</span><span class="o">][</span><span class="s1">&#39;min&#39;</span><span class="o">]</span> <span class="o">==</span> <span class="n">x</span><span class="o">[</span><span class="s1">&#39;orders&#39;</span><span class="o">][</span><span class="s1">&#39;max&#39;</span><span class="o">]</span> <span class="p">}</span>
+<span class="o">=&gt;</span> <span class="o">[</span><span class="p">{</span>
+       <span class="s2">&quot;name&quot;</span><span class="o">=&gt;</span><span class="s2">&quot;Classic Vanilla Chocolate&quot;</span><span class="p">,</span>
+       <span class="s2">&quot;taste&quot;</span><span class="o">=&gt;[</span><span class="s2">&quot;really sweet&quot;</span><span class="p">,</span> <span class="s2">&quot;vanilla&quot;</span><span class="p">,</span> <span class="s2">&quot;chocolate&quot;</span><span class="o">]</span><span class="p">,</span>
+       <span class="s2">&quot;orders&quot;</span><span class="o">=&gt;</span><span class="p">{</span><span class="s2">&quot;min&quot;</span><span class="o">=&gt;</span><span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;max&quot;</span><span class="o">=&gt;</span><span class="mi">1</span><span class="p">},</span>
+       <span class="s2">&quot;price&quot;</span><span class="o">=&gt;</span><span class="mi">5</span><span class="o">.</span><span class="mi">8</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+       <span class="s2">&quot;name&quot;</span><span class="o">=&gt;</span><span class="s2">&quot;Durian Square&quot;</span><span class="p">,</span>
+       <span class="s2">&quot;taste&quot;</span><span class="o">=&gt;[</span><span class="s2">&quot;little bit salty&quot;</span><span class="p">,</span> <span class="s2">&quot;sweet&quot;</span><span class="p">,</span> <span class="s2">&quot;fantastic&quot;</span><span class="o">]</span><span class="p">,</span>
+       <span class="s2">&quot;orders&quot;</span><span class="o">=&gt;</span><span class="p">{</span><span class="s2">&quot;min&quot;</span><span class="o">=&gt;</span><span class="mi">5</span><span class="p">,</span> <span class="s2">&quot;max&quot;</span><span class="o">=&gt;</span><span class="mi">5</span><span class="p">},</span>
+       <span class="s2">&quot;price&quot;</span><span class="o">=&gt;</span><span class="mi">7</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+       <span class="s2">&quot;name&quot;</span><span class="o">=&gt;</span><span class="s2">&quot;Rambutan Unique&quot;</span><span class="p">,</span>
+       <span class="s2">&quot;taste&quot;</span><span class="o">=&gt;[</span><span class="s2">&quot;sweet&quot;</span><span class="p">,</span> <span class="s2">&quot;fantastic&quot;</span><span class="p">,</span> <span class="s2">&quot;awesome&quot;</span><span class="o">]</span><span class="p">,</span>
+       <span class="s2">&quot;orders&quot;</span><span class="o">=&gt;</span><span class="p">{</span><span class="s2">&quot;min&quot;</span><span class="o">=&gt;</span><span class="mi">5</span><span class="p">,</span> <span class="s2">&quot;max&quot;</span><span class="o">=&gt;</span><span class="mi">5</span><span class="p">},</span>
+       <span class="s2">&quot;price&quot;</span><span class="o">=&gt;</span><span class="mi">10</span>
+    <span class="p">}</span><span class="o">]</span></code></pre></div>
+
+</ol>
+
+<p>That’s all from me. Thanks for reading! Happy Coding!</p>
+
+  </article>
+  <hr>
+  <div id="disqus_thread"></div>
+</div>
+
+<script>
+
+/**
+*  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+*  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
+/*
+var disqus_config = function () {
+  this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+  this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+};
+*/
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+s.src = 'https://tsara27.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+        </div>
+      </div>
+    </div>
+
+  </body>
+
+</html>

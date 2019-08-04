@@ -1,0 +1,1023 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Learn How to Code with Tsara</title>
+    <description>How te get started with Ruby, Ruby on Rails tutorials, IT stuff and thoughts by Tsara Fatma Larasati Sudrajat.
+</description>
+    <link>https://tsara27.github.io/</link>
+    <atom:link href="https://tsara27.github.io/feed.xml" rel="self" type="application/rss+xml" />
+    <pubDate>Sun, 04 Aug 2019 23:23:35 +0700</pubDate>
+    <lastBuildDate>Sun, 04 Aug 2019 23:23:35 +0700</lastBuildDate>
+    <generator>Jekyll v2.4.0</generator>
+    
+      <item>
+        <title>Automate Bluetooth Keyboard Connection — Manjaro</title>
+        <description>&lt;p&gt;I was upset when using bluetooth keyboard on Linux machine, Manjaro. I had to
+reconnect my bluetooth keyboard everytime I login to my machine. But, I’ve found
+a way to automate the bluetooth keyboard connection when logging in to my
+machine.&lt;/p&gt;
+
+&lt;p&gt;I setup an application autostart item. I am using XFCE desktop. So, what I did
+is open &lt;strong&gt;Session and Startup&lt;/strong&gt;. Then, go to &lt;strong&gt;Application Autostart&lt;/strong&gt;. Add
+new item. After that, enter the code below inside the &lt;strong&gt;Command&lt;/strong&gt; text input.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;connect DC:2C:26:EF:99:63&amp;#39;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;|&lt;/span&gt; bluetoothctl.&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Replace the &lt;code&gt;DC:2C:26:EF:99:63&lt;/code&gt; with your bluetooth device address. Set the
+&lt;strong&gt;Trigger&lt;/strong&gt; to &lt;strong&gt;on login&lt;/strong&gt;. Restart the
+machine and make sure that the bluetooth device is on. You will see that the
+device will be connected automatically when logging in.&lt;/p&gt;
+</description>
+        <pubDate>Sun, 04 Aug 2019 23:05:00 +0700</pubDate>
+        <link>https://tsara27.github.io/linux/2019/08/04/Automate-Bluetooth-Keyboard-Connection-Manjaro/</link>
+        <guid isPermaLink="true">https://tsara27.github.io/linux/2019/08/04/Automate-Bluetooth-Keyboard-Connection-Manjaro/</guid>
+        
+        <category>blog</category>
+        
+        <category>linux</category>
+        
+        <category>manjaro</category>
+        
+        
+        <category>linux</category>
+        
+      </item>
+    
+      <item>
+        <title>MySQL Gem and MAMP</title>
+        <description>&lt;p&gt;I usually use MAMP to add mysql to my local machine. I am using MAMP because I can use phpmyadmin to see my databases. I love simple things, that’s why I use it straight ahead.&lt;!--more--&gt;&lt;/p&gt;
+
+&lt;p&gt;Working with Ruby code a lot, that’s what I do for almost 4 years. But, when I should add mysql gem to my machine. There’s always a problem. It could not be installed because the gem installation expects the mysql installed on default path. I need to include mysql config that is placed within MAMP application. Here’s what I did.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;gem install mysql2 -- --with-mysql-config&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;/Applications/MAMP/Library/bin/mysql_config&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;I added &lt;code&gt;with-mysql-config&lt;/code&gt; when installing the gem. Mysql gem will be installed successfully. I don’t need to add mysql separately on my machine to make it work.&lt;/p&gt;
+</description>
+        <pubDate>Thu, 25 Jan 2018 11:40:00 +0700</pubDate>
+        <link>https://tsara27.github.io/ruby/2018/01/25/MYSQL-Gem-and-MAMP/</link>
+        <guid isPermaLink="true">https://tsara27.github.io/ruby/2018/01/25/MYSQL-Gem-and-MAMP/</guid>
+        
+        <category>blog</category>
+        
+        <category>rails</category>
+        
+        <category>ruby</category>
+        
+        <category>mysql</category>
+        
+        <category>mamp</category>
+        
+        
+        <category>ruby</category>
+        
+      </item>
+    
+      <item>
+        <title>Custom Text on Select Tag Option</title>
+        <description>&lt;p&gt;There’s some cases when we need to customize how we display the text on option inside select tag. We can customize that in very simple way. We only need to create a custom instance method on the model that we use on the select tag. Let’s jump into the code.&lt;!--more--&gt;&lt;/p&gt;
+
+&lt;p&gt;For example, you have this code inside your view.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;%=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;select_tag&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;people&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;options_from_collection_for_select&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Person&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;all&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;id&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;first_name&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;%&amp;gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Populating the options that relies the text on &lt;code&gt;first_name&lt;/code&gt; of the person will be confusing. Some of people might have same first name. The best thing that we can do is using their full name to the options that are displayed on the select tag. I have mentioned that we can add additional custom instance method inside &lt;code&gt;Person&lt;/code&gt; class.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Person&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;ApplicationRecord&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;name&lt;/span&gt;
+      &lt;span class=&quot;s2&quot;&gt;&amp;quot;&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;#{&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;first_name&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt; &lt;/span&gt;&lt;span class=&quot;si&quot;&gt;#{&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;last_name&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Then, change the &lt;code&gt;first_name&lt;/code&gt; on select tag into &lt;code&gt;name&lt;/code&gt;. Here’s the code.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;%=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;select_tag&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;people&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;options_from_collection_for_select&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Person&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;all&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;id&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;name&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;%&amp;gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Try to refresh the page and you’ll see that the option text will be person full name.&lt;/p&gt;
+
+&lt;p&gt;This approach will work on &lt;code&gt;f.collection_select&lt;/code&gt; too. Hope that helps. :)&lt;/p&gt;
+</description>
+        <pubDate>Sun, 23 Apr 2017 11:40:00 +0700</pubDate>
+        <link>https://tsara27.github.io/ruby/2017/04/23/custom-text-on-select-tag-option/</link>
+        <guid isPermaLink="true">https://tsara27.github.io/ruby/2017/04/23/custom-text-on-select-tag-option/</guid>
+        
+        <category>blog</category>
+        
+        <category>rails</category>
+        
+        <category>ruby</category>
+        
+        
+        <category>ruby</category>
+        
+      </item>
+    
+      <item>
+        <title>Paypal Login — Acceptance Test with Capybara and RSpec</title>
+        <description>&lt;p&gt;I was working on acceptance test for paypal login recently. It was hard on the beginning, because I found that the login form was put inside an iframe. Using plain capybara finder when locating the input text for email and password was painful. That wasn’t working. I should use capybara method &lt;code&gt;within_frame&lt;/code&gt; to make it works.&lt;!--more--&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;n&quot;&gt;within_frame&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;find&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;iframe&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;wait_until&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;60&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;page&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;has_css?&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;#email&amp;quot;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;fill_in&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;email&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;with&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;sample@mail.com&amp;quot;&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;fill_in&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;password&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;with&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;passwordsample&amp;quot;&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;click_button&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;Log In&amp;quot;&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;You see that I use &lt;code&gt;wait_until&lt;/code&gt; above. I use that to verify that the email input is loaded on the page or the input cannot be filled in.&lt;/p&gt;
+
+&lt;p&gt;I will share more from what I have learned from web development. See you next time.&lt;/p&gt;
+</description>
+        <pubDate>Fri, 11 Nov 2016 19:00:00 +0700</pubDate>
+        <link>https://tsara27.github.io/ruby/2016/11/11/paypal-express-login-acceptance-test-with-capybara-and-rspec/</link>
+        <guid isPermaLink="true">https://tsara27.github.io/ruby/2016/11/11/paypal-express-login-acceptance-test-with-capybara-and-rspec/</guid>
+        
+        <category>blog</category>
+        
+        <category>rails</category>
+        
+        <category>ruby</category>
+        
+        <category>capybara</category>
+        
+        <category>paypal</category>
+        
+        
+        <category>ruby</category>
+        
+      </item>
+    
+      <item>
+        <title>Git - Squashing Your Commits. Make your commits into a commit!</title>
+        <description>&lt;p&gt;In this article, I am going to tell you about squashing your commits with git. Squashing your commits would be useful for developing your application when you should use one commit message in describing the whole changes. Usually, you would use it when you work on a team, and you send the changes to be reviewed by other developers. Can you imagine if you have 20 commits describing the feature that you made? I think it would take time to click every commit, checking the code on the commit, give the review to you, then do the same thing again until the last commit. &lt;!--more--&gt;&lt;/p&gt;
+
+&lt;p&gt;Let’s dive into the implementation.&lt;/p&gt;
+
+&lt;p&gt;First thing todo is that you have to make sure that you’re in correct branch. Then, let’s see the commits that you want to be squeashed use &lt;code&gt;git log&lt;/code&gt; on your terminal.&lt;/p&gt;
+
+&lt;p&gt;You’ll see something like,&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;commit 6cdd995e17adc3f37b119ded1ed8e6310a46ecb6
+Author: fkeusr &amp;lt;faksr@example.com&amp;gt;
+Date:   Thu May 21 17:20:06 2015 +0700
+
+    add destroy all on todos
+
+commit 53604564f4d8ef38ff91ae9baa0bd7140fdb7ac3
+Author: fkeusr &amp;lt;faksr@example.com&amp;gt;
+Date:   Thu May 21 17:19:45 2015 +0700
+
+    add materialize toast
+
+commit d0ddf3de0ec8e6808734e40e5ccad72750745661
+Author: fkeusr &amp;lt;faksr@example.com&amp;gt;
+Date:   Thu May 21 17:19:15 2015 +0700
+
+    add clear all
+
+commit cac87d20fb3f1feb02ff02e8e08b67bdd0768e48
+Author: fkeusr &amp;lt;faksr@example.com&amp;gt;
+Date:   Thu May 21 16:49:06 2015 +0700
+
+    add destroy all method
+
+commit fder8091823asdsaaw12312q321sae2132123212
+Author: demouser &amp;lt;demo@fake.com&amp;gt;
+Date:   Thu May 21 16:48:36 2015 +0700
+
+    add override
+
+commit e1a7985400eaa4cfe9c2f9726f52eeecfbae1033
+Author: demouser &amp;lt;demo@fake.com&amp;gt;
+Date:   Wed May 19 07:48:36 2015 +0700
+
+    add new feature&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Let’s say the &lt;code&gt;fkeusr&lt;/code&gt; is you. You can see that there are &lt;strong&gt;4 commits&lt;/strong&gt; that you’ve made and you want to squash the commits into one commit. Let’s squashing the commits now. Use this command to run interactive rebase from your terminal.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;git rebase -i HEAD~n&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Change &lt;code&gt;n&lt;/code&gt; into number of commits from the last commit, &lt;code&gt;4&lt;/code&gt; commits, that you want to squashed.  After you hit enter, you’ll see something like this.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;pick 6cdd995 add destroy all on todos
+pick 5360456 add materialize toast
+pick d0ddf3d add clear all
+pick cac87d2 add destroy all method
+
+# Rebase cac87d2..39c606a onto cac87d2 (4 command(s))
+#
+# Commands:
+# p, pick = use commit
+# r, reword = use commit, but edit the commit message
+# e, edit = use commit, but stop for amending
+# s, squash = use commit, but meld into previous commit
+# f, fixup = like &amp;quot;squash&amp;quot;, but discard this commit&amp;#39;s log message
+# x, exec = run command (the rest of the line) using shell
+#
+# These lines can be re-ordered; they are executed from top to bottom.
+#
+# If you remove a line here THAT COMMIT WILL BE LOST.
+#
+# However, if you remove everything, the rebase will be aborted.
+#
+# Note that empty commits are commented out&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;As you can see that there are last 4 commits that you want to rebase. Change 3 commits from the bottom into &lt;code&gt;squash&lt;/code&gt; or &lt;code&gt;s&lt;/code&gt; rather than &lt;code&gt;pick&lt;/code&gt;. So, the 3 commits on the bottom will be squashed into the last commit that is still left with &lt;code&gt;pick&lt;/code&gt; command on the top. Just like this.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;pick 6cdd995 add destroy all on todos
+s 5360456 add materialize toast
+s d0ddf3d add clear all
+s cac87d2 add destroy all method
+
+# Rebase cac87d2..39c606a onto cac87d2 (4 command(s))
+#
+# Commands:
+# p, pick = use commit
+# r, reword = use commit, but edit the commit message
+# e, edit = use commit, but stop for amending
+# s, squash = use commit, but meld into previous commit
+# f, fixup = like &amp;quot;squash&amp;quot;, but discard this commit&amp;#39;s log message
+# x, exec = run command (the rest of the line) using shell
+#
+# These lines can be re-ordered; they are executed from top to bottom.
+#
+# If you remove a line here THAT COMMIT WILL BE LOST.
+#
+# However, if you remove everything, the rebase will be aborted.
+#
+# Note that empty commits are commented out&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;After that, you can save the changes and you’ll see something like,&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;# This is a combination of 4 commits.
+# The first commit&amp;#39;s message is:
+add destroy all on todos
+
+# This is the 2nd commit message:
+
+add materialize toast
+
+# This is the 3rd commit message:
+
+add destroy all method
+
+# This is the 4th commit message:
+
+update
+# Please enter the commit message for your changes. Lines starting
+# with &amp;#39;#&amp;#39; will be ignored, and an empty message aborts the commit.
+#
+# Date:      Thu May 21 17:19:15 2015 +0700
+#
+# rebase in progress; onto cac87d2
+# You are currently editing a commit while rebasing branch &amp;#39;master&amp;#39; on &amp;#39;cac87d2&amp;#39;.
+#
+# Changes to be committed:
+#       modified:   Gemfile.lock
+#       modified:   app/assets/javascripts/functions.js
+#       modified:   app/assets/stylesheets/application.scss
+#       new file:   app/assets/stylesheets/override.scss
+#       new file:   app/assets/stylesheets/styles.scss
+#       modified:   app/controllers/api/todos_controller.rb
+#       modified:   app/views/home/_doing.slim
+#       modified:   app/views/home/_done.slim
+#       modified:   app/views/home/_listed.slim
+#       modified:   app/views/home/_todos_row.slim
+#       modified:   app/views/home/index.slim
+#       modified:   config/routes.rb
+#&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;You can remove these lines, and change the commit message into your commit summary and save the changes.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;# This is a combination of 4 commits.
+# The first commit&amp;#39;s message is:
+add destroy all on todos
+
+# This is the 2nd commit message:
+
+add materialize toast
+
+# This is the 3rd commit message:
+
+add destroy all method
+
+# This is the 4th commit message:
+
+update&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;You can check again your log using &lt;code&gt;git log&lt;/code&gt;, and you’ll see that your commits squashed.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;commit 37366d3e3959ee30afa88206c84df37e6efdbe92
+Author: fkeusr &amp;lt;faksr@example.com&amp;gt;
+Date:   Thu May 21 17:20:06 2015 +0700
+
+    this is my commits summary
+
+commit fder8091823asdsaaw12312q321sae2132123212
+Author: demouser &amp;lt;demo@fake.com&amp;gt;
+Date:   Thu May 21 16:48:36 2015 +0700
+
+    add override
+
+commit e1a7985400eaa4cfe9c2f9726f52eeecfbae1033
+Author: demouser &amp;lt;demo@fake.com&amp;gt;
+Date:   Wed May 19 07:48:36 2015 +0700
+
+    add new feature&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Thank you for following this tutorial. See you on next tutorial. :)&lt;/p&gt;
+</description>
+        <pubDate>Fri, 25 Dec 2015 13:45:47 +0000</pubDate>
+        <link>https://tsara27.github.io/git/2015/12/25/git-squashing-your-commits/</link>
+        <guid isPermaLink="true">https://tsara27.github.io/git/2015/12/25/git-squashing-your-commits/</guid>
+        
+        <category>blog</category>
+        
+        <category>git</category>
+        
+        <category>squash</category>
+        
+        <category>rebase</category>
+        
+        <category>commits</category>
+        
+        <category>commit</category>
+        
+        
+        <category>git</category>
+        
+      </item>
+    
+      <item>
+        <title>Signature Pad on Rails</title>
+        <description>&lt;p&gt;In developing world, we would see a lot of applications. Some applications might need a signature pad to sign an agreement or policies that they provide. How do we put the signature pad on Rails app? Now, I am going to explain how to put signature pad on Rails app. I will use jQuery plugin, SignaturePad, by Thomas J Bradley.&lt;!--more--&gt;&lt;/p&gt;
+
+&lt;p&gt;Here’s the &lt;a target=&quot;_blank&quot; href=&quot;http://thomasjbradley.ca/lab/signature-pad&quot;&gt;link&lt;/a&gt; to the plugin. Download the plugin first, we will need &lt;code&gt;flashcanvas.js&lt;/code&gt;, &lt;code&gt;jquery.signaturepad.min.js&lt;/code&gt;, and &lt;code&gt;json2.min.js&lt;/code&gt;. The stylesheets are included too on the plugin. We will need &lt;code&gt;jquery.signaturepad.css&lt;/code&gt;, and &lt;code&gt;pen.cur&lt;/code&gt; (cursor for signature).&lt;/p&gt;
+
+&lt;p&gt;Let’s create a new rails application. Then, put the files in your &lt;code&gt;app/assets&lt;/code&gt;, the js files on the &lt;code&gt;javascripts/signaturepad&lt;/code&gt; and the css files with the pen cursor on the &lt;code&gt;stylesheets/signaturepad&lt;/code&gt;. Don’t forget to include those files in your application.&lt;/p&gt;
+
+&lt;p&gt;We can start the implementation right away. So, here, I am going to implement a simple agreement that needs to be signed. Let’s start with the model first. Create a model named &lt;code&gt;Agreement&lt;/code&gt; that has two columns, &lt;code&gt;name&lt;/code&gt; with string type and &lt;code&gt;signature&lt;/code&gt; with text type which will hold the coordinates from the signature later.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;n&quot;&gt;rails&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;g&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;model&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Agreement&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:string&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;signature&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;text&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;We use &lt;code&gt;text&lt;/code&gt;, because the coordinates would be very long. The &lt;code&gt;string&lt;/code&gt; may not hold the whole coordinates. Don’t forget to run the migration after you generate the model.&lt;/p&gt;
+
+&lt;p&gt;After the model is created and the table is made, we can move to the controller. Create a controller named &lt;code&gt;agreements_controller.rb&lt;/code&gt;. Add &lt;code&gt;index&lt;/code&gt;, &lt;code&gt;create&lt;/code&gt;, and &lt;code&gt;show&lt;/code&gt; methods on the controller.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;AgreementsController&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;ApplicationController&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;index&lt;/span&gt;
+    &lt;span class=&quot;vi&quot;&gt;@agreement&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Agreement&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;new&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;create&lt;/span&gt;
+    &lt;span class=&quot;vi&quot;&gt;@agreement&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Agreement&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;create&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;agreement_params&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;render&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;action&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;show&amp;quot;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;vi&quot;&gt;@agreement&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;persisted?&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;show&lt;/span&gt;
+    &lt;span class=&quot;vi&quot;&gt;@agreement&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Agreement&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;find&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;params&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:id&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+  &lt;span class=&quot;kp&quot;&gt;private&lt;/span&gt;
+
+  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;agreement_params&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;params&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;require&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:agreement&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;permit&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:signature&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;In the create method, we could see that if &lt;code&gt;@agreement&lt;/code&gt; is saved, so it would render &lt;code&gt;show&lt;/code&gt; method. The show method will hold the agreement that has been created. Let’s create the create the view for index page first. The page will contain a agreement and the signature pad.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-html&quot; data-lang=&quot;html&quot;&gt;&lt;span class=&quot;c&quot;&gt;&amp;lt;!-- app/views/agreements/index.html.erb --&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;err&quot;&gt;&amp;lt;&lt;/span&gt;%= form_for @agreement, html: { class: &amp;quot;sigPad&amp;quot; } do |f| %&amp;gt;
+  Your name: &lt;span class=&quot;err&quot;&gt;&amp;lt;&lt;/span&gt;%= f.text_field :name %&amp;gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;br&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;h5&amp;gt;&lt;/span&gt;User Agreement&lt;span class=&quot;nt&quot;&gt;&amp;lt;/h5&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;p&amp;gt;&lt;/span&gt;By signing this agreement, you promise to be a great person.&lt;span class=&quot;nt&quot;&gt;&amp;lt;/p&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;div&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;sig sigWrapper&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;div&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;typed&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&amp;lt;/div&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;canvas&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;pad&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;width=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;298&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;height=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;55&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&amp;lt;/canvas&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;err&quot;&gt;&amp;lt;&lt;/span&gt;%= f.hidden_field :signature, class: &amp;quot;output&amp;quot; %&amp;gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;br&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;/div&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;err&quot;&gt;&amp;lt;&lt;/span&gt;%= f.submit %&amp;gt;
+&lt;span class=&quot;err&quot;&gt;&amp;lt;&lt;/span&gt;% end %&amp;gt;
+
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;script &lt;/span&gt;&lt;span class=&quot;na&quot;&gt;type=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;text/javascript&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nx&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;document&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;ready&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;.sigPad&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;signaturePad&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;({&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;drawOnly&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/script&amp;gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;At the form we see that there’s &lt;code&gt;sigPad&lt;/code&gt; class on the form tag. The class will help us to initialize the signature pad. &lt;code&gt;sig&lt;/code&gt; and &lt;code&gt;sigWrapper&lt;/code&gt; class would be used for the signature pad box. Inside that class, there’s a canvas and a hidden field. The canvas that would be the area of signature that can be drawn. The hidden field with class &lt;code&gt;output&lt;/code&gt; will hold the coordinates for our signature.&lt;/p&gt;
+
+&lt;p&gt;As you can see at the bottom, there’s javascript code to initiate the signature pad. I use &lt;code&gt;drawOnly&lt;/code&gt; option, because we only need the drawing are for this time. We can use text field to generate our signature too. You can see the example &lt;a target=&quot;_blank&quot; href=&quot;https://thomasjbradley.github.io/signature-pad/examples/accept-signature.html&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;After the view is created, let’s add the routes. Open the &lt;code&gt;config/routes.rb&lt;/code&gt; and add this lines.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;n&quot;&gt;root&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;agreements#index&amp;#39;&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;resources&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:agreements&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Run the server and go to the site. The page that we’ve created would look like this.&lt;/p&gt;
+
+&lt;iframe src=&quot;https://drive.google.com/file/d/0B245dSGaMJ5YbEhqUUNyNVFDa00/preview&quot; style=&quot;width: 100%&quot;&gt;&lt;/iframe&gt;
+
+&lt;p&gt;Let’s create a page to show the agreement that is created.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-html&quot; data-lang=&quot;html&quot;&gt;&lt;span class=&quot;c&quot;&gt;&amp;lt;!-- app/views/agreements/show.html.erb --&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;h3&amp;gt;&lt;/span&gt;Hello &lt;span class=&quot;err&quot;&gt;&amp;lt;&lt;/span&gt;%= @agreement.name %&amp;gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;/h3&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;p&amp;gt;&lt;/span&gt;Thank you for signing the agreement. You have promised to be a great person!&lt;span class=&quot;nt&quot;&gt;&amp;lt;/p&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;div&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;sigPad sigWrapper&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;div&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;typed&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&amp;lt;/div&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;canvas&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;pad&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;width=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;298&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;height=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;55&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&amp;lt;/canvas&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;input&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;type=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;hidden&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;output&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;output&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/div&amp;gt;&lt;/span&gt;
+
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;script &lt;/span&gt;&lt;span class=&quot;na&quot;&gt;type=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;text/javascript&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nx&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;document&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;ready&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;sig&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;%=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;raw&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;@&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;agreement&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;signature&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;%&amp;gt;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;.sigPad&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;signaturePad&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;({&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;displayOnly&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}).&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;regenerate&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;sig&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/script&amp;gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;You can see that I add &lt;code&gt;sig&lt;/code&gt; variable on the js code. The variable contains the &lt;code&gt;@agreement.signature&lt;/code&gt; value as text. Then, by using &lt;code&gt;raw&lt;/code&gt;, I make the value into JSON data.&lt;/p&gt;
+
+&lt;p&gt;When I initiate the signature, I use option &lt;code&gt;displayOnly: true&lt;/code&gt; to make the signature pad not drawable. Then, &lt;code&gt;regenerate(sig)&lt;/code&gt; is used for generating a signature that is created and kept in &lt;code&gt;sig&lt;/code&gt; variable.&lt;/p&gt;
+
+&lt;p&gt;Try to add your signature, you’ll see the result just like this.&lt;/p&gt;
+
+&lt;iframe src=&quot;https://drive.google.com/file/d/0B245dSGaMJ5YdjFlcHQ5Y2dOYWM/preview&quot; style=&quot;width: 100%&quot;&gt;&lt;/iframe&gt;
+
+&lt;p&gt;You can access the app repository &lt;a target=&quot;_blank&quot; href=&quot;https://github.com/tsara27/sample_signature_pad&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Thank you for following this tutorial. Keep learning and happy coding!&lt;/p&gt;
+</description>
+        <pubDate>Thu, 17 Sep 2015 08:12:55 +0000</pubDate>
+        <link>https://tsara27.github.io/ruby/2015/09/17/signature-pad-on-rails/</link>
+        <guid isPermaLink="true">https://tsara27.github.io/ruby/2015/09/17/signature-pad-on-rails/</guid>
+        
+        <category>blog</category>
+        
+        <category>rails</category>
+        
+        <category>ruby</category>
+        
+        <category>signature-pad</category>
+        
+        <category>signature</category>
+        
+        
+        <category>ruby</category>
+        
+      </item>
+    
+      <item>
+        <title>Yeay! Grouping anagram with Ruby</title>
+        <description>&lt;p&gt;It’s been few months since I don’t write any blog post. I have been really busy with some projects at the same time. That’s why I leave my blog. Anyway, do you remember that I wrote a post about anagram few months ago? Now, I am going to share with you about grouping anagram words. It’s going to be simple or not. It depends on how do you solve the problem. Let’s start! &lt;!--more--&gt;&lt;/p&gt;
+
+&lt;p&gt;Let’s say that we have a variable called &lt;code&gt;words = [&quot;ate&quot;, &quot;eat&quot;, &quot;tea&quot;, &quot;keen&quot;, &quot;meticulous&quot;, &quot;spendid&quot;, &quot;plug&quot;, &quot;gulp&quot;]&lt;/code&gt; that contains words. We are going to organize the words with its anagram. For example, if I have this variable &lt;code&gt;x = [&#39;bus&#39;, &#39;sub&#39;]&lt;/code&gt; the result will be &lt;code&gt;&#39;b&#39;, &#39;s&#39;, &#39;u&#39; =&amp;gt; [&#39;bus&#39;, &#39;sub&#39;]&lt;/code&gt;. What do you think the solution would be?&lt;/p&gt;
+
+&lt;p&gt;Do you know that Ruby has group_by method? Find out more &lt;a target=&quot;_blank&quot; href=&quot;http://ruby-doc.org/core-2.2.2/Enumerable.html#method-i-group_by&quot;&gt;here&lt;/a&gt;. I will use group_by method here to organize the words.&lt;/p&gt;
+
+&lt;p&gt;Let’s play with interactive ruby or &lt;code&gt;irb&lt;/code&gt;. Run &lt;code&gt;irb&lt;/code&gt; on your terminal. Put the variables with the array to your irb.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;n&quot;&gt;irb&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;words&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;ate&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;eat&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;tea&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;keen&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;meticulous&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;spendid&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;plug&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;gulp&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;irb&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;words&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;group_by&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;word&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;word&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;split&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sort&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;irb&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;a&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;e&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;t&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]=&amp;gt;[&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;ate&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;eat&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;tea&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;e&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;e&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;k&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;n&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]=&amp;gt;[&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;keen&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;c&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;e&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;i&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;l&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;m&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;o&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;s&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;t&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;u&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;u&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]=&amp;gt;[&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;meticulous&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;d&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;d&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;e&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;i&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;n&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;p&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;s&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]=&amp;gt;[&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;spendid&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;g&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;l&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;p&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;u&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]=&amp;gt;[&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;plug&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;gulp&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;This is how it works. The words will be grouped by splitting the each words into characters, sort the splitted characters, then find words that have similar character. That simple.&lt;/p&gt;
+
+&lt;p&gt;There’s another method that I will use here. It looks like more complex and longer. Let’s create &lt;code&gt;anagram.rb&lt;/code&gt; file and write this code.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;n&quot;&gt;words&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;ate&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;eat&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;tea&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;keen&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;meticulous&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;spendid&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;plug&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;gulp&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;h&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Hash&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;new&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;keys&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;words&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;map&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;word&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;word&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;split&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sort&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;uniq&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;keys&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;each&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;key&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;h&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;key&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;words&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;each&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;word&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;word&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;split&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sort&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;key&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;h&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;key&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;word&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+&lt;span class=&quot;nb&quot;&gt;puts&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;h&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;So here, I write hash variable called &lt;code&gt;h&lt;/code&gt;. Before I start grouping the words into anagram characters, I should provide its anagram characters first. You can see on the line 3 that I split each words into sorted characters and remove duplicate anagram arrays from it by using &lt;code&gt;uniq&lt;/code&gt; method. After the keys are provided, I start to do something with each anagram characters. I put each anagram characters as the key on hash that has empty array. Then, I do something with each words. Each words will be splitted and checked whether the splitted word has the same character with the anagram character. If the splitted word has the same character with the anagram character, the word will be pushed into the anagram character (hash key). So, when we run the &lt;code&gt;anagram.rb&lt;/code&gt; with this &lt;code&gt;ruby anagram.rb&lt;/code&gt;, the result would be like this.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;a&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;e&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;t&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]=&amp;gt;[&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;ate&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;eat&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;tea&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;e&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;e&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;k&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;n&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]=&amp;gt;[&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;keen&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;c&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;e&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;i&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;l&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;m&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;o&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;s&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;t&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;u&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;u&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]=&amp;gt;[&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;meticulous&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;d&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;d&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;e&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;i&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;n&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;p&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;s&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]=&amp;gt;[&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;spendid&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;g&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;l&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;p&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;u&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]=&amp;gt;[&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;plug&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;gulp&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;That’s  all from me! You can use your own solution. I would say that we should use the simplest solution in solving any problem that you face in coding.&lt;/p&gt;
+
+&lt;p&gt;Happy coding! :)&lt;/p&gt;
+</description>
+        <pubDate>Sat, 02 May 2015 07:55:57 +0000</pubDate>
+        <link>https://tsara27.github.io/ruby/2015/05/02/yeay-grouping-anagram/</link>
+        <guid isPermaLink="true">https://tsara27.github.io/ruby/2015/05/02/yeay-grouping-anagram/</guid>
+        
+        <category>blog</category>
+        
+        <category>ruby</category>
+        
+        
+        <category>ruby</category>
+        
+      </item>
+    
+      <item>
+        <title>Developing Announcement Wall Using Redis and Bootstrap</title>
+        <description>&lt;p&gt;There will be a moment where using RDBMS is not really recommended when the process itself has fast pace in storing and destroying a record on database. For example in announcement application a user will create announcement that would be available in 30 minutes, post an information and it’s disappeared after the time is up. In this case, we can use a key value store, or referred to NoSQL database.&lt;!--more--&gt;&lt;/p&gt;
+
+&lt;p&gt;There are some NoSQL database such as &lt;a href=&quot;http://www.mongodb.org/&quot;&gt;MongoDB&lt;/a&gt;, &lt;a href=&quot;http://redis.io/Redis&quot;&gt;Redis&lt;/a&gt;, etc. Each of them has different characteristics and implementation. You can read the documentation for more details.&lt;/p&gt;
+
+&lt;p&gt;Now, we will implement a really simple announcement application using Redis hash key and expire, also bootstrap sass to make the page looks better. Let’s get started.&lt;/p&gt;
+
+&lt;h2 id=&quot;preparing-redis-and-bootstrap&quot;&gt;Preparing Redis and Bootstrap&lt;/h2&gt;
+
+&lt;p&gt;Generate new rails application using &lt;code&gt;rails new simple_announcement&lt;/code&gt;. Remove turbolinks from the app, we will not need turbolinks this time. Then, add redis gem inside the Gemfile. Run &lt;code&gt;bundle install&lt;/code&gt;. If you see in redis gem documentation, we can initiate redis by using &lt;code&gt;redis = Redis.new&lt;/code&gt; everytime we need it. Because we are going to use it all over the time we use application, it would be better if we create redis initializer. Let’s create &lt;code&gt;redis.rb&lt;/code&gt; inside &lt;code&gt;config/initializers/&lt;/code&gt; folder. Write this into it.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;vg&quot;&gt;$redis&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Redis&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;new&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Let’s add bootstrap into our application. Add this into our &lt;code&gt;Gemfile&lt;/code&gt; and run &lt;code&gt;bundle install&lt;/code&gt;.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;n&quot;&gt;gem&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;sass-rails&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;~&amp;gt; 5.0&amp;#39;&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;gem&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;bootstrap-sass&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;~&amp;gt; 3.3.3&amp;#39;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Insert this line after &lt;code&gt;jquery_ujs&lt;/code&gt; on &lt;code&gt;app/assets/javascripts/application.js&lt;/code&gt;.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-javascript&quot; data-lang=&quot;javascript&quot;&gt;&lt;span class=&quot;c1&quot;&gt;//= require bootstrap-sprockets&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Rename &lt;code&gt;app/assets/stylesheets/application.css&lt;/code&gt; into &lt;code&gt;application.scss&lt;/code&gt;, empty the file and put the lines below inside the file.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-css&quot; data-lang=&quot;css&quot;&gt;&lt;span class=&quot;k&quot;&gt;@import&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;bootstrap-sprockets&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;@import&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;bootstrap&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;body&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;.container&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;padding-top&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;60px&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;create-announcement-model&quot;&gt;Create Announcement Model&lt;/h2&gt;
+
+&lt;p&gt;We know that Ruby on Rails will use ActiveRecord that handles the model. Because Redis doesn’t support ActiveRecord, let’s create a class named Announcement inside application model.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Announcement&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Things that we need to do after creating the class is adding methods that supports app functionality. In this case, announcement needs two methods. The first one is &lt;code&gt;add&lt;/code&gt; value to key and the last one is &lt;code&gt;fetch&lt;/code&gt; all keys. Here’s the implementation.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Announcement&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;add&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;announcement&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;posted_by&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;expire&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;timestamp&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Time&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;now&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;to_i&lt;/span&gt;
+    &lt;span class=&quot;vg&quot;&gt;$redis&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;hmset&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;announcement:&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;#{&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;timestamp&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;announcement&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;announcement&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;posted_by&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;posted_by&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;vg&quot;&gt;$redis&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;expire&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;announcement:&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;#{&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;timestamp&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;expire&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;fetch_all&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;arr&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;announcements&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;vg&quot;&gt;$redis&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;keys&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;announcement:*&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;announcements&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;each&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;announcement&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;arr&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;vg&quot;&gt;$redis&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;hgetall&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;announcement&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;arr&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;In the &lt;code&gt;add&lt;/code&gt; method we pass three parameters, such as announcement text, who post the announcement, and when the announcement is expired. We know that there might be some users that post announcement at the same time, so the hash key for announcement should be unique. In this case, I would use timestamp to differentiate the keys. The first argument that passed to the hmset method is the name of the hash key. The second is the key inside the hash to store specified value followed by the value of the key and so on. Then, after the hash key is created, we set how many seconds that the hash key will be expired because we know that announcement won’t be last forever.&lt;/p&gt;
+
+&lt;p&gt;Let’s see on &lt;code&gt;fetch_all&lt;/code&gt; method that we initiate empty array. The empty array will be filled by hash keys that begin with announcement. After the announcements are fetched, we put all the hashes into the empty array. The array will be filled by hashes and returned.&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;Don’t forget to run &lt;code&gt;redis-server&lt;/code&gt; before you run &lt;code&gt;rails server&lt;/code&gt;.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h2 id=&quot;create-announcement-controller-and-views&quot;&gt;Create Announcement Controller and Views&lt;/h2&gt;
+
+&lt;p&gt;In this section we are going to create application layout, app functionality and its interface.&lt;/p&gt;
+
+&lt;h3 id=&quot;create-application-layout&quot;&gt;Create Application Layout&lt;/h3&gt;
+
+&lt;p&gt;Let’s open &lt;code&gt;app/views/layouts/application.html.erb&lt;/code&gt;. Change the layout into this. We will render navigation bar that is separated from this file.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-html&quot; data-lang=&quot;html&quot;&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;!DOCTYPE html&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;html&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;head&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;title&amp;gt;&lt;/span&gt;Announcement Wall&lt;span class=&quot;nt&quot;&gt;&amp;lt;/title&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;err&quot;&gt;&amp;lt;&lt;/span&gt;%= stylesheet_link_tag    &amp;#39;application&amp;#39;, media: &amp;#39;all&amp;#39; %&amp;gt;
+    &lt;span class=&quot;err&quot;&gt;&amp;lt;&lt;/span&gt;%= javascript_include_tag &amp;#39;application&amp;#39; %&amp;gt;
+    &lt;span class=&quot;err&quot;&gt;&amp;lt;&lt;/span&gt;%= csrf_meta_tags %&amp;gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;/head&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;body&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;err&quot;&gt;&amp;lt;&lt;/span&gt;%= render &amp;quot;layouts/navbar&amp;quot; %&amp;gt;
+    &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- Begin page content --&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;div&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;container&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;err&quot;&gt;&amp;lt;&lt;/span&gt;%= yield %&amp;gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/div&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;/body&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/html&amp;gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-html&quot; data-lang=&quot;html&quot;&gt;&lt;span class=&quot;c&quot;&gt;&amp;lt;!-- app/views/layouts/_navbar.html.erb --&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;&amp;lt;!-- Fixed navbar --&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;nav&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;navbar navbar-default navbar-fixed-top&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;div&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;container&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;div&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;navbar-header&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;nt&quot;&gt;&amp;lt;button&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;type=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;button&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;navbar-toggle collapsed&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;data-toggle=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;collapse&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;data-target=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;#navbar&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;aria-expanded=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;false&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;aria-controls=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;navbar&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;span&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;sr-only&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;Toggle navigation&lt;span class=&quot;nt&quot;&gt;&amp;lt;/span&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;span&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;icon-bar&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&amp;lt;/span&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;span&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;icon-bar&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&amp;lt;/span&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;span&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;icon-bar&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&amp;lt;/span&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;nt&quot;&gt;&amp;lt;/button&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;nt&quot;&gt;&amp;lt;a&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;navbar-brand&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;href=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;/&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;Announcement Wall&lt;span class=&quot;nt&quot;&gt;&amp;lt;/a&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/div&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;div&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;id=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;navbar&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;collapse navbar-collapse&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;nt&quot;&gt;&amp;lt;ul&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;nav navbar-nav&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;li&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;active&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;&amp;lt;&lt;/span&gt;%= link_to &amp;quot;Post Announcement!&amp;quot;, new_announcement_path%&amp;gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;/li&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;nt&quot;&gt;&amp;lt;/ul&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/div&amp;gt;&lt;/span&gt;&lt;span class=&quot;c&quot;&gt;&amp;lt;!--/.nav-collapse --&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;/div&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/nav&amp;gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;You can refresh the page. Then, you’ll see.
+&amp;lt;iframe src=&quot;https://docs.google.com/file/d/0B245dSGaMJ5YUDY2cDdoZnhqeFU/preview&quot; style=&quot;width: 100%&quot;&amp;gt;&amp;lt;/iframe&amp;gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;create-application-functionality-and-interface&quot;&gt;Create Application Functionality and Interface&lt;/h3&gt;
+
+&lt;p&gt;The model and layout are setup. Then, we need to implement announcement interface to help user to create and view announcements from web page. Let’s create the announcements controller.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;AnnouncementsController&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;ApplicationController&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;before_action&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:init_class&lt;/span&gt;
+
+  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;index&lt;/span&gt;
+    &lt;span class=&quot;vi&quot;&gt;@announcements&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;vi&quot;&gt;@announcement&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;fetch_all&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;create&lt;/span&gt;
+    &lt;span class=&quot;vi&quot;&gt;@announcement&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;add&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;params&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:text&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;params&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:posted_by&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;params&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:expire&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;redirect_to&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;announcements_path&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+  &lt;span class=&quot;kp&quot;&gt;private&lt;/span&gt;
+
+  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;init_class&lt;/span&gt;
+    &lt;span class=&quot;vi&quot;&gt;@announcement&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Announcement&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;new&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;We use “plain” class to define our Announcement model. So, we have to initiate the class at the first time using before action filter. As you can see inside the index method, I put an instance variable named &lt;code&gt;@announcements&lt;/code&gt;. It is used to fetch announcements on Redis storage. The announcements that are fetched from Redis are compiled as JSON data type. So, while we put it on the view, it has different ways from generating query result from &lt;code&gt;ActiveRecord&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;Let’s create &lt;code&gt;app/views/announcements/index.html.erb&lt;/code&gt;.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;sx&quot;&gt;% @announcements.each &lt;/span&gt;&lt;span class=&quot;k&quot;&gt;do&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;announcement&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;sx&quot;&gt;%&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;sx&quot;&gt;  &amp;lt;div class=&amp;quot;well&amp;quot;&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;blockquote&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;sx&quot;&gt;%= announcement[&amp;#39;announcement&amp;#39;] %&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;sx&quot;&gt;    &amp;lt;/blockquote&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;sx&quot;&gt;    &amp;lt;p&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;sx&quot;&gt;      - &amp;lt;%=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;announcement&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;posted_by&amp;#39;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;sx&quot;&gt;%&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;sx&quot;&gt;    &amp;lt;/p&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;sr&quot;&gt;/div&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;sr&quot;&gt;&amp;lt;% end %&amp;gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;After that, add announcements routes &lt;code&gt;resources :announcements, only: [:index, :new, :create]&lt;/code&gt;. Don’t forget to set root path into &lt;code&gt;anouncements#index&lt;/code&gt;. Then, go to &lt;code&gt;http://localhost:3000/announcements&lt;/code&gt;. You’ll see an empty container there. Because there’s no hash keys that stored on Redis storage.&lt;/p&gt;
+
+&lt;p&gt;Next step, we can add announcement form. We can just add &lt;code&gt;new.html.erb&lt;/code&gt; inside &lt;code&gt;app/views/announcements&lt;/code&gt; without creating method. When we create the routes, Rails will automatically searching for the view when there’s no method related with the routes. Let’s fill &lt;code&gt;new.html.erb&lt;/code&gt; with this.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-html&quot; data-lang=&quot;html&quot;&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;div&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;row&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;div&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;col-md-11 well&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;h3&amp;gt;&lt;/span&gt;Post Announcement&lt;span class=&quot;nt&quot;&gt;&amp;lt;/h3&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;err&quot;&gt;&amp;lt;&lt;/span&gt;%= form_tag announcements_path, method: :post, class: &amp;quot;form-horizontal&amp;quot; do %&amp;gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;div&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;form-group&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;err&quot;&gt;&amp;lt;&lt;/span&gt;%= label_tag &amp;#39;text&amp;#39;, &amp;quot;Announcement Text&amp;quot;, class: &amp;#39;col-sm-2 control-label&amp;#39; %&amp;gt;
+      &lt;span class=&quot;nt&quot;&gt;&amp;lt;div&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;col-sm-10&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;err&quot;&gt;&amp;lt;&lt;/span&gt;%= text_field_tag &amp;#39;text&amp;#39;, &amp;quot;&amp;quot;, class: &amp;quot;form-control&amp;quot; %&amp;gt;
+      &lt;span class=&quot;nt&quot;&gt;&amp;lt;/div&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/div&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;div&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;form-group&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;err&quot;&gt;&amp;lt;&lt;/span&gt;%= label_tag &amp;#39;posted_by&amp;#39;, &amp;quot;Posted By&amp;quot;, class: &amp;#39;col-sm-2 control-label&amp;#39; %&amp;gt;
+      &lt;span class=&quot;nt&quot;&gt;&amp;lt;div&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;col-sm-10&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;err&quot;&gt;&amp;lt;&lt;/span&gt;%= text_field_tag &amp;#39;posted_by&amp;#39;, &amp;quot;&amp;quot;, class: &amp;quot;form-control&amp;quot; %&amp;gt;
+      &lt;span class=&quot;nt&quot;&gt;&amp;lt;/div&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/div&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;div&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;form-group&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;err&quot;&gt;&amp;lt;&lt;/span&gt;%= label_tag &amp;#39;expire&amp;#39;, &amp;quot;Expired on (seconds)&amp;quot;, class: &amp;#39;col-sm-2 control-label&amp;#39; %&amp;gt;
+      &lt;span class=&quot;nt&quot;&gt;&amp;lt;div&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;col-sm-10&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;err&quot;&gt;&amp;lt;&lt;/span&gt;%= select_tag &amp;quot;expire&amp;quot;, options_for_select([ 10, 20, 30, 60], 30) %&amp;gt;
+      &lt;span class=&quot;nt&quot;&gt;&amp;lt;/div&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/div&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;div&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;form-group&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;div&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;col-sm-offset-2 col-sm-10&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;err&quot;&gt;&amp;lt;&lt;/span&gt;%= button_tag &amp;quot;Submit&amp;quot;, class: &amp;quot;btn btn-default&amp;quot; %&amp;gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/div&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;/div&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;err&quot;&gt;&amp;lt;&lt;/span&gt;% end %&amp;gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;/div&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/div&amp;gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Let’s try to post announcement.&lt;/p&gt;
+
+&lt;iframe src=&quot;https://docs.google.com/file/d/0B245dSGaMJ5YUUR6Tm1NMkRuVWc/preview&quot; style=&quot;width: 100%&quot;&gt;&lt;/iframe&gt;
+
+&lt;p&gt;We’ve created method &lt;code&gt;create&lt;/code&gt; on the controller.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;AnnouncementsController&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;ApplicationController&lt;/span&gt;
+  &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;create&lt;/span&gt;
+    &lt;span class=&quot;vi&quot;&gt;@announcement&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;add&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;params&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:text&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;params&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:posted_by&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;params&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:expire&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;redirect_to&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;announcements_path&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+  &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;We can use method add from Announcement model and pass arguments into it. After it is created, we can see that the announcement is already posted on the website. Voila!&lt;/p&gt;
+
+&lt;iframe src=&quot;https://docs.google.com/file/d/0B245dSGaMJ5YTVV2NTFMcEx4c3M/preview&quot; style=&quot;width: 100%&quot;&gt;&lt;/iframe&gt;
+
+&lt;p&gt;You can see the source &lt;a href=&quot;https://github.com/tsara27/announcement_wall&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
+</description>
+        <pubDate>Thu, 05 Mar 2015 17:46:00 +0700</pubDate>
+        <link>https://tsara27.github.io/rails/2015/03/05/developing-announcement-wall-using-redis-and-bootstrap/</link>
+        <guid isPermaLink="true">https://tsara27.github.io/rails/2015/03/05/developing-announcement-wall-using-redis-and-bootstrap/</guid>
+        
+        <category>blog</category>
+        
+        <category>ruby</category>
+        
+        <category>rails</category>
+        
+        <category>redis</category>
+        
+        
+        <category>rails</category>
+        
+      </item>
+    
+      <item>
+        <title>Anagram Checker with Ruby</title>
+        <description>&lt;p&gt;Few days ago I had a test to check whether a word is anagram or not. Now, I want to share with you how to check anagram using Ruby. Let’s say that we have two words, and want to check if the both of them is anagram. What I am going to do is that split each words and make sure that the words have same characters and length.&lt;!--more--&gt;&lt;/p&gt;
+
+&lt;p&gt;Let’s implement the logic here. Create file named &lt;code&gt;anagram.rb&lt;/code&gt;.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;is_anagram?&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;first_word&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;second_word&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;first_word&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;chars&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;second_word&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;chars&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;length&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;zero?&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;?&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;Is anagram!&amp;quot;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;Not anagram!&amp;quot;&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+&lt;span class=&quot;nb&quot;&gt;puts&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;is_anagram?&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;less&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;sell&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;puts&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;is_anagram?&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;lose&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;sell&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;So, what I did first is splitting each words, then subtract the first word with the second word. Let see the first case where the first word is “less” and the second word is “sell”. “less” will be splitted into &lt;code&gt;[&quot;l&quot;, &quot;e&quot;, &quot;s&quot;, &quot;s&quot;]&lt;/code&gt; and the word “sell” into &lt;code&gt;[&quot;s&quot;, &quot;e&quot;, &quot;l&quot;, &quot;l&quot;]&lt;/code&gt;. When the first array is subtracted with the second array, this will raise &lt;code&gt;[]&lt;/code&gt;, which has zero length. If the words are the set of anagram, so the length will be zero and vise versa.&lt;/p&gt;
+
+&lt;p&gt;Run the script using &lt;code&gt;ruby anagram.rb&lt;/code&gt; in your terminal. Then it would return,&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;no&quot;&gt;Is&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;anagram!&lt;/span&gt;
+&lt;span class=&quot;no&quot;&gt;Not&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;anagram!&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Happy coding! :)&lt;/p&gt;
+</description>
+        <pubDate>Mon, 19 Jan 2015 19:42:32 +0000</pubDate>
+        <link>https://tsara27.github.io/ruby/2015/01/19/anagram-checker-with-ruby/</link>
+        <guid isPermaLink="true">https://tsara27.github.io/ruby/2015/01/19/anagram-checker-with-ruby/</guid>
+        
+        <category>blog</category>
+        
+        <category>ruby</category>
+        
+        
+        <category>ruby</category>
+        
+      </item>
+    
+      <item>
+        <title>Create Simple Messaging Application Using Ajax and Ancestry</title>
+        <description>&lt;p&gt;Before start reading this tutorial I recommend you to have basic knowledge of Ruby, Ruby on Rails, and jQuery.&lt;/p&gt;
+
+&lt;p&gt;In some cases in developing application I met requirement that I should create messaging, comment, or forum feature. I want to share about how to implement a simple messaging app. Basically the flow is more or less just like this, somebody send a message and somebody else reply it. That’s simple. But, how the code looks like.&lt;!--more--&gt;&lt;/p&gt;
+
+&lt;p&gt;First thing first, as usual, generate a rails app using &lt;code&gt;rails new simple_messaging&lt;/code&gt; inside the terminal. Don’t forget to point the folder where do you want to put the app. After that let’s run &lt;code&gt;rake db:create&lt;/code&gt; to create the database. We’re going to create a table that stores messages. So it should have several fields such as name. message, and timestamps. That simple. Let’s create the Message model use rails generator &lt;code&gt;rails g model message&lt;/code&gt;. Open the &lt;code&gt;message.rb&lt;/code&gt; in app/models. Add name, message, and timestamps fields to the migration.&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;If you find a problem in migration or creating database with Ralis 4.2 you may add &lt;code&gt;gem &#39;arel&#39;, &#39;6.0.0.beta2&#39;&lt;/code&gt; to your Gemfile and do &lt;code&gt;bundle install&lt;/code&gt;
+In rails 4.2 you have to add &lt;code&gt;gem &#39;responders&#39;&lt;/code&gt; to implement xhr request&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;CreateMessages&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;ActiveRecord&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Migration&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;change&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;create_table&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:messages&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;t&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;t&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;string&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:name&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;t&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;string&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:text&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;t&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;timestamps&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Run &lt;code&gt;rake db:migrate&lt;/code&gt; to run the migration above.&lt;/p&gt;
+
+&lt;p&gt;Then create a controller named &lt;code&gt;messages_controller.rb&lt;/code&gt;.  Add &lt;code&gt;@messages&lt;/code&gt; variable to load whole messages for each methods using &lt;code&gt;before_action&lt;/code&gt; and &lt;code&gt;@message&lt;/code&gt; variable for initializing new message.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;MessagesController&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;ApplicationController&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;before_action&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:load_messages&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;before_action&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:new_message&lt;/span&gt;
+
+  &lt;span class=&quot;kp&quot;&gt;private&lt;/span&gt;
+
+  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;load_messages&lt;/span&gt;
+    &lt;span class=&quot;vi&quot;&gt;@messages&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;||=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Message&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;all&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;new_message&lt;/span&gt;
+    &lt;span class=&quot;vi&quot;&gt;@message&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;||=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Message&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;new&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Create &lt;code&gt;index.html.erb&lt;/code&gt; inside &lt;code&gt;app/views/messages/&lt;/code&gt; and put this code inside. We will make the form and the list into one page.&lt;/p&gt;
+
+&lt;p&gt;Before we create the index page. We can remove turbolinks gem from Gemfile and execute &lt;code&gt;bundle install&lt;/code&gt; from terminal. After that, remove the turbolinks from layout and javascript. Then, you may create the index page and put this code into it.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-html&quot; data-lang=&quot;html&quot;&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;div&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;messages-list&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;&amp;lt;&lt;/span&gt;%= render &amp;quot;list&amp;quot; %&amp;gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;/div&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;h3&amp;gt;&lt;/span&gt;Add New Message&lt;span class=&quot;nt&quot;&gt;&amp;lt;/h3&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;div&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;messages-form&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;&amp;lt;&lt;/span&gt;%= render &amp;quot;form&amp;quot; %&amp;gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;/div&amp;gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;We will use form partials to help us implement ajax within the page. Create this partial views within messages.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-html&quot; data-lang=&quot;html&quot;&gt;&lt;span class=&quot;c&quot;&gt;&amp;lt;!-- app/views/messages/_list.html.erb --&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;h3&amp;gt;&lt;/span&gt;This site has &lt;span class=&quot;err&quot;&gt;&amp;lt;&lt;/span&gt;%= &amp;quot;#{@messages.count} #{@messages.count &amp;gt; 1 ? &amp;#39;message&amp;#39;.pluralize : &amp;#39;message&amp;#39;}.&amp;quot; %&amp;gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;/h3&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;err&quot;&gt;&amp;lt;&lt;/span&gt;% @messages.each do |message| %&amp;gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;p&amp;gt;&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;&amp;lt;&lt;/span&gt;%= message.name %&amp;gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;/p&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;p&amp;gt;&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;&amp;lt;&lt;/span&gt;%= message.text %&amp;gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;/p&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;hr&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;err&quot;&gt;&amp;lt;&lt;/span&gt;% end %&amp;gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-html&quot; data-lang=&quot;html&quot;&gt;&lt;span class=&quot;c&quot;&gt;&amp;lt;!-- app/views/messages/_form.html.erb --&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;err&quot;&gt;&amp;lt;&lt;/span&gt;%= form_for @message, remote: true do |m| %&amp;gt;
+  &lt;span class=&quot;err&quot;&gt;&amp;lt;&lt;/span&gt;%= m.text_field :name, placeholder: &amp;quot;Name&amp;quot; %&amp;gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;br&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;br&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;err&quot;&gt;&amp;lt;&lt;/span&gt;%= m.text_area :text, placeholder: &amp;quot;Your message here&amp;quot; %&amp;gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;br&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;err&quot;&gt;&amp;lt;&lt;/span&gt;%= m.submit &amp;quot;Send&amp;quot; %&amp;gt;
+&lt;span class=&quot;err&quot;&gt;&amp;lt;&lt;/span&gt;% end %&amp;gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Don’t forget to add messages controller to routes. Add &lt;code&gt;resource :messages&lt;/code&gt; inside the routes and uncomment the default root and change the root into &lt;code&gt;root &#39;messages#index&#39;&lt;/code&gt;. Run &lt;code&gt;rails s -p 7777&lt;/code&gt; and open &lt;code&gt;http://localhost:7777/&lt;/code&gt; in your browser.&lt;/p&gt;
+
+&lt;iframe src=&quot;https://docs.google.com/file/d/0B245dSGaMJ5YSFRMTEFPbjFkUXc/preview&quot; style=&quot;width: 100%&quot;&gt;&lt;/iframe&gt;
+
+&lt;p&gt;You’ll see the page above. The &lt;code&gt;@messages = Message.all&lt;/code&gt; will load all messages that is kept on the database. &lt;code&gt;@messages.count&lt;/code&gt; will count how many messages existed on the database. We still have zero message. Let’s build a new method to create new message using ajax. Rails has great environment to handle this. Would be very simple! Don’t be scared!&lt;/p&gt;
+
+&lt;p&gt;Let’s add create action on the controller and message parameters on private scope.&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;You don’t have to add routes for that because &lt;code&gt;resource :messages&lt;/code&gt; represents RESTful controller (index, new, create, edit, update, destroy).&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;MessagesController&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;ApplicationController&lt;/span&gt;
+  &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;create&lt;/span&gt;
+    &lt;span class=&quot;vi&quot;&gt;@message&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Message&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;new&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;message_params&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;vi&quot;&gt;@message&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;save&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+  &lt;span class=&quot;kp&quot;&gt;private&lt;/span&gt;
+
+  &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;
+
+  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;message_params&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;params&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;require&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:message&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;permit&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:text&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Put this code below into &lt;code&gt;create.js.erb&lt;/code&gt; inside &lt;code&gt;app/views/messages/&lt;/code&gt;.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-javascript&quot; data-lang=&quot;javascript&quot;&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;%&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;@&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;message&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;persisted&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;?&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;%&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nx&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;.messages-list&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;html&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;&amp;lt;%=j render &amp;quot;list&amp;quot; %&amp;gt;&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;&amp;lt;%&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;end&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;%&amp;gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Modify &lt;code&gt;application_controller.rb&lt;/code&gt; with this. This will set &lt;code&gt;layout &#39;false&#39;&lt;/code&gt; when the form is submitted using ajax.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;ApplicationController&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;ActionController&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Base&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;protect_from_forgery&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;with&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:exception&lt;/span&gt;
+
+  &lt;span class=&quot;n&quot;&gt;layout&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:is_xhr?&lt;/span&gt;
+
+  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;is_xhr?&lt;/span&gt;
+    &lt;span class=&quot;kp&quot;&gt;false&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;request&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;xhr?&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;The &lt;code&gt;message_params&lt;/code&gt; represent parameters that are generated from the form using &lt;code&gt;form_for&lt;/code&gt; tag. After the create action is running, rails will search for the response. Because we use ajax in submitting the form, so we set the response using javascript extension to update the list without reloading the page. We should set the layout into false, or the page will appear once again.&lt;/p&gt;
+
+&lt;p&gt;Create your first message. When you click &lt;code&gt;Send&lt;/code&gt; button, the list will be updated without reloading the page.&lt;/p&gt;
+
+&lt;iframe src=&quot;https://docs.google.com/file/d/0B245dSGaMJ5YSkFBVlJTWU10QjQ/preview&quot; style=&quot;width: 100%&quot;&gt;&lt;/iframe&gt;
+
+&lt;p&gt;Let’s create the system for replying messages. Add &lt;code&gt;gem &#39;ancestry&#39;&lt;/code&gt; in your Gemfile and run &lt;code&gt;bundle install&lt;/code&gt; from your terminal. Then, generate migration on terminal &lt;code&gt;rails g migration add_ancestry_to_messages ancestry:string&lt;/code&gt;. Open the migration file on &lt;code&gt;db/migrate&lt;/code&gt; and put this code into it.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;up&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;add_column&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:messages&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:ancestry&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:string&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;add_index&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:messages&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:ancestry&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;down&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;remove_column&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:messages&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:ancestry&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:string&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;remove_index&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:messages&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:ancestry&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Migrate it and add this line, &lt;code&gt;has_ancestry&lt;/code&gt;, to your &lt;code&gt;Message&lt;/code&gt; model on &lt;code&gt;message.rb&lt;/code&gt;. Then, create the &lt;code&gt;reply&lt;/code&gt; action to call reply form.&lt;/p&gt;
+
+&lt;p&gt;Add this one to &lt;code&gt;messages_controller.rb&lt;/code&gt;.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;reply&lt;/span&gt;
+  &lt;span class=&quot;vi&quot;&gt;@parent&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Message&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;find&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;params&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:id&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;code&gt;@parent&lt;/code&gt; refers to the message id that is going to be replied. Add the routes &lt;code&gt;get :reply, on: :member&lt;/code&gt; under &lt;code&gt;resources :messages&lt;/code&gt;. Just like this.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;n&quot;&gt;resources&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:messages&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;get&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:reply&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;on&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:member&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Run &lt;code&gt;rake routes&lt;/code&gt; and you’ll have &lt;code&gt;reply_message GET    /messages/:id/reply(.:format)      messages#reply&lt;/code&gt;. You can see that there is a &lt;code&gt;params[:id]&lt;/code&gt; on the path. That refers to message id that is going to be replied. Let’s give the link on the list that refers to reply form.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-html&quot; data-lang=&quot;html&quot;&gt;&lt;span class=&quot;c&quot;&gt;&amp;lt;!-- app/views/messages/_list.html.erb --&amp;gt;&lt;/span&gt;
+....
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;p&amp;gt;&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;&amp;lt;&lt;/span&gt;%= message.name %&amp;gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;/p&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;p&amp;gt;&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;&amp;lt;&lt;/span&gt;%= message.text %&amp;gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;/p&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;p&amp;gt;&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;&amp;lt;&lt;/span&gt;%= link_to &amp;quot;Reply&amp;quot;, reply_message_path(message) %&amp;gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;/p&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;hr&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;err&quot;&gt;&amp;lt;&lt;/span&gt;% end %&amp;gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Prepare the view for &lt;code&gt;reply&lt;/code&gt; action which render the same partial form &lt;code&gt;_form.html.erb&lt;/code&gt;.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-html&quot; data-lang=&quot;html&quot;&gt;&lt;span class=&quot;c&quot;&gt;&amp;lt;!-- app/views/messages/reply.html.erb --&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;div&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;message&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;p&amp;gt;&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;&amp;lt;&lt;/span&gt;%= @parent.name %&amp;gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;/p&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;p&amp;gt;&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;&amp;lt;&lt;/span&gt;%= @parent.text %&amp;gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;/p&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/div&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;h3&amp;gt;&lt;/span&gt;Reply Message&lt;span class=&quot;nt&quot;&gt;&amp;lt;/h3&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;div&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;messages-form&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;&amp;lt;&lt;/span&gt;%= render &amp;quot;form&amp;quot; %&amp;gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;/div&amp;gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Click reply link on the first message. Then, you’ll have this view. Try to submit a message and the form is not going to work.&lt;/p&gt;
+
+&lt;iframe src=&quot;https://docs.google.com/file/d/0B245dSGaMJ5Yd2NQcWNxcXdSLTA/preview&quot; style=&quot;width: 100%&quot;&gt;&lt;/iframe&gt;
+
+&lt;p&gt;After that, let’s create &lt;code&gt;send_reply&lt;/code&gt; action to handle the post request to reply the message. Add the action to the routes.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;send_reply&lt;/span&gt;
+  &lt;span class=&quot;vi&quot;&gt;@reply_message&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Message&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;find&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;params&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:id&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;children&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;create&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;message_params&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;redirect_to&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;root_path&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;vi&quot;&gt;@reply_message&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;persisted?&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;c1&quot;&gt;# config/routes.rb&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;resources&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:messages&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;get&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:reply&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;on&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:member&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;post&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:send_reply&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;on&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:member&lt;/span&gt;
+
+  &lt;span class=&quot;c1&quot;&gt;# or&lt;/span&gt;
+
+  &lt;span class=&quot;n&quot;&gt;member&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;get&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:reply&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;post&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:send_reply&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;We use &lt;code&gt;children&lt;/code&gt; method, scopes the model on children of the record, to create new child record (the reply message). Then, we should add this action to the form. Let’s change the &lt;code&gt;action&lt;/code&gt; and &lt;code&gt;data-remote&lt;/code&gt; on the form attributes. Don’t forget to modify the list, so it display the root message in reply message.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-html&quot; data-lang=&quot;html&quot;&gt;&lt;span class=&quot;c&quot;&gt;&amp;lt;!-- app/views/messages/_form.html.erb --&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;err&quot;&gt;&amp;lt;&lt;/span&gt;%= form_for @message, url: (send_reply_message_path(id: @parent.id) if params[:action] == &amp;quot;reply&amp;quot;), remote: (true if params[:action] == &amp;quot;index&amp;quot;) do |m| %&amp;gt;
+  &lt;span class=&quot;err&quot;&gt;&amp;lt;&lt;/span&gt;%= m.text_field :name, placeholder: &amp;quot;Name&amp;quot; %&amp;gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;br&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;br&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;err&quot;&gt;&amp;lt;&lt;/span&gt;%= m.text_area :text, placeholder: &amp;quot;Your message here&amp;quot; %&amp;gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;br&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;err&quot;&gt;&amp;lt;&lt;/span&gt;%= m.submit &amp;quot;Send&amp;quot; %&amp;gt;
+&lt;span class=&quot;err&quot;&gt;&amp;lt;&lt;/span&gt;% end %&amp;gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-html&quot; data-lang=&quot;html&quot;&gt;&lt;span class=&quot;c&quot;&gt;&amp;lt;!-- app/views/messages/_list.html.erb --&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;h3&amp;gt;&lt;/span&gt;This site has &lt;span class=&quot;err&quot;&gt;&amp;lt;&lt;/span&gt;%= &amp;quot;#{@messages.count} #{@messages.count &amp;gt; 1 ? &amp;#39;message&amp;#39;.pluralize : &amp;#39;message&amp;#39;}.&amp;quot; %&amp;gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;/h3&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;err&quot;&gt;&amp;lt;&lt;/span&gt;% @messages.each do |message| %&amp;gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;blockquote&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;p&amp;gt;&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;&amp;lt;&lt;/span&gt;%= message.parent.try(:name) %&amp;gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;/p&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;p&amp;gt;&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;&amp;lt;&lt;/span&gt;%= message.parent.try(:text) %&amp;gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;/p&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;/blockquote&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;p&amp;gt;&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;&amp;lt;&lt;/span&gt;%= message.name %&amp;gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;/p&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;p&amp;gt;&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;&amp;lt;&lt;/span&gt;%= message.text %&amp;gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;/p&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;p&amp;gt;&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;&amp;lt;&lt;/span&gt;%= link_to &amp;quot;Reply&amp;quot;, reply_message_path(message) %&amp;gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;/p&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;hr&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;err&quot;&gt;&amp;lt;&lt;/span&gt;% end %&amp;gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Try to reply a message after you modified the form. You’ll see that the form is working! just like this.&lt;/p&gt;
+
+&lt;iframe src=&quot;https://docs.google.com/file/d/0B245dSGaMJ5YcVhVbC1TaXZvZEU/preview&quot; style=&quot;width: 100%&quot;&gt;&lt;/iframe&gt;
+
+&lt;p&gt;If you want to see complete methods on &lt;code&gt;ancestry&lt;/code&gt; you can visit this &lt;a href=&quot;https://github.com/stefankroes/ancestry&quot; target=&quot;_blank&quot;&gt;link&lt;/a&gt;. For this tutorial source code, you can visit this &lt;a href=&quot;https://github.com/tsara27/simple_messaging&quot; target=&quot;_blank&quot;&gt;link&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Thanks for reading! Happy Coding!&lt;/p&gt;
+</description>
+        <pubDate>Fri, 16 Jan 2015 06:02:00 +0000</pubDate>
+        <link>https://tsara27.github.io/rails/2015/01/16/create-simple-comments-using-ajax-and-ancestry/</link>
+        <guid isPermaLink="true">https://tsara27.github.io/rails/2015/01/16/create-simple-comments-using-ajax-and-ancestry/</guid>
+        
+        <category>blog</category>
+        
+        <category>ruby</category>
+        
+        <category>rails</category>
+        
+        <category>ajax</category>
+        
+        
+        <category>rails</category>
+        
+      </item>
+    
+  </channel>
+</rss>

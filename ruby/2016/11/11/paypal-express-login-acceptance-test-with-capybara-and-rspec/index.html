@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title>Paypal Login — Acceptance Test with Capybara and RSpec - Learn How to Code with Tsara </title>
+    <meta name="description" content="I was working on acceptance test for paypal login recently. It was hard on the beginning, because I found that the login form was put inside an iframe. Using plain capybara finder when locating the input text for email and password was painful. That wasn't working. I should use capybara method `within_iframe` to make it works. How te get started with Ruby, Ruby on Rails tutorials, IT stuff and thoughts by Tsara Fatma Larasati Sudrajat.
+">
+    <meta name="keywords" content="ruby,ruby on rails,html,css,tutorials,tutorial,practice,guide,blog,github,learn,learning">
+    <meta name="author" content="Tsara Fatma L">
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:300,600" rel="stylesheet">
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="canonical" href="https://tsara27.github.io/ruby/2016/11/11/paypal-express-login-acceptance-test-with-capybara-and-rspec/">
+</head>
+
+
+  <body>
+    <div class="container">
+      <div class="sidebar">
+  <div id="profile-picture">
+    <a href="/"><img src="/images/ruby-256.png" height="125" width="125"></img></a>
+  </div>
+  <div class="profile-caption">
+    I am Tsara | A Wife | Ruby on Rails Developer | Moslem
+  </div>
+  <div class="links">
+    <a href="/">Blog</a>
+    <a href="/new_to_ruby/">New to Ruby?</a>
+    <a href="https://www.upwork.com/fl/tsarafatmalarasatis" target="_blank">Hire Me</a>
+    <a href="/about/">About</a>
+  </div>
+  <blockquote class="quotes">“Simple can be harder than complex: You have to work hard to get your thinking clean to make it simple. But it’s worth it in the end because once you get there, you can move mountains.” - Steve Jobs</blockquote>
+  <div class="social-icons">
+    <ul class="soc">
+      <li><a href="https://twitter.com/tsara_tf"><i class="fa fa-twitter" aria-hidden="true"></i></a></li>
+      <li><a href="https://www.facebook.com/tsara.tf"><i class="fa fa-facebook" aria-hidden="true"></i></a></li>
+      <li><a href="https://github.com/tsara27"><i class="fa fa-github-alt" aria-hidden="true"></i></a></li>
+      <li><a class="soc-icon-last" href="https://id.linkedin.com/in/tsarasudrajat"><i class="fa fa-linkedin" aria-hidden="true"></i></a></li>
+    </ul>
+  </div>
+</div>
+
+      <div class="page-content">
+        <div class="wrapper">
+          <div class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">Paypal Login — Acceptance Test with Capybara and RSpec</h1>
+    <p class="post-meta"><i class="fa fa-calendar"></i> Nov 11, 2016 • <i class="fa fa-tags"></i>  <a href="/tags/blog" class="tag">blog</a>  <a href="/tags/rails" class="tag">rails</a>  <a href="/tags/ruby" class="tag">ruby</a>  <a href="/tags/capybara" class="tag">capybara</a>  <a href="/tags/paypal" class="tag">paypal</a> 
+ </p>
+  </header>
+
+  <article class="post-content">
+    <p>I was working on acceptance test for paypal login recently. It was hard on the beginning, because I found that the login form was put inside an iframe. Using plain capybara finder when locating the input text for email and password was painful. That wasn’t working. I should use capybara method <code>within_frame</code> to make it works.<!--more--></p>
+
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">within_frame</span> <span class="n">find</span><span class="p">(</span><span class="s2">&quot;iframe&quot;</span><span class="p">)</span> <span class="k">do</span>
+  <span class="n">wait_until</span><span class="p">(</span><span class="mi">60</span><span class="p">)</span> <span class="p">{</span> <span class="n">page</span><span class="o">.</span><span class="n">has_css?</span> <span class="s2">&quot;#email&quot;</span> <span class="p">}</span>
+  <span class="n">fill_in</span> <span class="s2">&quot;email&quot;</span><span class="p">,</span> <span class="ss">with</span><span class="p">:</span> <span class="s2">&quot;sample@mail.com&quot;</span>
+  <span class="n">fill_in</span> <span class="s2">&quot;password&quot;</span><span class="p">,</span> <span class="ss">with</span><span class="p">:</span> <span class="s2">&quot;passwordsample&quot;</span>
+  <span class="n">click_button</span> <span class="s2">&quot;Log In&quot;</span>
+<span class="k">end</span></code></pre></div>
+
+<p>You see that I use <code>wait_until</code> above. I use that to verify that the email input is loaded on the page or the input cannot be filled in.</p>
+
+<p>I will share more from what I have learned from web development. See you next time.</p>
+
+  </article>
+  <hr>
+  <div id="disqus_thread"></div>
+</div>
+
+<script>
+
+/**
+*  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+*  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
+/*
+var disqus_config = function () {
+  this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+  this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+};
+*/
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+s.src = 'https://tsara27.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+        </div>
+      </div>
+    </div>
+
+  </body>
+
+</html>

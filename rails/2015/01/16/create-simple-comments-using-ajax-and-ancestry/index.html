@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title>Create Simple Messaging Application Using Ajax and Ancestry - Learn How to Code with Tsara </title>
+    <meta name="description" content="In some cases in developing application I met requirement that I should create messaging, comment, or forum feature. I want to share about how to implement a simple messaging app. Basically the flow is more or less just like this, somebody send a message and somebody else reply it. That's simple. But, how is the code looks like. How te get started with Ruby, Ruby on Rails tutorials, IT stuff and thoughts by Tsara Fatma Larasati Sudrajat.
+">
+    <meta name="keywords" content="ruby,ruby on rails,html,css,tutorials,tutorial,practice,guide,blog,github,learn,learning">
+    <meta name="author" content="Tsara Fatma L">
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:300,600" rel="stylesheet">
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="canonical" href="https://tsara27.github.io/rails/2015/01/16/create-simple-comments-using-ajax-and-ancestry/">
+</head>
+
+
+  <body>
+    <div class="container">
+      <div class="sidebar">
+  <div id="profile-picture">
+    <a href="/"><img src="/images/ruby-256.png" height="125" width="125"></img></a>
+  </div>
+  <div class="profile-caption">
+    I am Tsara | A Wife | Ruby on Rails Developer | Moslem
+  </div>
+  <div class="links">
+    <a href="/">Blog</a>
+    <a href="/new_to_ruby/">New to Ruby?</a>
+    <a href="https://www.upwork.com/fl/tsarafatmalarasatis" target="_blank">Hire Me</a>
+    <a href="/about/">About</a>
+  </div>
+  <blockquote class="quotes">“Simple can be harder than complex: You have to work hard to get your thinking clean to make it simple. But it’s worth it in the end because once you get there, you can move mountains.” - Steve Jobs</blockquote>
+  <div class="social-icons">
+    <ul class="soc">
+      <li><a href="https://twitter.com/tsara_tf"><i class="fa fa-twitter" aria-hidden="true"></i></a></li>
+      <li><a href="https://www.facebook.com/tsara.tf"><i class="fa fa-facebook" aria-hidden="true"></i></a></li>
+      <li><a href="https://github.com/tsara27"><i class="fa fa-github-alt" aria-hidden="true"></i></a></li>
+      <li><a class="soc-icon-last" href="https://id.linkedin.com/in/tsarasudrajat"><i class="fa fa-linkedin" aria-hidden="true"></i></a></li>
+    </ul>
+  </div>
+</div>
+
+      <div class="page-content">
+        <div class="wrapper">
+          <div class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">Create Simple Messaging Application Using Ajax and Ancestry</h1>
+    <p class="post-meta"><i class="fa fa-calendar"></i> Jan 16, 2015 • <i class="fa fa-tags"></i>  <a href="/tags/blog" class="tag">blog</a>  <a href="/tags/ruby" class="tag">ruby</a>  <a href="/tags/rails" class="tag">rails</a>  <a href="/tags/ajax" class="tag">ajax</a> 
+ </p>
+  </header>
+
+  <article class="post-content">
+    <p>Before start reading this tutorial I recommend you to have basic knowledge of Ruby, Ruby on Rails, and jQuery.</p>
+
+<p>In some cases in developing application I met requirement that I should create messaging, comment, or forum feature. I want to share about how to implement a simple messaging app. Basically the flow is more or less just like this, somebody send a message and somebody else reply it. That’s simple. But, how the code looks like.<!--more--></p>
+
+<p>First thing first, as usual, generate a rails app using <code>rails new simple_messaging</code> inside the terminal. Don’t forget to point the folder where do you want to put the app. After that let’s run <code>rake db:create</code> to create the database. We’re going to create a table that stores messages. So it should have several fields such as name. message, and timestamps. That simple. Let’s create the Message model use rails generator <code>rails g model message</code>. Open the <code>message.rb</code> in app/models. Add name, message, and timestamps fields to the migration.</p>
+
+<blockquote>
+  <p>If you find a problem in migration or creating database with Ralis 4.2 you may add <code>gem 'arel', '6.0.0.beta2'</code> to your Gemfile and do <code>bundle install</code>
+In rails 4.2 you have to add <code>gem 'responders'</code> to implement xhr request</p>
+</blockquote>
+
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">class</span> <span class="nc">CreateMessages</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Migration</span>
+  <span class="k">def</span> <span class="nf">change</span>
+    <span class="n">create_table</span> <span class="ss">:messages</span> <span class="k">do</span> <span class="o">|</span><span class="n">t</span><span class="o">|</span>
+      <span class="n">t</span><span class="o">.</span><span class="n">string</span> <span class="ss">:name</span>
+      <span class="n">t</span><span class="o">.</span><span class="n">string</span> <span class="ss">:text</span>
+      <span class="n">t</span><span class="o">.</span><span class="n">timestamps</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
+<span class="k">end</span></code></pre></div>
+
+<p>Run <code>rake db:migrate</code> to run the migration above.</p>
+
+<p>Then create a controller named <code>messages_controller.rb</code>.  Add <code>@messages</code> variable to load whole messages for each methods using <code>before_action</code> and <code>@message</code> variable for initializing new message.</p>
+
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">class</span> <span class="nc">MessagesController</span> <span class="o">&lt;</span> <span class="no">ApplicationController</span>
+  <span class="n">before_action</span> <span class="ss">:load_messages</span>
+  <span class="n">before_action</span> <span class="ss">:new_message</span>
+
+  <span class="kp">private</span>
+
+  <span class="k">def</span> <span class="nf">load_messages</span>
+    <span class="vi">@messages</span> <span class="o">||=</span> <span class="no">Message</span><span class="o">.</span><span class="n">all</span>
+  <span class="k">end</span>
+
+  <span class="k">def</span> <span class="nf">new_message</span>
+    <span class="vi">@message</span> <span class="o">||=</span> <span class="no">Message</span><span class="o">.</span><span class="n">new</span>
+  <span class="k">end</span>
+<span class="k">end</span></code></pre></div>
+
+<p>Create <code>index.html.erb</code> inside <code>app/views/messages/</code> and put this code inside. We will make the form and the list into one page.</p>
+
+<p>Before we create the index page. We can remove turbolinks gem from Gemfile and execute <code>bundle install</code> from terminal. After that, remove the turbolinks from layout and javascript. Then, you may create the index page and put this code into it.</p>
+
+<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;messages-list&quot;</span><span class="nt">&gt;</span><span class="err">&lt;</span>%= render &quot;list&quot; %&gt;<span class="nt">&lt;/div&gt;</span>
+<span class="nt">&lt;h3&gt;</span>Add New Message<span class="nt">&lt;/h3&gt;</span>
+<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;messages-form&quot;</span><span class="nt">&gt;</span><span class="err">&lt;</span>%= render &quot;form&quot; %&gt;<span class="nt">&lt;/div&gt;</span></code></pre></div>
+
+<p>We will use form partials to help us implement ajax within the page. Create this partial views within messages.</p>
+
+<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="c">&lt;!-- app/views/messages/_list.html.erb --&gt;</span>
+<span class="nt">&lt;h3&gt;</span>This site has <span class="err">&lt;</span>%= &quot;#{@messages.count} #{@messages.count &gt; 1 ? &#39;message&#39;.pluralize : &#39;message&#39;}.&quot; %&gt;<span class="nt">&lt;/h3&gt;</span>
+<span class="err">&lt;</span>% @messages.each do |message| %&gt;
+  <span class="nt">&lt;p&gt;</span><span class="err">&lt;</span>%= message.name %&gt;<span class="nt">&lt;/p&gt;</span>
+  <span class="nt">&lt;p&gt;</span><span class="err">&lt;</span>%= message.text %&gt;<span class="nt">&lt;/p&gt;</span>
+  <span class="nt">&lt;hr&gt;</span>
+<span class="err">&lt;</span>% end %&gt;</code></pre></div>
+
+<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="c">&lt;!-- app/views/messages/_form.html.erb --&gt;</span>
+<span class="err">&lt;</span>%= form_for @message, remote: true do |m| %&gt;
+  <span class="err">&lt;</span>%= m.text_field :name, placeholder: &quot;Name&quot; %&gt;
+  <span class="nt">&lt;br&gt;</span>
+  <span class="nt">&lt;br&gt;</span>
+  <span class="err">&lt;</span>%= m.text_area :text, placeholder: &quot;Your message here&quot; %&gt;
+  <span class="nt">&lt;br&gt;</span>
+  <span class="err">&lt;</span>%= m.submit &quot;Send&quot; %&gt;
+<span class="err">&lt;</span>% end %&gt;</code></pre></div>
+
+<p>Don’t forget to add messages controller to routes. Add <code>resource :messages</code> inside the routes and uncomment the default root and change the root into <code>root 'messages#index'</code>. Run <code>rails s -p 7777</code> and open <code>http://localhost:7777/</code> in your browser.</p>
+
+<iframe src="https://docs.google.com/file/d/0B245dSGaMJ5YSFRMTEFPbjFkUXc/preview" style="width: 100%"></iframe>
+
+<p>You’ll see the page above. The <code>@messages = Message.all</code> will load all messages that is kept on the database. <code>@messages.count</code> will count how many messages existed on the database. We still have zero message. Let’s build a new method to create new message using ajax. Rails has great environment to handle this. Would be very simple! Don’t be scared!</p>
+
+<p>Let’s add create action on the controller and message parameters on private scope.</p>
+
+<blockquote>
+  <p>You don’t have to add routes for that because <code>resource :messages</code> represents RESTful controller (index, new, create, edit, update, destroy).</p>
+</blockquote>
+
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">class</span> <span class="nc">MessagesController</span> <span class="o">&lt;</span> <span class="no">ApplicationController</span>
+  <span class="o">.</span><span class="n">.</span><span class="o">.</span>
+  <span class="k">def</span> <span class="nf">create</span>
+    <span class="vi">@message</span> <span class="o">=</span> <span class="no">Message</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">message_params</span><span class="p">)</span>
+    <span class="vi">@message</span><span class="o">.</span><span class="n">save</span>
+  <span class="k">end</span>
+
+  <span class="kp">private</span>
+
+  <span class="o">.</span><span class="n">.</span><span class="o">.</span>
+
+  <span class="k">def</span> <span class="nf">message_params</span>
+    <span class="n">params</span><span class="o">.</span><span class="n">require</span><span class="p">(</span><span class="ss">:message</span><span class="p">)</span><span class="o">.</span><span class="n">permit</span><span class="p">(</span><span class="ss">:name</span><span class="p">,</span> <span class="ss">:text</span><span class="p">)</span>
+  <span class="k">end</span>
+<span class="k">end</span></code></pre></div>
+
+<p>Put this code below into <code>create.js.erb</code> inside <code>app/views/messages/</code>.</p>
+
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="o">&lt;%</span> <span class="k">if</span> <span class="err">@</span><span class="nx">message</span><span class="p">.</span><span class="nx">persisted</span><span class="o">?</span> <span class="o">%&gt;</span>
+  <span class="nx">$</span><span class="p">(</span><span class="s2">&quot;.messages-list&quot;</span><span class="p">).</span><span class="nx">html</span><span class="p">(</span><span class="s1">&#39;&lt;%=j render &quot;list&quot; %&gt;&#39;</span><span class="p">)</span>
+<span class="o">&lt;%</span> <span class="nx">end</span> <span class="o">%&gt;</span></code></pre></div>
+
+<p>Modify <code>application_controller.rb</code> with this. This will set <code>layout 'false'</code> when the form is submitted using ajax.</p>
+
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">class</span> <span class="nc">ApplicationController</span> <span class="o">&lt;</span> <span class="no">ActionController</span><span class="o">::</span><span class="no">Base</span>
+  <span class="n">protect_from_forgery</span> <span class="ss">with</span><span class="p">:</span> <span class="ss">:exception</span>
+
+  <span class="n">layout</span> <span class="ss">:is_xhr?</span>
+
+  <span class="k">def</span> <span class="nf">is_xhr?</span>
+    <span class="kp">false</span> <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">xhr?</span>
+  <span class="k">end</span>
+<span class="k">end</span></code></pre></div>
+
+<p>The <code>message_params</code> represent parameters that are generated from the form using <code>form_for</code> tag. After the create action is running, rails will search for the response. Because we use ajax in submitting the form, so we set the response using javascript extension to update the list without reloading the page. We should set the layout into false, or the page will appear once again.</p>
+
+<p>Create your first message. When you click <code>Send</code> button, the list will be updated without reloading the page.</p>
+
+<iframe src="https://docs.google.com/file/d/0B245dSGaMJ5YSkFBVlJTWU10QjQ/preview" style="width: 100%"></iframe>
+
+<p>Let’s create the system for replying messages. Add <code>gem 'ancestry'</code> in your Gemfile and run <code>bundle install</code> from your terminal. Then, generate migration on terminal <code>rails g migration add_ancestry_to_messages ancestry:string</code>. Open the migration file on <code>db/migrate</code> and put this code into it.</p>
+
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">def</span> <span class="nf">up</span>
+  <span class="n">add_column</span> <span class="ss">:messages</span><span class="p">,</span> <span class="ss">:ancestry</span><span class="p">,</span> <span class="ss">:string</span>
+  <span class="n">add_index</span> <span class="ss">:messages</span><span class="p">,</span> <span class="ss">:ancestry</span>
+<span class="k">end</span>
+
+<span class="k">def</span> <span class="nf">down</span>
+  <span class="n">remove_column</span> <span class="ss">:messages</span><span class="p">,</span> <span class="ss">:ancestry</span><span class="p">,</span> <span class="ss">:string</span>
+  <span class="n">remove_index</span> <span class="ss">:messages</span><span class="p">,</span> <span class="ss">:ancestry</span>
+<span class="k">end</span></code></pre></div>
+
+<p>Migrate it and add this line, <code>has_ancestry</code>, to your <code>Message</code> model on <code>message.rb</code>. Then, create the <code>reply</code> action to call reply form.</p>
+
+<p>Add this one to <code>messages_controller.rb</code>.</p>
+
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">def</span> <span class="nf">reply</span>
+  <span class="vi">@parent</span> <span class="o">=</span> <span class="no">Message</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">params</span><span class="o">[</span><span class="ss">:id</span><span class="o">]</span><span class="p">)</span>
+<span class="k">end</span></code></pre></div>
+
+<p><code>@parent</code> refers to the message id that is going to be replied. Add the routes <code>get :reply, on: :member</code> under <code>resources :messages</code>. Just like this.</p>
+
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">resources</span> <span class="ss">:messages</span> <span class="k">do</span>
+  <span class="n">get</span> <span class="ss">:reply</span><span class="p">,</span> <span class="ss">on</span><span class="p">:</span> <span class="ss">:member</span>
+<span class="k">end</span></code></pre></div>
+
+<p>Run <code>rake routes</code> and you’ll have <code>reply_message GET    /messages/:id/reply(.:format)      messages#reply</code>. You can see that there is a <code>params[:id]</code> on the path. That refers to message id that is going to be replied. Let’s give the link on the list that refers to reply form.</p>
+
+<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="c">&lt;!-- app/views/messages/_list.html.erb --&gt;</span>
+....
+  <span class="nt">&lt;p&gt;</span><span class="err">&lt;</span>%= message.name %&gt;<span class="nt">&lt;/p&gt;</span>
+  <span class="nt">&lt;p&gt;</span><span class="err">&lt;</span>%= message.text %&gt;<span class="nt">&lt;/p&gt;</span>
+  <span class="nt">&lt;p&gt;</span><span class="err">&lt;</span>%= link_to &quot;Reply&quot;, reply_message_path(message) %&gt;<span class="nt">&lt;/p&gt;</span>
+  <span class="nt">&lt;hr&gt;</span>
+<span class="err">&lt;</span>% end %&gt;</code></pre></div>
+
+<p>Prepare the view for <code>reply</code> action which render the same partial form <code>_form.html.erb</code>.</p>
+
+<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="c">&lt;!-- app/views/messages/reply.html.erb --&gt;</span>
+<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;message&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;p&gt;</span><span class="err">&lt;</span>%= @parent.name %&gt;<span class="nt">&lt;/p&gt;</span>
+  <span class="nt">&lt;p&gt;</span><span class="err">&lt;</span>%= @parent.text %&gt;<span class="nt">&lt;/p&gt;</span>
+<span class="nt">&lt;/div&gt;</span>
+<span class="nt">&lt;h3&gt;</span>Reply Message<span class="nt">&lt;/h3&gt;</span>
+<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;messages-form&quot;</span><span class="nt">&gt;</span><span class="err">&lt;</span>%= render &quot;form&quot; %&gt;<span class="nt">&lt;/div&gt;</span></code></pre></div>
+
+<p>Click reply link on the first message. Then, you’ll have this view. Try to submit a message and the form is not going to work.</p>
+
+<iframe src="https://docs.google.com/file/d/0B245dSGaMJ5Yd2NQcWNxcXdSLTA/preview" style="width: 100%"></iframe>
+
+<p>After that, let’s create <code>send_reply</code> action to handle the post request to reply the message. Add the action to the routes.</p>
+
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">def</span> <span class="nf">send_reply</span>
+  <span class="vi">@reply_message</span> <span class="o">=</span> <span class="no">Message</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">params</span><span class="o">[</span><span class="ss">:id</span><span class="o">]</span><span class="p">)</span><span class="o">.</span><span class="n">children</span><span class="o">.</span><span class="n">create</span> <span class="n">message_params</span>
+  <span class="n">redirect_to</span> <span class="n">root_path</span> <span class="k">if</span> <span class="vi">@reply_message</span><span class="o">.</span><span class="n">persisted?</span>
+<span class="k">end</span></code></pre></div>
+
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="c1"># config/routes.rb</span>
+<span class="n">resources</span> <span class="ss">:messages</span> <span class="k">do</span>
+  <span class="n">get</span> <span class="ss">:reply</span><span class="p">,</span> <span class="ss">on</span><span class="p">:</span> <span class="ss">:member</span>
+  <span class="n">post</span> <span class="ss">:send_reply</span><span class="p">,</span> <span class="ss">on</span><span class="p">:</span> <span class="ss">:member</span>
+
+  <span class="c1"># or</span>
+
+  <span class="n">member</span> <span class="k">do</span>
+    <span class="n">get</span> <span class="ss">:reply</span>
+    <span class="n">post</span> <span class="ss">:send_reply</span>
+  <span class="k">end</span>
+<span class="k">end</span></code></pre></div>
+
+<p>We use <code>children</code> method, scopes the model on children of the record, to create new child record (the reply message). Then, we should add this action to the form. Let’s change the <code>action</code> and <code>data-remote</code> on the form attributes. Don’t forget to modify the list, so it display the root message in reply message.</p>
+
+<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="c">&lt;!-- app/views/messages/_form.html.erb --&gt;</span>
+<span class="err">&lt;</span>%= form_for @message, url: (send_reply_message_path(id: @parent.id) if params[:action] == &quot;reply&quot;), remote: (true if params[:action] == &quot;index&quot;) do |m| %&gt;
+  <span class="err">&lt;</span>%= m.text_field :name, placeholder: &quot;Name&quot; %&gt;
+  <span class="nt">&lt;br&gt;</span>
+  <span class="nt">&lt;br&gt;</span>
+  <span class="err">&lt;</span>%= m.text_area :text, placeholder: &quot;Your message here&quot; %&gt;
+  <span class="nt">&lt;br&gt;</span>
+  <span class="err">&lt;</span>%= m.submit &quot;Send&quot; %&gt;
+<span class="err">&lt;</span>% end %&gt;</code></pre></div>
+
+<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="c">&lt;!-- app/views/messages/_list.html.erb --&gt;</span>
+<span class="nt">&lt;h3&gt;</span>This site has <span class="err">&lt;</span>%= &quot;#{@messages.count} #{@messages.count &gt; 1 ? &#39;message&#39;.pluralize : &#39;message&#39;}.&quot; %&gt;<span class="nt">&lt;/h3&gt;</span>
+<span class="err">&lt;</span>% @messages.each do |message| %&gt;
+  <span class="nt">&lt;blockquote&gt;</span>
+    <span class="nt">&lt;p&gt;</span><span class="err">&lt;</span>%= message.parent.try(:name) %&gt;<span class="nt">&lt;/p&gt;</span>
+    <span class="nt">&lt;p&gt;</span><span class="err">&lt;</span>%= message.parent.try(:text) %&gt;<span class="nt">&lt;/p&gt;</span>
+  <span class="nt">&lt;/blockquote&gt;</span>
+  <span class="nt">&lt;p&gt;</span><span class="err">&lt;</span>%= message.name %&gt;<span class="nt">&lt;/p&gt;</span>
+  <span class="nt">&lt;p&gt;</span><span class="err">&lt;</span>%= message.text %&gt;<span class="nt">&lt;/p&gt;</span>
+  <span class="nt">&lt;p&gt;</span><span class="err">&lt;</span>%= link_to &quot;Reply&quot;, reply_message_path(message) %&gt;<span class="nt">&lt;/p&gt;</span>
+  <span class="nt">&lt;hr&gt;</span>
+<span class="err">&lt;</span>% end %&gt;</code></pre></div>
+
+<p>Try to reply a message after you modified the form. You’ll see that the form is working! just like this.</p>
+
+<iframe src="https://docs.google.com/file/d/0B245dSGaMJ5YcVhVbC1TaXZvZEU/preview" style="width: 100%"></iframe>
+
+<p>If you want to see complete methods on <code>ancestry</code> you can visit this <a href="https://github.com/stefankroes/ancestry" target="_blank">link</a>. For this tutorial source code, you can visit this <a href="https://github.com/tsara27/simple_messaging" target="_blank">link</a>.</p>
+
+<p>Thanks for reading! Happy Coding!</p>
+
+  </article>
+  <hr>
+  <div id="disqus_thread"></div>
+</div>
+
+<script>
+
+/**
+*  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+*  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
+/*
+var disqus_config = function () {
+  this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+  this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+};
+*/
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+s.src = 'https://tsara27.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+        </div>
+      </div>
+    </div>
+
+  </body>
+
+</html>
