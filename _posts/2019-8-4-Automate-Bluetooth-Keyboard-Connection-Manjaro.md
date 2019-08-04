@@ -4,10 +4,7 @@ title: Automate Bluetooth Keyboard Connection — Manjaro
 date: 2019-08-04 23:05
 categories: linux
 tags: blog linux manjaro
-description: I was upset when using bluetooth keyboard on Linux machine, Manjaro. I had to
-reconnect my bluetooth keyboard everytime I login to my machine. But, I've found
-a way to automate the bluetooth keyboard connection when logging in to my
-machine.
+description: I was upset when using bluetooth keyboard on Linux machine, Manjaro. I had to reconnect my bluetooth keyboard everytime I login to my machine. But, I've found a way to automate the bluetooth keyboard connection when logging in to my machine.
 ---
 
 I was upset when using bluetooth keyboard on Linux machine, Manjaro. I had to
