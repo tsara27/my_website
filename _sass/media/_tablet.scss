@@ -1,0 +1,7 @@
+@media (min-width: 721px) {
+  nav {
+    &.grid__navigation-mobile {
+      display: none;
+    }
+  }
+}

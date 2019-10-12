@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title></title>
+  <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+  <link rel="icon" href="/favicon.ico" type="image/x-icon">
+  <link rel="stylesheet" href="/assets/css/default.css">
+  <meta name="viewport" content="width=device-width">
+</head>
+<body>
+  {% include components/navigation.html %}
+  <main>
+    <div class="post-container">
+      <h1>{{ page.title }}</h1>
+      <div class="grid grid__post-caption">
+        <div class="post-caption post-caption__date">
+          <picture>
+            <source srcset="/assets/images/icons/calendar.webp" type="image/webp">
+            <img src="/assets/images/icons/calendar.png" alt="Calendar">
+          </picture>
+          <span>Published in {{ page.date | date: "%b %-d, %Y" }}</span>
+        </div>
+        <div class="post-caption post-caption__tags">
+          {% if page.tags %}
+            <i class="fa fa-tags"></i>
+            {% for tag in page.tags %}
+              <a href="/tags/{{ tag }}" class="tag">{{ tag }}</a>
+            {% endfor %}
+          {% endif %}
+        </div>
+      </div>
+      <div class="post-content">
+        {{ content }}
+      </div>
+    </div>
+  </main>
+  {% include footer.html %}
+</body>
+</html>

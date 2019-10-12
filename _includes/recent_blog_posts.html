@@ -1,0 +1,17 @@
+<section class="grid grid__recent_blog_posts recent-blog-posts">
+  <h2>Latest Blog Posts</h2>
+  <div class="grid grid__recent_items">
+    {% for post in site.posts limit: 3 %}
+      <div class="recent_items recent_items__post">
+        <h3>
+          <a href="{{ post.url }}">{{ post.title }}</a>
+        </h3>
+        <div class="recent_items recent_items__excerpt">
+          {{ post.excerpt }}
+        </div>
+        <div class="recent_items recent_items__line"></div>
+        <a href="{{ post.url }}" class="recent_items recent_items__read-more">Read more</a>
+      </div>
+    {% endfor %}
+  </div>
+</section>

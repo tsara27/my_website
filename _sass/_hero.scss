@@ -1,0 +1,57 @@
+.hero {
+  align-items: center;
+
+  h1 {
+    color: $gray;
+    font-family: 'Playfair Display';
+    font-size: 67px;
+    font-weight: 100;
+    letter-spacing: -0.84px;
+    margin-bottom: 42px;
+  }
+
+  &__caption {
+    padding-left: 60px;
+  }
+
+  &__image {
+    object-fit: cover;
+
+    img {
+      width: 100%;
+    }
+  }
+
+  .about-me-text {
+    border-left: 3px solid #FF7B7A;
+    color: $black;
+    font-size: 18px;
+    line-height: 26px;
+    opacity: 0.3;
+    padding-left: 35px;
+  }
+
+  .get-in-touch-button {
+    margin-bottom: 50px;
+    margin-left: 35px;
+    margin-top: 35px;
+  }
+}
+
+@media (max-width: 720px) {
+  .grid__hero {
+    grid-auto-flow: row;
+    grid-template-columns: auto;
+
+    .hero {
+      &__caption {
+        padding-left: 30px;
+        padding-right: 30px;
+      }
+
+      &__image {
+        display: none;
+      }
+    }
+  }
+}

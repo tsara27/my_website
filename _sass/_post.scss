@@ -1,0 +1,50 @@
+.grid__post-caption {
+  .post-caption__tags {
+    text-align: right;
+  }
+}
+
+.post-container {
+  margin: 0 auto;
+  min-width: 320px;
+  max-width: 728px;
+}
+
+.post-caption {
+  border-top: 1px solid $light-gray;
+  border-bottom: 1px solid $light-gray;
+  color: $light-dove-gray;
+  font-family: "Barlow";
+  padding: 25px 0px;
+
+  &__date {
+    span {
+      margin-left: 15px;
+    }
+  }
+
+  &__tags {
+    width: 100%;
+
+    a {
+      color: $faded-red;
+      text-decoration: none;
+      margin: 0 5px;
+
+      &:before {
+        content: "#";
+      }
+    }
+  }
+}
+
+.post-content {
+  font-family: "Barlow";
+}
+
+.highlight {
+  background-color: $alabaster;
+  margin: 50px 0;
+  overflow-x: scroll;
+  padding: 20px 30px;
+}
