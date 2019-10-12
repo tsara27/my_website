@@ -1,0 +1,50 @@
+---
+---
+
+@font-face {
+  font-family: "Signerica";
+  src: url("/assets/fonts/signerica/Signerica_Medium.ttf");
+}
+
+@import 'variables';
+@import url('https://fonts.googleapis.com/css?family=Barlow&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Nunito+Sans|Playfair+Display&display=swap');
+@import 'button';
+@import 'grid';
+@import 'links';
+@import 'hero';
+@import 'navigation';
+@import 'post';
+@import 'sections/books_i_read';
+@import 'sections/footer';
+@import 'sections/my_clients';
+@import 'sections/recent_blog_posts';
+
+// Media Queries
+@import 'media/mobile';
+@import 'media/tablet';
+
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html {
+  height: 100%;
+}
+
+body {
+  display: grid;
+  font-family: 'Nunito Sans', 'Barlow', sans;
+  font-size: 16px;
+  grid-template-rows: minmax(auto, auto) 1fr auto;
+  margin: 0;
+  min-height: 100%;
+}
+
+h1, h2 {
+  color: $gray;
+  font-family: 'Playfair Display', 'Barlow', sans;
+  font-size: 49px;
+  letter-spacing: -0.61px;
+}

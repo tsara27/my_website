@@ -1,0 +1,91 @@
+@media (max-width: 720px) {
+  .post-container {
+    p, a {
+      font-size: 160%;
+    }
+
+    p {
+      line-height: 40px;
+    }
+
+    h1 {
+      font-size: 350%;
+    }
+
+    h2 {
+      font-size: 300%;
+    }
+  }
+
+  .post-caption {
+    span, a {
+      font-size: 150%;
+    }
+  }
+
+  nav {
+    &.grid__navigation {
+      display: none !important;
+    }
+
+    &.grid__navigation-mobile {
+      display: grid;
+    }
+  }
+
+  .books-i-read {
+    &__image-of-me img {
+      margin-left: 30px;
+      padding-bottom: 10px;
+      width: 80%;
+    }
+
+    &__image-shadow {
+      left: 0;
+      overflow: hidden;
+      top: 95px;
+      width: 80%;
+    }
+  }
+
+  .navigation {
+    &__logo {
+      font-size: 22px;
+      padding-left: 0;
+    }
+  }
+
+  .books-i-read {
+    grid-auto-flow: row;
+    grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+
+    &__content {
+      background-position-y: 30px;
+    }
+  }
+
+  // Footer
+  footer {
+    margin: 0;
+  }
+
+  .footer-bottom {
+    &__sign {
+      font-size: 150%;
+      right: 50px;
+    }
+  }
+
+  .grid {
+    &__footer {
+      grid-auto-flow: row;
+      grid-gap: 0;
+      grid-template-columns: auto;
+    }
+  }
+
+  // Posts
+  .post-container {
+    margin: 30px 60px;
+  }
+}
