@@ -1,12 +1,18 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-  <title></title>
+  <title>{{ post.title }}</title>
+  <meta property="og:url" content="{{ site.url }}{{ page.url }}" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="{{ post.title }}" />
+  <meta property="og:description" content="{{ post.description }}" />
   <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
   <link rel="icon" href="/favicon.ico" type="image/x-icon">
   <link rel="stylesheet" href="/assets/css/default.css">
   <meta name="viewport" content="width=device-width">
 </head>
+
 <body>
   {% include components/navigation.html %}
   <main>
@@ -22,18 +28,62 @@
         </div>
         <div class="post-caption post-caption__tags">
           {% if page.tags %}
-            <i class="fa fa-tags"></i>
-            {% for tag in page.tags %}
-              <a href="/tags/{{ tag }}" class="tag">{{ tag }}</a>
-            {% endfor %}
+          <i class="fa fa-tags"></i>
+          {% for tag in page.tags %}
+          <a href="/tags/{{ tag }}" class="tag">{{ tag }}</a>
+          {% endfor %}
           {% endif %}
         </div>
       </div>
       <div class="post-content">
         {{ content }}
       </div>
+      <div class="grid grid__post-share-links">
+        <div class="post-share-label">
+          <img src="/assets/images/icons/share.svg" alt="Share">
+          <span>Share this post</span>
+        </div>
+        <div class="post-share-links">
+          <a href="#" class="facebook-share">
+            <img src="/assets/images/logos/facebook.svg" alt="Share on facebook">
+          </a>
+          <a class="twitter-share-button" target="__blank"
+            href="https://twitter.com/intent/tweet?url={{ site.url }}{{ page.url }}">
+            <img src="/assets/images/logos/twitter.svg" alt="Share on twitter">
+          </a>
+        </div>
+      </div>
+    </div>
     </div>
   </main>
+  <script>
+    var getWindowOptions = function () {
+      var width = 500;
+      var height = 450;
+      var left = (window.innerWidth / 2) - (width / 2);
+      var top = (window.innerHeight / 2) - (height / 2);
+
+      return [
+        'resizable,scrollbars,status',
+        'height=' + height,
+        'width=' + width,
+        'left=' + left,
+        'top=' + top,
+      ].join();
+    };
+
+    var fbBtn = document.querySelector('.facebook-share');
+    var title = encodeURIComponent('Hey everyone, come & see how good I look!');
+    var shareUrl = 'https://www.facebook.com/sharer/sharer.php?u=' + location.href + '&title=' + title;
+    fbBtn.href = shareUrl; // 1
+
+    fbBtn.addEventListener('click', function (e) {
+      e.preventDefault();
+      var win = window.open(shareUrl, 'ShareOnFb', getWindowOptions());
+      win.opener = null; // 2
+    });
+  </script>
   {% include footer.html %}
 </body>
+
 </html>
