@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Blog - Tsara's Blog</title>
+  <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+  <link rel="icon" href="/favicon.ico" type="image/x-icon">
+  <link rel="stylesheet" href="/assets/css/default.css">
+  <meta name="viewport" content="width=device-width">
+</head>
+
+<body>
+  {% include components/navigation.html %}
+  <main>
+    <div class="post-list-container">
+      {% for post in site.posts %}
+      <div class="grid grid__post-box">
+        <div class="post-box post-box__image"
+          style="background: url(/assets/images/posts/thumbs/001.jpg) center center; background-size: cover;">
+        </div>
+        <div class="post-box post-box__content">
+          <h2>{{ post.title }}</h2>
+          <p>
+            <picture>
+              <source srcset="/assets/images/icons/calendar.webp" type="image/webp">
+              <img src="/assets/images/icons/calendar.png" alt="Calendar">
+            </picture>
+            Published in {{ post.date | date: "%b %-d, %Y" }}
+          </p>
+          <p>{{ post.excerpt }}</p>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </main>
+  {% include footer.html %}
+</body>
+
+</html>

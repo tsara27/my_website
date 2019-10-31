@@ -35,4 +35,12 @@
   &__post-share-links {
     grid-template-columns: 50%;
   }
+
+  &__post-box {
+    height: 560px;
+    margin: 30px auto;
+    max-width: 1200px;
+    grid-gap: 50px;
+    grid-template-columns: 40% 60%;
+  }
 }
