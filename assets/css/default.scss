@@ -9,6 +9,7 @@
 @import 'variables';
 @import url('https://fonts.googleapis.com/css?family=Barlow&display=swap');
 @import url('https://fonts.googleapis.com/css?family=Nunito+Sans|Playfair+Display&display=swap');
+@import 'blog_list';
 @import 'button';
 @import 'grid';
 @import 'links';
@@ -42,7 +43,8 @@ body {
   min-height: 100%;
 }
 
-h1, h2 {
+h1,
+h2 {
   color: $gray;
   font-family: 'Playfair Display', 'Barlow', sans;
   font-size: 49px;

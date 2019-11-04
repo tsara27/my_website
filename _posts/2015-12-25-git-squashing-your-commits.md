@@ -7,7 +7,9 @@ tags: blog git squash rebase commits commit
 description: In this article, I am going to tell you about squashing your commits with git. Squashing your commits would be useful for developing your application when you should use one commit message in describing the whole changes. Usually, you would use it when you work on a team, and you send the changes to be reviewed by other developers. Can you imagine if you have 20 commits describing the feature that you made? I think it would take time to click every commit, checking the code on the commit, give the review to you, then do the same thing again until the last commit.
 ---
 
-In this article, I am going to tell you about squashing your commits with git. Squashing your commits would be useful for developing your application when you should use one commit message in describing the whole changes. Usually, you would use it when you work on a team, and you send the changes to be reviewed by other developers. Can you imagine if you have 20 commits describing the feature that you made? I think it would take time to click every commit, checking the code on the commit, give the review to you, then do the same thing again until the last commit. <!--more-->
+In this article, I am going to tell you about squashing your commits with git. Squashing your commits would be useful for developing your application when you should use one commit message in describing the whole changes.<!--more-->
+
+Usually, you would use it when you work on a team, and you send the changes to be reviewed by other developers. Can you imagine if you have 20 commits describing the feature that you made? I think it would take time to click every commit, checking the code on the commit, give the review to you, then do the same thing again until the last commit.
 
 Let's dive into the implementation.
 

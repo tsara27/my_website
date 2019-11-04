@@ -20,14 +20,18 @@
         </div>
         <div class="post-box post-box__content">
           <h2>{{ post.title }}</h2>
-          <p>
+          <p class="post-box post-box__caption">
             <picture>
               <source srcset="/assets/images/icons/calendar.webp" type="image/webp">
               <img src="/assets/images/icons/calendar.png" alt="Calendar">
             </picture>
             Published in {{ post.date | date: "%b %-d, %Y" }}
           </p>
-          <p>{{ post.excerpt }}</p>
+          <div class="post-box post-box__excerpt">
+            <p>{{ post.excerpt }}</p>
+          </div>
+          <hr>
+          <a href="{{ post.url }}" class="post-box post-box__read-more">Read more</a>
         </div>
       </div>
       {% endfor %}
