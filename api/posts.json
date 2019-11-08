@@ -1,0 +1,16 @@
+---
+layout: none
+---
+
+{% assign posts = site.posts %}
+[
+  {% for post in posts %}
+    {
+      "post_title": "{{ post.title }}",
+      "post_path": "{{ post.url }}",
+      "post_date": "{{ post.date | date: '%b %-d, %Y' }}",
+      "post_excerpt": "{{ post.excerpt | newline_to_br | strip_newlines | xml_escape | textilize }}"
+    }{% unless forloop.last %},
+  {% endunless %}
+  {% endfor %}
+]
