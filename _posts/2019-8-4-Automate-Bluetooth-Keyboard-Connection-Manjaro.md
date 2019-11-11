@@ -7,10 +7,7 @@ tags: blog linux manjaro
 description: I was upset when using bluetooth keyboard on Linux machine, Manjaro. I had to reconnect my bluetooth keyboard everytime I login to my machine. But, I've found a way to automate the bluetooth keyboard connection when logging in to my machine.
 ---
 
-I was upset when using bluetooth keyboard on Linux machine, Manjaro. I had to
-reconnect my bluetooth keyboard everytime I login to my machine. But, I've found
-a way to automate the bluetooth keyboard connection when logging in to my
-machine.
+I was upset when using bluetooth keyboard on Linux machine, Manjaro. I had to reconnect my bluetooth keyboard everytime I login to my machine. But, I've found a way to automate the bluetooth keyboard connection when logging in to my machine.
 
 I setup an application autostart item. I am using XFCE desktop. So, what I did
 is open **Session and Startup**. Then, go to **Application Autostart**. Add

@@ -37,10 +37,12 @@
   }
 
   &__post-box {
-    height: 560px;
-    margin: 30px auto;
-    max-width: 1200px;
+    align-items: center;
     grid-gap: 50px;
     grid-template-columns: 40% 60%;
+    height: 380px;
+    justify-content: center;
+    margin: 0 auto;
+    max-width: 1200px;
   }
 }
