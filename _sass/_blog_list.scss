@@ -46,3 +46,19 @@
     }
   }
 }
+
+.post-list {
+  &__load-more-button {
+    display: block;
+    margin: 0 auto;
+    margin-bottom: 45px;
+
+    &:hover {
+      cursor: pointer;
+
+      rect#Rectangle-Copy-2 {
+        fill: $candy-pink;
+      }
+    }
+  }
+}

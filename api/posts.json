@@ -9,7 +9,7 @@ layout: none
       "post_title": "{{ post.title }}",
       "post_path": "{{ post.url }}",
       "post_date": "{{ post.date | date: '%b %-d, %Y' }}",
-      "post_excerpt": "{{ post.excerpt | newline_to_br | strip_newlines | xml_escape | textilize }}"
+      "post_description": "{{ post.description }}"
     }{% unless forloop.last %},
   {% endunless %}
   {% endfor %}
