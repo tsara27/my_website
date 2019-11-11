@@ -1,12 +1,19 @@
 <nav class="navigation grid grid__navigation">
   <div class="navigation navigation__logo">
-    Tsara Fatma
+    <a href="/">Tsara Fatma</a>
   </div>
   <div class="navigation navigation__links">
-    <a href="#about-me" class="active">About Me</a>
-    <a href="#about-me">Blog</a>
-    <a href="#about-me">Clients</a>
-    <a href="#about-me">Books I Read</a>
+    {% assign current_segment = (page.url | split:'/') %}
+    {% if current_segment[1] == nil %}
+    <a href="#" class="active">About Me</a>
+    {% else %}
+    <a href="/">About Me</a>
+    {% endif %}
+    {% if current_segment[1] == 'blog.html' %}
+    <a href="#" class="active">Blog</a>
+    {% else %}
+    <a href="/blog">Blog</a>
+    {% endif %}
   </div>
 </nav>
 <nav class="navigation grid grid__navigation-mobile">

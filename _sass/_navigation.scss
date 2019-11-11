@@ -5,6 +5,11 @@
     font-family: 'Signerica';
     font-size: 32px;
     padding-left: 95px;
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
   }
 
   &__links {

@@ -24,6 +24,9 @@
 
   .post-share-links {
     justify-self: end;
+    a {
+      text-decoration: none;
+    }
   }
 }
 

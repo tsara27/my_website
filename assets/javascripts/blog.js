@@ -19,7 +19,7 @@ var appendPosts = function () {
   loadMoreButton += '<rect id="Rectangle" fill="#A7A7A7" opacity="0.4" x="2.88659794" y="2.88659794" width="137.113402" height="50.5154639"></rect>\n';
   loadMoreButton += '<rect id="Rectangle-Copy-2" fill="#FF8088" x="0" y="0" width="137.113402" height="50.5154639"></rect>\n';
   loadMoreButton += '</g>\n';
-  loadMoreButton += '<text id="Load-More" font-family="PlayfairDisplay-Bold, Playfair Display" font-size="17" font-weight="bold" fill="#FFFFFF">\n';
+  loadMoreButton += '<text id="Load-More" font-family="Playfair Display" font-size="17" font-weight="normal" fill="#FFFFFF">\n';
   loadMoreButton += '<tspan x="26.102" y="32">Load More</tspan>\n';
   loadMoreButton += '</text>\n';
   loadMoreButton += '</g>\n';
