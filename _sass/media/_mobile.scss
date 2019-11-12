@@ -88,4 +88,15 @@
   .post-container {
     margin: 30px 60px;
   }
+
+  // Post lists or blog lists
+  .grid__post-box {
+    grid-template-columns: 100%;
+    height: 100%;
+    margin-bottom: 40px;
+
+    .post-box__image {
+      display: none;
+    }
+  }
 }

@@ -8,9 +8,8 @@ footer {
   &__footer {
     border-bottom: 1px solid $light-gray;
     grid-gap: 75px;
-    height: 100%;
-    margin: 15px 50px;
-    padding: 50px 0;
+    margin: 15px 50px 0;
+    padding: 50px 0 0;
   }
 
   &__footer-bottom {
@@ -20,8 +19,9 @@ footer {
 }
 
 .footer {
-  position: relative;
   color: $gray;
+  padding-bottom: 50px;
+  position: relative;
 
   img {
     position: absolute;
