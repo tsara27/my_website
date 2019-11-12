@@ -3,6 +3,7 @@ layout: post
 title: Custom Text on Select Tag Option
 date:   2017-4-23 11:40
 categories: ruby
+image: '005'
 tags: blog rails ruby
 description: There's some cases when we need to customize how we display the text on option inside select tag. We can customize that in very simple way. We only need to create a custom instance method on the model that we use on the select tag. Let's jump into the code.
 ---

@@ -3,6 +3,7 @@ layout: post
 title: MySQL Gem and MAMP
 date: 2018-1-25 11:40
 categories: ruby
+image: '003'
 tags: blog rails ruby mysql mamp
 description: Working with Ruby code a lot, that’s what I do for almost 4 years. But, when I should add mysql gem to my machine. There’s always a problem. It could not be installed because the gem installation expects the mysql installed on default path. I need to include mysql config that is placed within MAMP application.
 ---

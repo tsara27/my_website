@@ -44,7 +44,7 @@ var appendMorePosts = function () {
 var populatePosts = function (startIndex, endIndex) {
   for (var index = startIndex; index < endIndex; index++) {
     var postGrid = '<div class="grid grid__post-box">' +
-      '<div class="post-box post-box__image" style="background: url(/assets/images/posts/thumbs/001.jpg) center center; background-size: cover;"></div>' +
+      '<div class="post-box post-box__image" style="background: url(' + posts[index]['post_thumb'] + ') center center; background-size: cover;"></div>' +
       '<div class="post-box post-box__content">' +
       '<h2>' + posts[index]['post_title'] + '</h2>' +
       '<p class="post-box post-box__caption">' +
@@ -59,7 +59,7 @@ var populatePosts = function (startIndex, endIndex) {
       '<p>' + posts[index]['post_description'] + '</p>' +
       '</div>' +
       '<hr>' +
-      '<a href="' + posts[index]['post_url'] + '" class="post-box post-box__read-more">Read more</a>' +
+      '<a href="' + posts[index]['post_path'] + '" class="post-box post-box__read-more">Read more</a>' +
       '</div>' +
       '</div>';
 

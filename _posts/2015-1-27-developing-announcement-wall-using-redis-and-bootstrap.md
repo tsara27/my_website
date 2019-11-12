@@ -3,6 +3,7 @@ layout: post
 title: Developing Announcement Wall Using Redis and Bootstrap
 date:   2015-3-5 17:46
 categories: rails
+image: '010'
 tags: blog ruby rails redis
 description: There will be a moment where using RDBMS is not really recommended when the process itself has fast pace in storing and destroying a record on database. For example in announcement application a user will create announcement that would be available in 30 minutes, post an information and it's disappeared after the time is up. In this case, we can use a key value store, or referred to NoSQL database.
 ---

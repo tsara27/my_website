@@ -3,6 +3,7 @@ layout: post
 title: Signature Pad on Rails
 date:   2015-9-17 8:12:55
 categories: ruby
+image: '008'
 tags: blog rails ruby signature-pad signature
 description: In developing world, we would see a lot of applications. Some applications might need a signature pad to sign an agreement or policies that they provide. How do we put the signature pad on Rails app? Now, I am going to explain how to put signature pad on Rails app. I will use jQuery plugin, SignaturePad, by Thomas J Bradley.
 ---

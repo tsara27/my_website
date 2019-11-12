@@ -3,6 +3,7 @@ layout: post
 title: Yeay! Grouping anagram with Ruby
 date:   2015-5-2 7:55:57
 categories: ruby
+image: '009'
 tags: blog ruby
 description: It's been few months since I don't write any blog post. I have been really busy with some projects at the same time. That's why I leave my blog. Anyway, do you remember that I wrote a post about anagram few months ago? Now, I am going to share with you about grouping anagram words. It's going to be simple or not. It depends on how do you solve the problem. Let's start!
 ---

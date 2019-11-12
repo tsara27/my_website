@@ -3,6 +3,7 @@ layout: post
 title: Anagram Checker with Ruby
 date:   2015-1-19 19:42:32
 categories: ruby
+image: '011'
 tags: blog ruby
 description: Few days ago I had a test to check whether a word is anagram or not. Now, I want to share with you how to check anagram using Ruby. Let's say that we have two words, and want to check if the both of them is anagram. What I am going to do is that split each words and make sure that the words have same characters and length.
 ---
