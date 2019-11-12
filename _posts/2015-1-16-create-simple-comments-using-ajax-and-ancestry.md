@@ -3,6 +3,7 @@ layout: post
 title: Create Simple Messaging Application Using Ajax and Ancestry
 date:   2015-1-16 06:02:00
 categories: rails
+image: '012'
 tags: blog ruby rails ajax
 description: In some cases in developing application I met requirement that I should create messaging, comment, or forum feature. I want to share about how to implement a simple messaging app. Basically the flow is more or less just like this, somebody send a message and somebody else reply it. That's simple. But, how is the code looks like.
 ---

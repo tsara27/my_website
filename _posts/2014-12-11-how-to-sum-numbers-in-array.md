@@ -3,6 +3,7 @@ layout: post
 title: How to Sum Numbers in Array?
 date:   2014-12-11 06:20:55
 categories: ruby
+image: '014'
 tags: blog ruby math sum inject
 description: In developing application you may find a problem where you have to sum numbers inside an array. You may feel confuse of how to do that. Here, I explain how you can solve the problem. Let's say that we have `nums = [1,2,3,4,5]` and the result of sum is 15.
 ---

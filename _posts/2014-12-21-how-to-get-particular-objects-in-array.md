@@ -3,6 +3,7 @@ layout: post
 title: How to Get Particular Objects in Array?
 date:   2014-12-21 11:02:46
 categories: ruby
+image: '013'
 tags: blog ruby object array
 description: Finding particular rows from a table from relational database is commonly used by many developers in developing their application. But, how to find particular objects in array. In my opinion, finding rows from a table on relational database is easier than find particular objects from array which too logical sometimes (haha). I just have to create the query that select particular rows or using active record to fetch the rows.
 ---
