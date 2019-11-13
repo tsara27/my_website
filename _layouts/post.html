@@ -36,6 +36,10 @@
           {% endif %}
         </div>
       </div>
+      <picture class="post-image">
+        <source srcset="/assets/images/posts/{{ page.image }}.webp" type="image/webp">
+        <img src="/assets/images/posts/{{ page.image }}.jpg" alt="Calendar">
+      </picture>
       <div class="post-content">
         {{ content }}
       </div>
