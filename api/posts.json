@@ -13,7 +13,8 @@ layout: none
       "post_image": "/assets/images/posts/{{ post.image }}.jpg",
       "post_image_webp": "/assets/images/posts/{{ post.image }}.webp",
       "post_thumb": "/assets/images/posts/thumbs/{{ post.image }}.jpg",
-      "post_thumb_webp": "/assets/images/posts/thumbs/{{ post.image }}.webp"
+      "post_thumb_webp": "/assets/images/posts/thumbs/{{ post.image }}.webp",
+      "post_tags": {{ post.tags | jsonify }}
     }{% unless forloop.last %},
   {% endunless %}
   {% endfor %}
