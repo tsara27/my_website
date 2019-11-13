@@ -1,10 +1,13 @@
 var posts = [];
 var test = '';
+var current_tags = window.location.pathname.split('/')[2];
 
 var loadPosts = function () {
   $.getJSON("/api/posts.json")
     .done(function (data) {
-      posts = data;
+      posts = data.filter(function (post) {
+        return post['post_tags'].includes(current_tags) == true;
+      });
       appendPosts();
     });
 }
@@ -29,7 +32,7 @@ var appendPosts = function () {
   loadMoreButton += '</svg>';
 
   if (posts.length < 4) {
-    populatePosts(0, posts.length - 1);
+    populatePosts(0, posts.length);
   } else {
     populatePosts(0, 4);
     $('.post-list-container').parent().append(loadMoreButton);
