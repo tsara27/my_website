@@ -16,6 +16,7 @@
 
 <body>
   {% include components/navigation.html %}
+  {% include hamburger_menu_lists.html %}
   <main>
     <div class="post-container">
       <h1>{{ page.title }}</h1>
@@ -89,6 +90,7 @@
     });
   </script>
   {% include footer.html %}
+  <script src="/assets/javascripts/hamburger.js"></script>
 </body>
 
 </html>
