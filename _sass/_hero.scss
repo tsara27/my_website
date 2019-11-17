@@ -35,6 +35,14 @@
     margin-bottom: 50px;
     margin-left: 35px;
     margin-top: 35px;
+
+    &:hover {
+      cursor: pointer;
+
+      rect#Rectangle-Copy-2 {
+        fill: $candy-pink;
+      }
+    }
   }
 }
 
