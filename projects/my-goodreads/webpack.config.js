@@ -2,8 +2,8 @@
 const path = require("path");
 const webpack = require("webpack");
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
-const srcPath = path.resolve(__dirname, "app/assets");
-const bundlePath = path.resolve(__dirname, "public/assets/");
+const srcPath = path.resolve(__dirname, "src");
+const bundlePath = path.resolve(__dirname, "dist");
 const fs = require('fs');
 const prod = process.argv.indexOf('-p') !== -1;
 const js_output_template = prod ? "javascripts/[name]-[hash].js" : "javascripts/[name].js";
@@ -11,9 +11,7 @@ const js_output_template = prod ? "javascripts/[name]-[hash].js" : "javascripts/
 
 module.exports = {
   entry: {
-    application: srcPath + "/javascripts/application.js",
-    vendor_application: srcPath + "/javascripts/vendor_application.js",
-    dashboard: srcPath + "/javascripts/dashboard.js",
+    main: srcPath + "/index.js",
   },
   module: {
     rules: [
@@ -29,11 +27,14 @@ module.exports = {
   },
   resolve: {
     extensions: ['*', '.js', '.jsx'],
-    modules: [srcPath, './node_modules', '/vendor']
+    modules: [srcPath, './node_modules']
   },
   output: {
     path: bundlePath,
     filename: js_output_template
+  },
+  devServer: {
+    contentBase: './dist'
   },
   plugins: [
     new UglifyJSPlugin({
@@ -45,16 +46,9 @@ module.exports = {
       }
     }),
     function () {
-      // output the fingerprint
-      this.plugin("done", function (stats) {
-        let output = "ASSET_FINGERPRINT = \"" + stats.hash + "\""
-        fs.writeFileSync("config/initializers/fingerprint.rb", output, "utf8");
-      });
-    },
-    function () {
       // delete previous outputs
       this.plugin("compile", function () {
-        let basepath = __dirname + "/public";
+        let basepath = __dirname + "/dist";
         let paths = ["/javascripts"];
 
         for (let x = 0; x < paths.length; x++) {
