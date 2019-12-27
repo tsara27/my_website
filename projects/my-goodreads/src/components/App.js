@@ -14,7 +14,7 @@ class App extends Component {
   }
 
   searchResultCallback = (childData) => {
-    this.setState({ searchResult: childData });
+    this.setState({ searchResult: [...childData] });
   }
 
   render() {

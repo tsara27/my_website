@@ -1,5 +1,5 @@
 import Radium from 'radium';
-import React, { Component, useState, useEffect } from 'react';
+import React, { Component } from 'react';
 import FavoriteBook from '../FavoriteBook';
 
 function SearchResultContainer(props) {
@@ -21,6 +21,9 @@ function SearchResultContainer(props) {
       <h1 style={styles.header}>Search Results</h1>
       <div style={styles.base}>
         {
+          props.resultData.map((value, index) => {
+            return <FavoriteBook key={index} data={value}></FavoriteBook>
+          })
         }
       </div>
     </div>
