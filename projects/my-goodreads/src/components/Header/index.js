@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 class Header extends Component {
   render() {
     return (
-      <header style={styles.base} {...this.props}>
+      <header style={styles.base}>
         {this.props.children}
       </header>
     );

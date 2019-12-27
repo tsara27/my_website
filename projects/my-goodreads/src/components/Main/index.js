@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 class Main extends Component {
   render() {
     return (
-      <main style={styles.base} {...this.props}>
+      <main style={styles.base}>
         {this.props.children}
       </main>
     );
@@ -17,8 +17,7 @@ let styles = {
     borderBottom: '1px solid #454161',
     display: 'grid',
     gridAutoFlow: 'row',
-    alignItems: 'center',
-    justifyItems: 'center'
+    alignItems: 'center'
   }
 };
 
