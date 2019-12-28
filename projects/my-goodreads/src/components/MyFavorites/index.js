@@ -11,9 +11,6 @@ function MyFavorites(props) {
       gridAutoFlow: 'dense',
       gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))',
       gridGap: '30px'
-    },
-    header: {
-      marginLeft: '70px'
     }
   };
 
@@ -38,7 +35,7 @@ function MyFavorites(props) {
 
   return (
     <div>
-      <h1 style={styles.header}>My Favorite Books</h1>
+      <h1>My Favorite Books</h1>
       <div style={styles.base}>
         {
           favoriteBooks.map((value, index) => {

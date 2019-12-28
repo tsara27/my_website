@@ -17,7 +17,9 @@ let styles = {
     borderBottom: '1px solid #454161',
     display: 'grid',
     gridAutoFlow: 'row',
-    alignItems: 'center'
+    alignItems: 'center',
+    maxWidth: '960px',
+    margin: '0 auto'
   }
 };
 

@@ -10,15 +10,12 @@ function SearchResultContainer(props) {
       gridAutoFlow: 'dense',
       gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))',
       gridGap: '30px'
-    },
-    header: {
-      marginLeft: '70px'
     }
   };
 
   return (
     <div>
-      <h1 style={styles.header}>Search Results</h1>
+      <h1>Search Results</h1>
       <div style={styles.base}>
         {
           props.resultData.map((value, index) => {
