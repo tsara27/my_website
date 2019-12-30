@@ -10,7 +10,18 @@ function MyFavorites(props) {
       display: 'grid',
       gridAutoFlow: 'dense',
       gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))',
-      gridGap: '30px'
+      gridGap: '30px',
+      maxWidth: '960px',
+      margin: '0 auto'
+    },
+    container: {
+      borderBottom: '1px solid #454161',
+      padding: '50px'
+    },
+    header: {
+      maxWidth: '960px',
+      margin: '0 auto',
+      padding: '0 50px 50px'
     }
   };
 
@@ -34,8 +45,8 @@ function MyFavorites(props) {
   }
 
   return (
-    <div>
-      <h1>My Favorite Books</h1>
+    <div style={styles.container}>
+      <h1 style={styles.header}>My Favorite Books</h1>
       <div style={styles.base}>
         {
           favoriteBooks.map((value, index) => {
