@@ -30,6 +30,10 @@
     &__content h2 {
       font-size: 35px;
       margin: 0;
+
+      &:hover {
+        color: $dove-gray !important;
+      }
     }
 
     &__excerpt {
@@ -42,6 +46,10 @@
       font-size: 22px;
       letter-spacing: -0.28px;
       text-align: right;
+      text-decoration: none;
+    }
+
+    &__title-link {
       text-decoration: none;
     }
   }

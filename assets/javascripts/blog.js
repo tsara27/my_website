@@ -55,7 +55,7 @@ var populatePosts = function (startIndex, endIndex) {
     var postGrid = '<div class="grid grid__post-box">' +
       '<div class="post-box post-box__image" style="background: url(' + posts[index]['post_thumb'] + ') center center; background-size: cover;"></div>' +
       '<div class="post-box post-box__content">' +
-      '<h2>' + posts[index]['post_title'] + '</h2>' +
+      '<a href="' + posts[index]['post_path'] + '" class="post-box post-box__title-link"><h2>' + posts[index]['post_title'] + '</h2></a>' +
       '<p class="post-box post-box__caption">' +
       '<picture>' +
       '<source srcset="/assets/images/icons/calendar.webp" type="image/webp">' +
