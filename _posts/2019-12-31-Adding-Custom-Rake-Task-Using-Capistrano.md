@@ -14,12 +14,12 @@ It will be easier if I can update that through my local CLI instead of login to 
 
 These are few steps that I follow to achieve it.
 
-#### 1. Make sure the rake task that you want to run is ready on the production server.
+#### 1. Make sure the rake task that you want to run is ready on the production server
 
 You have to deploy the rake task that you want to run from your local CLI before creating the capistrano task that runs
 rake task.
 
-#### 2. Create a Capistrano task that is used to run rake from the CLI.
+#### 2. Create a Capistrano task that is used to run rake from the CLI
 
 I am using Capistrano version **3.10**. If I see `Capfile` after I setup capistrano,
 I'll see that there is a line that defines Capistrano loads custom task from `lib/capistrano/tasks/` folder.
@@ -46,5 +46,7 @@ namespace :run_rake do
   end
 end
 {% endhighlight %}
+
+#### 3. Run the task through your CLI
 
 I can run any task from my local by running `cap (staging/production) run_rake:invoke task=task_name` from my local.
