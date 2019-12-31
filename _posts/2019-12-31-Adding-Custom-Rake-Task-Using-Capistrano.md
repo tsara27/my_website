@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Adding Custom Rake Task Using Capistrano
-date: 2019-12-31 14:43
+date: 2019-12-31 00:00
 categories: ruby
 image: '015'
 tags: blog ruby rails capistrano
