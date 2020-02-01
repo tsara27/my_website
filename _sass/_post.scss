@@ -39,6 +39,10 @@
 
 .post-image >  img {
   width: 100%;
+}
+
+.post-image-description {
+  color: $light-dove-gray;
   margin-bottom: 30px;
 }
 
@@ -72,6 +76,16 @@
 
 .post-content {
   font-family: "Barlow";
+
+  p {
+    font-size: large;
+    line-height: 1.7;
+  }
+
+  h2 {
+    font-size: 2.2em;
+    margin-top: 40px;
+  }
 }
 
 .highlight {
