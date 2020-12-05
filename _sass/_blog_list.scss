@@ -2,8 +2,12 @@
   margin: 75px;
   .post-box {
     &__image {
-      // align-self: center;
       height: 320px;
+      overflow: hidden;
+    }
+
+    &__image img {
+      width: 100%;
     }
 
     &__caption {

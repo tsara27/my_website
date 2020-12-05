@@ -40,7 +40,7 @@
       </div>
       <picture class="post-image">
         <source srcset="/assets/images/posts/{{ page.image }}.webp" type="image/webp">
-        <img src="/assets/images/posts/{{ page.image }}.jpg" alt="Calendar">
+        <img class="lazy" src="/assets/images/posts/{{ page.image }}.jpg" data-src="/assets/images/picture-placeholder.png" alt="Main image">
       </picture>
       <span class="post-image-description">{{ page.image_caption }}</span>
       <div class="post-content">
@@ -92,7 +92,13 @@
     });
   </script>
   {% include footer.html %}
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js"
+    integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
   <script src="/assets/javascripts/hamburger.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload@17.3.0/dist/lazyload.min.js"></script>
+  <script>
+    var lazyLoadInstance = new LazyLoad({});
+  </script>
 </body>
 
 </html>

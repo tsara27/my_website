@@ -1,5 +1,6 @@
 var posts = [];
 var test = '';
+var lazyLoadInstance = new LazyLoad({});
 
 var loadPosts = function () {
   $.getJSON("/api/posts.json")
@@ -53,14 +54,17 @@ var appendMorePosts = function () {
 var populatePosts = function (startIndex, endIndex) {
   for (var index = startIndex; index < endIndex; index++) {
     var postGrid = '<div class="grid grid__post-box">' +
-      '<div class="post-box post-box__image" style="background: url(' + posts[index]['post_thumb'] + ') center center; background-size: cover;"></div>' +
+      '<div class="post-box post-box__image">' +
+      '<img data-src="/assets/images/picture-placeholder.png"  src="' + posts[index]['post_thumb'] + '" class="lazy" alt="Thumbnail">' +
+      '</div>' +
+      //'<div class="post-box post-box__image" style="background: url(' + posts[index]['post_thumb'] + ') center center; background-size: cover;"></div>' +
       '<div class="post-box post-box__content">' +
       '<a href="' + posts[index]['post_path'] + '" class="post-box post-box__title-link"><h2>' + posts[index]['post_title'] + '</h2></a>' +
       '<p class="post-box post-box__caption">' +
       '<picture>' +
       '<source srcset="/assets/images/icons/calendar.webp" type="image/webp">' +
       '<img src="/assets/images/icons/calendar.png" alt="Calendar">' +
-      '</picture >' +
+      '</picture>' +
       'Published in ' +
       posts[index]['post_date'] +
       '</p>' +
