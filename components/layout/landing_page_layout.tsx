@@ -1,4 +1,6 @@
-import Head from 'next/head'
+import Head from 'next/head';
+import Navbar from "../complex/Navbar";
+import Hero from "../complex/Hero";
 
 type Props = {
   title: string
@@ -18,9 +20,9 @@ function LandingPageLayout({ title, description, tags, children }: Props) {
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className="container mx-auto">
-        <nav className="flex flex-row">
-        </nav>
+      <main className="container mx-auto font-sans">
+        <Navbar />
+        <Hero />
         {children}
       </main>
       <section className="footer"></section>
