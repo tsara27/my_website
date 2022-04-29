@@ -2,7 +2,7 @@ import Image from "next/image";
 
 function Hero() {
   return (
-    <section className="hero flex justify-between p-20">
+    <section className="hero container mx-auto flex justify-between p-20">
       <div className="w-2/5">
         <h1 className="font-display text-gray text-7xl mb-8 tracking-tighter mt-32">Tsara Fatma</h1>
         <div className="border-l-4 pl-6 border-candy-pink text-xl opacity-30">
