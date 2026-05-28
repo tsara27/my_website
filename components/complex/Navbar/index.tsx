@@ -9,7 +9,7 @@ function Navbar() {
             <a className="font-logo text-3xl text-faded-red">Tsara Fatma</a>
           </Link>
         </div>
-        <div className="nav-links font-sans text-black text-xl tracking-0">
+        <div className="nav-links font-display text-black text-xl tracking-0">
           <Link href="/">
             <a className="pr-5">About Me</a>
           </Link>
