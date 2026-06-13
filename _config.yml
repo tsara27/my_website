@@ -39,5 +39,6 @@ markdown: kramdown
 permalink: pretty
 excerpt_separator: <!--more-->
 
-gems:
+plugins:
   - jekyll-sitemap
+  - jekyll-paginate
