@@ -1,26 +1,49 @@
-import type { NextPage } from 'next'
-import LandingPageLayout from '../components/layout/landing_page_layout'
 import Hero from "../components/sections/Hero";
-import LatestBlogPosts from '../components/sections/LatestBlogPosts';
-import { fetchLatestPosts } from "../lib/fetch_latest_posts";
+import Companies from "../components/sections/Companies";
+import Company from "../types/company";
+import CompanyJSON from "../data/companies.json";
+import LandingPageLayout from "../components/layout/LandingPageLayout";
+import LatestBlogPosts from "../components/sections/LatestBlogPosts";
+import Post from "../types/post";
+import { getAllPosts } from "../lib/api";
+import { GetStaticProps } from "next";
 
-const Home: NextPage = ({ posts }) => {
+type Props = {
+  allPosts: Post[];
+  companies: Company[];
+};
+
+const Index = ({ allPosts, companies }: Props) => {
+  const posts = allPosts.slice(0, 3);
+
   return (
-      <LandingPageLayout title="Tsara Sudrajat - Software Engineer" description="The Software Engineer">
-        <Hero />
-        <LatestBlogPosts posts={posts} />
-      </LandingPageLayout>
-  )
-}
+    <LandingPageLayout
+      title="Tsara Sudrajat - Software Engineer"
+      description="The Software Engineer"
+    >
+      <Hero />
+      <LatestBlogPosts posts={posts} />
+      <Companies companies={companies} />
+    </LandingPageLayout>
+  );
+};
 
-export default Home;
+export default Index;
 
-export const getStaticProps = async (context) => {
-  const posts = await fetchLatestPosts();
+export const getStaticProps: GetStaticProps<Props> = async () => {
+  const allPosts = getAllPosts([
+    "title",
+    "date",
+    "slug",
+    "author",
+    "coverImage",
+    "excerpt",
+  ]);
+
   return {
     props: {
-      posts
-    }
-  }
-}
-
+      companies: CompanyJSON,
+      allPosts: allPosts as unknown as Post[],
+    },
+  };
+};

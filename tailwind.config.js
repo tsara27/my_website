@@ -5,11 +5,12 @@ module.exports = {
   ],
   theme: {
     letterSpacing: {
-      '0': '-1px',
+      0: "-1px",
     },
     fontFamily: {
       sans: ["Nunito Sans", "Roboto", "sans-serif"],
       display: ["Playfair Display", "Times New Roman", "sans-serif"],
+      article: ["Roboto Flex"],
       logo: ["Signerica"],
     },
     extend: {
@@ -25,6 +26,13 @@ module.exports = {
         "light-dove-gray": "#727272",
         "light-gray": "#D2D2D2",
       },
+    },
+    screens: {
+      'xs': "0px",
+      'sm': "576px",
+      'sm-tab': "640px",
+      'md': "960px",
+      'lg': "1440px",
     },
   },
   plugins: [],

@@ -2,19 +2,19 @@ import Link from "next/link";
 
 function Navbar() {
   return (
-    <section className="container mx-auto py-7">
+    <section className="sm:container mx-auto py-7">
       <nav className="flex justify-between px-7">
         <div className="nav-logo">
-          <Link href="/">
-            <a className="font-logo text-3xl text-faded-red">Tsara Fatma</a>
+          <Link href="/" className="font-logo text-3xl text-faded-red">
+            Tsara Fatma
           </Link>
         </div>
         <div className="nav-links font-display text-black text-xl tracking-0">
-          <Link href="/">
-            <a className="pr-5">About Me</a>
+          <Link href="/" className="pr-5">
+            About Me
           </Link>
-          <Link href="/">
-            <a className="text-gray">Blog</a>
+          <Link href="/" className="text-gray">
+            Blog
           </Link>
         </div>
       </nav>

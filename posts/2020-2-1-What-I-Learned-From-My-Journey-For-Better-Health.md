@@ -3,8 +3,7 @@ slug: "what-i-learned-from-my-journey-for-better-health"
 title: What I Learned from My Journey for Better Health
 date: 2020-02-01 00:00
 categories: life
-image: '016'
-image_caption: Photo by Anna Pelzer on Unsplash
+imageCaption: Photo by Anna Pelzer on Unsplash
 tags: blog life
 description: When I was in college my weight was 78kg, eating unhealthy foods, had a bad sleep pattern, and not fit (remembering that I was getting tired easily). Of course, so many times I thought about how to change my life and have better health. I tried different things without any basis of knowledge, so, failures became friends of mine.
 ---
