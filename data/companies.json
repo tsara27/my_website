@@ -1,0 +1,32 @@
+[
+  {
+    "name": "Bespaced",
+    "logo": "/assets/images/companies/bespaced.png",
+    "width": 56,
+    "height": 56
+  },
+  {
+    "name": "Influx",
+    "logo": "/assets/images/companies/influx.svg",
+    "width": 160,
+    "height": 50
+  },
+  {
+    "name": "Petro Ninja Maps",
+    "logo": "/assets/images/companies/petro-ninja-maps.png",
+    "width": 345,
+    "height": 50
+  },
+  {
+    "name": "Satori",
+    "logo": "/assets/images/companies/satori.png",
+    "width": 229,
+    "height": 50
+  },
+  {
+    "name": "Mrsool",
+    "logo": "/assets/images/companies/mrsool.png",
+    "width": 192,
+    "height": 50
+  }
+]

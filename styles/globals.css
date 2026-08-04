@@ -1,0 +1,7 @@
+@import "tailwindcss";
+@config "../tailwind.config.js";
+
+@font-face {
+  font-family: "Signerica";
+  src: url("../fonts/signerica/Signerica_Medium.ttf");
+}
