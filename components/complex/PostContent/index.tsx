@@ -15,7 +15,7 @@ function PostContent({ content, image }: Props) {
     <div className="xs:max-w-[90%] sm:max-w-xl sm-tab:max-w-3xl md:max-w-4xl mx-auto">
       <Image
         src={image.url}
-        alt="Photo by Anna Pelzer on Unsplash"
+        alt={image.caption}
         width="1000"
         height="1000"
         style={{

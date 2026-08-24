@@ -9,6 +9,7 @@ author:
   picture: '/assets/images/tsara.png'
 ogImage:
   url: '/assets/images/posts/defx-file-explorer-for-neovim.webp'
+  caption: "Screenshot from my Defx UI"
 excerpt: I recently tried to check neovim startup time. The result was showing that NERDTree is quite slow in the startup time. So, I tried to search for other file explorer plugin. I found defx, the one that is lighter than NERDTree, that also has similar functionality with NERDTree.
 ---
 

@@ -1,6 +1,6 @@
 function LetsTalkButton() {
   return (
-    <a href="mailto:tsara.tf@gmail.com" className="transition-all duration-200 hover:brightness-90">
+    <a href="mailto:tsara.tf@gmail.com" className="transition-all duration-200 hover:brightness-110">
       <svg className="get-in-touch-button mt-6" width="194px" height="74px" viewBox="0 0 194 74" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink">
         <g id="Page-1" stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
           <g id="Tsara-landingpage" transform="translate(-133.000000, -586.000000)">
