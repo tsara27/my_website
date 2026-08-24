@@ -1,0 +1,1306 @@
+<!doctype html>
+<html lang="en" class="h-full">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vigor - Body Metric Tracker</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <!-- FontAwesome for Icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+
+    <script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ["Plus Jakarta Sans", "sans-serif"],
+            },
+            colors: {
+              brand: {
+                50: "#f0f9ff",
+                100: "#e0f2fe",
+                500: "#0ea5e9",
+                600: "#0284c7",
+                700: "#0369a1",
+                accent: "#10b981", // emerald green for healthy logs
+                danger: "#ef4444", // red for warning
+                warning: "#f59e0b", // orange
+              },
+            },
+          },
+        },
+      };
+    </script>
+    <link rel="stylesheet" href="css/styles.css" />
+  </head>
+  <body
+    class="bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 min-h-full transition-colors duration-200"
+  >
+    <div class="flex flex-col min-h-screen">
+      <!-- Top Navbar -->
+      <header
+        class="bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 sticky top-0 z-40 transition-colors duration-200 shadow-sm"
+      >
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="flex items-center justify-between h-16">
+            <div class="flex items-center gap-3">
+              <div
+                class="w-10 h-10 bg-brand-500 rounded-xl flex items-center justify-center text-white font-extrabold text-xl shadow-lg shadow-brand-500/20"
+              >
+                <i class="fa-solid fa-heart-pulse"></i>
+              </div>
+              <div>
+                <h1
+                  class="text-xl font-bold tracking-tight bg-gradient-to-r from-brand-500 to-emerald-500 bg-clip-text text-transparent"
+                >
+                  VIGOR
+                </h1>
+                <p
+                  class="text-[10px] text-slate-400 font-medium tracking-widest uppercase"
+                >
+                  Metric Tracker
+                </p>
+              </div>
+            </div>
+
+            <!-- Sync Status Widget -->
+            <div
+              class="hidden md:flex items-center gap-2 px-3 h-9 bg-slate-100 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-full text-xs font-semibold"
+            >
+              <span
+                id="nav-sync-indicator"
+                class="w-2.5 h-2.5 rounded-full bg-amber-500 animate-pulse"
+              ></span>
+              <span
+                id="nav-sync-text"
+                class="text-slate-600 dark:text-slate-300"
+                >Local Only Mode</span
+              >
+            </div>
+
+            <!-- Controls -->
+            <div class="flex items-center gap-3">
+              <!-- Theme Toggle -->
+              <button
+                onclick="toggleTheme()"
+                class="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600 transition flex items-center justify-center"
+                title="Toggle Theme"
+              >
+                <i class="fa-solid fa-sun dark:hidden text-lg"></i>
+                <i class="fa-solid fa-moon hidden dark:block text-lg"></i>
+              </button>
+              <!-- Quick Add Entry Button -->
+              <button
+                onclick="switchTab('add')"
+                class="px-4 h-10 bg-brand-500 hover:bg-brand-600 text-white font-bold rounded-xl transition flex items-center gap-2 shadow-md shadow-brand-500/10 hover:shadow-brand-500/20"
+              >
+                <i class="fa-solid fa-plus text-sm"></i>
+                <span class="hidden sm:inline">Add Entry</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- Main Body Wrapper -->
+      <div
+        class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col gap-6"
+      >
+        <!-- Mobile Sync Status Bar -->
+        <div
+          class="md:hidden w-full flex items-center justify-between p-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl shadow-sm text-xs"
+        >
+          <div class="flex items-center gap-2">
+            <span
+              id="nav-sync-indicator-mobile"
+              class="w-2.5 h-2.5 rounded-full bg-amber-500 animate-pulse"
+            ></span>
+            <span
+              id="nav-sync-text-mobile"
+              class="font-semibold text-slate-600 dark:text-slate-300"
+              >Local Only Mode</span
+            >
+          </div>
+          <button
+            onclick="switchTab('sync')"
+            class="text-brand-500 hover:underline font-bold"
+          >
+            Configure Sheets
+          </button>
+        </div>
+
+        <!-- Tabs Navigation -->
+        <div
+          class="flex border-b border-slate-200 dark:border-slate-700 overflow-x-auto gap-2 no-scrollbar"
+        >
+          <button
+            id="tab-btn-dash"
+            onclick="switchTab('dash')"
+            class="px-5 py-3 font-semibold text-sm transition-all border-b-2 border-brand-500 text-brand-500 flex items-center gap-2 whitespace-nowrap"
+          >
+            <i class="fa-solid fa-chart-line"></i> Dashboard
+          </button>
+          <button
+            id="tab-btn-add"
+            onclick="switchTab('add')"
+            class="px-5 py-3 font-semibold text-sm transition-all border-b-2 border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 flex items-center gap-2 whitespace-nowrap"
+          >
+            <i class="fa-solid fa-pen-to-square"></i> Daily Entry
+          </button>
+          <button
+            id="tab-btn-history"
+            onclick="switchTab('history')"
+            class="px-5 py-3 font-semibold text-sm transition-all border-b-2 border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 flex items-center gap-2 whitespace-nowrap"
+          >
+            <i class="fa-solid fa-list-check"></i> History Log
+          </button>
+          <button
+            id="tab-btn-sync"
+            onclick="switchTab('sync')"
+            class="px-5 py-3 font-semibold text-sm transition-all border-b-2 border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 flex items-center gap-2 whitespace-nowrap"
+          >
+            <i class="fa-solid fa-file-excel"></i> Sheets Sync
+          </button>
+        </div>
+
+        <!-- Tab Contents -->
+        <main class="flex-1 flex flex-col gap-6">
+          <!-- 1. DASHBOARD TAB -->
+          <section id="tab-dash" class="flex flex-col gap-6">
+            <!-- Top Stat Overview cards -->
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+              <!-- Weight Card -->
+              <div
+                class="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-200/80 dark:border-slate-700/80 shadow-sm flex flex-col justify-between"
+              >
+                <div class="flex items-center justify-between mb-2">
+                  <span
+                    class="text-xs font-bold text-slate-400 tracking-wider uppercase"
+                    >Weight</span
+                  >
+                  <div
+                    class="w-8 h-8 rounded-lg bg-sky-100 dark:bg-sky-950 text-sky-500 dark:text-sky-300 flex items-center justify-center text-sm"
+                  >
+                    <i class="fa-solid fa-weight-scale"></i>
+                  </div>
+                </div>
+                <div>
+                  <h3
+                    id="stat-weight"
+                    class="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white"
+                  >
+                    --
+                    <span class="text-sm font-semibold text-slate-400">kg</span>
+                  </h3>
+                  <p
+                    id="stat-weight-diff"
+                    class="text-xs font-semibold text-slate-400 mt-1 flex items-center gap-1"
+                  >
+                    No comparative logs
+                  </p>
+                </div>
+              </div>
+
+              <!-- Body Fat Card -->
+              <div
+                class="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-200/80 dark:border-slate-700/80 shadow-sm flex flex-col justify-between"
+              >
+                <div class="flex items-center justify-between mb-2">
+                  <span
+                    class="text-xs font-bold text-slate-400 tracking-wider uppercase"
+                    >Body Fat</span
+                  >
+                  <div
+                    class="w-8 h-8 rounded-lg bg-emerald-100 dark:bg-emerald-950 text-emerald-500 dark:text-emerald-300 flex items-center justify-center text-sm"
+                  >
+                    <i class="fa-solid fa-percent"></i>
+                  </div>
+                </div>
+                <div>
+                  <h3
+                    id="stat-fat"
+                    class="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white"
+                  >
+                    --
+                    <span class="text-sm font-semibold text-slate-400">%</span>
+                  </h3>
+                  <p
+                    id="stat-fat-diff"
+                    class="text-xs font-semibold text-slate-400 mt-1 flex items-center gap-1"
+                  >
+                    No comparative logs
+                  </p>
+                </div>
+              </div>
+
+              <!-- Visceral Fat Card -->
+              <div
+                class="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-200/80 dark:border-slate-700/80 shadow-sm flex flex-col justify-between"
+              >
+                <div class="flex items-center justify-between mb-2">
+                  <span
+                    class="text-xs font-bold text-slate-400 tracking-wider uppercase"
+                    >Visceral Fat</span
+                  >
+                  <div
+                    class="w-8 h-8 rounded-lg bg-indigo-100 dark:bg-indigo-950 text-indigo-500 dark:text-indigo-300 flex items-center justify-center text-sm"
+                  >
+                    <i class="fa-solid fa-circle-dot"></i>
+                  </div>
+                </div>
+                <div>
+                  <h3
+                    id="stat-visceral"
+                    class="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white"
+                  >
+                    --
+                  </h3>
+                  <p
+                    id="stat-visceral-diff"
+                    class="text-xs font-semibold text-slate-400 mt-1 flex items-center gap-1"
+                  >
+                    No comparative logs
+                  </p>
+                </div>
+              </div>
+
+              <!-- Calculated BMI Card -->
+              <div
+                class="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-200/80 dark:border-slate-700/80 shadow-sm flex flex-col justify-between"
+              >
+                <div class="flex items-center justify-between mb-2">
+                  <span
+                    class="text-xs font-bold text-slate-400 tracking-wider uppercase"
+                    >BMI Calculator</span
+                  >
+                  <button
+                    onclick="openHeightModal()"
+                    id="btn-height"
+                    class="text-xs font-semibold text-brand-500 hover:text-brand-600 underline flex items-center gap-1"
+                    title="Click to update Height"
+                  >
+                    <span id="stat-height-label">Set Height</span>
+                  </button>
+                </div>
+                <div>
+                  <h3
+                    id="stat-bmi"
+                    class="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white"
+                  >
+                    --
+                  </h3>
+                  <span
+                    id="stat-bmi-status"
+                    class="inline-flex mt-1 items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300"
+                    >Set Height to calculate</span
+                  >
+                </div>
+              </div>
+            </div>
+
+            <!-- Charts Grid -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              <!-- Main Metric Chart Area -->
+              <div
+                class="lg:col-span-2 bg-white dark:bg-slate-800 p-4 sm:p-6 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm flex flex-col gap-4"
+              >
+                <div
+                  class="flex flex-col sm:flex-row sm:items-center justify-between gap-3"
+                >
+                  <div>
+                    <h3 class="font-bold text-lg">Fitness Journey Charts</h3>
+                    <p class="text-xs text-slate-400">
+                      Track and visualize your body compositions over time
+                    </p>
+                  </div>
+
+                  <!-- Chart Metric Selector -->
+                  <div
+                    class="flex bg-slate-100 dark:bg-slate-700 p-1 rounded-xl self-start sm:self-auto"
+                  >
+                    <button
+                      id="chart-sel-weight"
+                      onclick="changeChartType('weight')"
+                      class="px-3 py-1.5 text-xs font-bold rounded-lg bg-white dark:bg-slate-600 text-slate-950 dark:text-white shadow-sm transition"
+                    >
+                      Weight
+                    </button>
+                    <button
+                      id="chart-sel-fat"
+                      onclick="changeChartType('fat')"
+                      class="px-3 py-1.5 text-xs font-bold rounded-lg text-slate-500 dark:text-slate-400 hover:text-slate-950 dark:hover:text-white transition"
+                    >
+                      Body Fat %
+                    </button>
+                    <button
+                      id="chart-sel-visceral"
+                      onclick="changeChartType('visceral')"
+                      class="px-3 py-1.5 text-xs font-bold rounded-lg text-slate-500 dark:text-slate-400 hover:text-slate-950 dark:hover:text-white transition"
+                    >
+                      Visceral Fat
+                    </button>
+                  </div>
+                </div>
+
+                <div class="flex items-center justify-end gap-2 text-xs">
+                  <span class="text-slate-400 font-semibold">Timeframe:</span>
+                  <div
+                    class="inline-flex bg-slate-100 dark:bg-slate-700 p-0.5 rounded-lg"
+                  >
+                    <button
+                      onclick="changeTimeframe(7)"
+                      id="tf-7"
+                      class="px-2 py-1 rounded-md text-[10px] font-bold text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition"
+                    >
+                      7D
+                    </button>
+                    <button
+                      onclick="changeTimeframe(30)"
+                      id="tf-30"
+                      class="px-2 py-1 rounded-md text-[10px] font-bold bg-white dark:bg-slate-600 text-slate-800 dark:text-white shadow-sm"
+                    >
+                      30D
+                    </button>
+                    <button
+                      onclick="changeTimeframe(90)"
+                      id="tf-90"
+                      class="px-2 py-1 rounded-md text-[10px] font-bold text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition"
+                    >
+                      90D
+                    </button>
+                    <button
+                      onclick="changeTimeframe(0)"
+                      id="tf-0"
+                      class="px-2 py-1 rounded-md text-[10px] font-bold text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition"
+                    >
+                      ALL
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Canvas for Chart.js -->
+                <div class="relative flex-1 min-h-[280px] w-full">
+                  <canvas id="metricChart"></canvas>
+                </div>
+              </div>
+
+              <!-- Sidebar Analysis / Target Area -->
+              <div
+                class="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm flex flex-col gap-5 justify-between"
+              >
+                <div class="flex flex-col gap-4">
+                  <h3 class="font-bold text-lg">Composition Diagnostics</h3>
+
+                  <div class="flex flex-col gap-3">
+                    <!-- Visceral Fat Range Diagnostics -->
+                    <div
+                      class="p-3 bg-slate-50 dark:bg-slate-900 border border-slate-150 dark:border-slate-700/50 rounded-xl"
+                    >
+                      <div class="flex justify-between items-center mb-1">
+                        <span
+                          class="text-xs font-bold text-slate-400 uppercase tracking-wider"
+                          >Visceral Level Info</span
+                        >
+                        <span
+                          id="diagnostic-visceral-level"
+                          class="text-xs font-bold text-slate-600 dark:text-slate-300"
+                          >--</span
+                        >
+                      </div>
+                      <p
+                        id="diagnostic-visceral-desc"
+                        class="text-xs text-slate-500 leading-relaxed"
+                      >
+                        Please add logs to analyze health indicators of visceral
+                        fat parameters.
+                      </p>
+                    </div>
+
+                    <!-- Body Fat Scale info -->
+                    <div
+                      class="p-3 bg-slate-50 dark:bg-slate-900 border border-slate-150 dark:border-slate-700/50 rounded-xl"
+                    >
+                      <div class="flex justify-between items-center mb-1">
+                        <span
+                          class="text-xs font-bold text-slate-400 uppercase tracking-wider"
+                          >Body Fat Analysis</span
+                        >
+                        <span
+                          id="diagnostic-fat-level"
+                          class="text-xs font-bold text-slate-600 dark:text-slate-300"
+                          >--</span
+                        >
+                      </div>
+                      <p
+                        id="diagnostic-fat-desc"
+                        class="text-xs text-slate-500 leading-relaxed"
+                      >
+                        Enter your gender and measurements to gauge fat
+                        percentages ranges.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Sidebar Sync Status Box -->
+                <div
+                  id="sidebar-sync-card"
+                  class="p-4 bg-slate-50 dark:bg-slate-900/60 border border-slate-150 dark:border-slate-700/60 rounded-xl flex flex-col gap-2"
+                >
+                  <div class="flex justify-between items-center">
+                    <span
+                      class="text-xs font-bold text-slate-400 uppercase tracking-wider"
+                      >Cloud Database</span
+                    >
+                    <span
+                      id="sidebar-sync-badge"
+                      class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-500/10 text-amber-500"
+                      >Connecting...</span
+                    >
+                  </div>
+                  <p
+                    id="sidebar-sync-desc"
+                    class="text-[11px] text-slate-500 dark:text-slate-400 leading-relaxed"
+                  >
+                    Attempting to sync with your Google Sheet to fetch your
+                    active metrics logs...
+                  </p>
+                  <div class="flex items-center gap-2 mt-1">
+                    <button
+                      onclick="pullDataFromSheet()"
+                      class="text-[10px] font-extrabold text-brand-500 hover:text-brand-600 underline uppercase tracking-wider flex items-center gap-1"
+                    >
+                      <i class="fa-solid fa-arrows-rotate"></i> Sync Now
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- 2. DAILY ENTRY TAB -->
+          <section id="tab-add" class="hidden max-w-2xl mx-auto w-full">
+            <div
+              class="bg-white dark:bg-slate-800 p-6 sm:p-8 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm flex flex-col gap-6"
+            >
+              <div class="border-b border-slate-200 dark:border-slate-700 pb-4">
+                <h3 id="form-title" class="text-xl font-bold">
+                  Record Daily Metrics
+                </h3>
+                <p class="text-xs text-slate-400">
+                  Consistency creates progress. Log today's morning metrics.
+                </p>
+              </div>
+
+              <form
+                id="metricsForm"
+                onsubmit="handleFormSubmit(event)"
+                class="flex flex-col gap-6"
+              >
+                <!-- Entry Date -->
+                <div class="flex flex-col gap-2">
+                  <label
+                    for="entry-date"
+                    class="text-sm font-semibold text-slate-500 dark:text-slate-400"
+                    >Date of Entry</label
+                  >
+                  <div class="relative">
+                    <i
+                      class="fa-solid fa-calendar absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"
+                    ></i>
+                    <input
+                      type="date"
+                      id="entry-date"
+                      required
+                      class="w-full pl-11 pr-4 py-3 border border-slate-200 dark:border-slate-700 rounded-xl bg-slate-50 dark:bg-slate-900 font-medium text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition"
+                    />
+                  </div>
+                </div>
+
+                <!-- Weight in kg -->
+                <div class="flex flex-col gap-2">
+                  <div class="flex justify-between items-center">
+                    <label
+                      for="entry-weight"
+                      class="text-sm font-semibold text-slate-500 dark:text-slate-400"
+                      >Body Weight (kg)</label
+                    >
+                    <span
+                      id="weight-slider-val"
+                      class="text-sm font-bold text-brand-500"
+                      >70.0 kg</span
+                    >
+                  </div>
+                  <div class="flex items-center gap-4">
+                    <button
+                      type="button"
+                      onclick="adjustInput('entry-weight', -0.1)"
+                      class="w-10 h-10 border border-slate-200 dark:border-slate-700 rounded-xl flex items-center justify-center hover:bg-slate-100 dark:hover:bg-slate-900 transition font-bold"
+                    >
+                      <i class="fa-solid fa-minus text-xs"></i>
+                    </button>
+                    <input
+                      type="number"
+                      id="entry-weight"
+                      step="0.1"
+                      min="20"
+                      max="300"
+                      required
+                      oninput="syncSliderVal('entry-weight')"
+                      class="flex-1 px-4 py-2.5 border border-slate-200 dark:border-slate-700 rounded-xl bg-slate-50 dark:bg-slate-900 font-bold text-center text-lg focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition"
+                    />
+                    <button
+                      type="button"
+                      onclick="adjustInput('entry-weight', 0.1)"
+                      class="w-10 h-10 border border-slate-200 dark:border-slate-700 rounded-xl flex items-center justify-center hover:bg-slate-100 dark:hover:bg-slate-900 transition font-bold"
+                    >
+                      <i class="fa-solid fa-plus text-xs"></i>
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Body Fat in % -->
+                <div class="flex flex-col gap-2">
+                  <div class="flex justify-between items-center">
+                    <label
+                      for="entry-fat"
+                      class="text-sm font-semibold text-slate-500 dark:text-slate-400"
+                      >Body Fat Percentage (%)</label
+                    >
+                    <span
+                      id="fat-slider-val"
+                      class="text-sm font-bold text-emerald-500"
+                      >18.5 %</span
+                    >
+                  </div>
+                  <div class="flex items-center gap-4">
+                    <button
+                      type="button"
+                      onclick="adjustInput('entry-fat', -0.1)"
+                      class="w-10 h-10 border border-slate-200 dark:border-slate-700 rounded-xl flex items-center justify-center hover:bg-slate-100 dark:hover:bg-slate-900 transition font-bold"
+                    >
+                      <i class="fa-solid fa-minus text-xs"></i>
+                    </button>
+                    <input
+                      type="number"
+                      id="entry-fat"
+                      step="0.1"
+                      min="1"
+                      max="70"
+                      required
+                      oninput="syncSliderVal('entry-fat')"
+                      class="flex-1 px-4 py-2.5 border border-slate-200 dark:border-slate-700 rounded-xl bg-slate-50 dark:bg-slate-900 font-bold text-center text-lg focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition"
+                    />
+                    <button
+                      type="button"
+                      onclick="adjustInput('entry-fat', 0.1)"
+                      class="w-10 h-10 border border-slate-200 dark:border-slate-700 rounded-xl flex items-center justify-center hover:bg-slate-100 dark:hover:bg-slate-900 transition font-bold"
+                    >
+                      <i class="fa-solid fa-plus text-xs"></i>
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Visceral Fat number -->
+                <div class="flex flex-col gap-2">
+                  <div class="flex justify-between items-center">
+                    <label
+                      for="entry-visceral"
+                      class="text-sm font-semibold text-slate-500 dark:text-slate-400"
+                      >Visceral Fat Level (1-30)</label
+                    >
+                    <span
+                      id="visceral-slider-val"
+                      class="text-sm font-bold text-indigo-500"
+                      >6.0</span
+                    >
+                  </div>
+                  <div class="flex items-center gap-4">
+                    <button
+                      type="button"
+                      onclick="adjustInput('entry-visceral', -0.5)"
+                      class="w-10 h-10 border border-slate-200 dark:border-slate-700 rounded-xl flex items-center justify-center hover:bg-slate-100 dark:hover:bg-slate-900 transition font-bold"
+                    >
+                      <i class="fa-solid fa-minus text-xs"></i>
+                    </button>
+                    <input
+                      type="number"
+                      id="entry-visceral"
+                      step="0.1"
+                      min="1"
+                      max="30"
+                      required
+                      oninput="syncSliderVal('entry-visceral')"
+                      class="flex-1 px-4 py-2.5 border border-slate-200 dark:border-slate-700 rounded-xl bg-slate-50 dark:bg-slate-900 font-bold text-center text-lg focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition"
+                    />
+                    <button
+                      type="button"
+                      onclick="adjustInput('entry-visceral', 0.5)"
+                      class="w-10 h-10 border border-slate-200 dark:border-slate-700 rounded-xl flex items-center justify-center hover:bg-slate-100 dark:hover:bg-slate-900 transition font-bold"
+                    >
+                      <i class="fa-solid fa-plus text-xs"></i>
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Optional Notes -->
+                <div class="flex flex-col gap-2">
+                  <label
+                    for="entry-notes"
+                    class="text-sm font-semibold text-slate-500 dark:text-slate-400"
+                    >Notes / Reminders (Optional)</label
+                  >
+                  <textarea
+                    id="entry-notes"
+                    placeholder="E.g., Felt energized today, post-workout morning weigh-in, etc."
+                    rows="2"
+                    class="w-full px-4 py-3 border border-slate-200 dark:border-slate-700 rounded-xl bg-slate-50 dark:bg-slate-900 font-medium text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition resize-none"
+                  ></textarea>
+                </div>
+
+                <!-- Buttons -->
+                <div class="flex items-center gap-3 pt-2">
+                  <button
+                    type="button"
+                    onclick="resetForm()"
+                    class="flex-1 h-12 border border-slate-200 dark:border-slate-700 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-700 transition font-bold text-sm"
+                  >
+                    Clear Form
+                  </button>
+                  <button
+                    type="submit"
+                    class="flex-[2] h-12 bg-brand-500 hover:bg-brand-600 text-white rounded-xl font-bold text-sm transition shadow-lg shadow-brand-500/10 flex items-center justify-center gap-2"
+                  >
+                    <i class="fa-solid fa-save"></i> Save Metrics
+                  </button>
+                </div>
+              </form>
+            </div>
+          </section>
+
+          <!-- 3. HISTORY TAB -->
+          <section id="tab-history" class="hidden flex flex-col gap-6">
+            <div
+              class="bg-white dark:bg-slate-800 p-4 sm:p-6 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm flex flex-col gap-4"
+            >
+              <div
+                class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 dark:border-slate-700 pb-4"
+              >
+                <div>
+                  <h3 class="font-bold text-lg">Detailed Entry Logs</h3>
+                  <p class="text-xs text-slate-400">
+                    View, search, or delete past metrics from your tracker logs
+                  </p>
+                </div>
+
+                <!-- Search filter -->
+                <div class="relative max-w-xs w-full">
+                  <i
+                    class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-sm"
+                  ></i>
+                  <input
+                    type="text"
+                    id="history-search"
+                    oninput="renderHistoryTable()"
+                    placeholder="Search notes or dates..."
+                    class="w-full pl-10 pr-4 py-2 border border-slate-200 dark:border-slate-700 rounded-xl bg-slate-50 dark:bg-slate-900 text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition"
+                  />
+                </div>
+              </div>
+
+              <!-- Main Table Container -->
+              <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                  <thead>
+                    <tr
+                      class="border-b border-slate-100 dark:border-slate-700/80 text-[11px] font-bold text-slate-400 tracking-wider uppercase bg-slate-50/50 dark:bg-slate-900/30"
+                    >
+                      <th class="py-3.5 px-4 rounded-l-xl">Date</th>
+                      <th class="py-3.5 px-4 text-center">Weight</th>
+                      <th class="py-3.5 px-4 text-center">Body Fat %</th>
+                      <th class="py-3.5 px-4 text-center">Visceral Fat</th>
+                      <th class="py-3.5 px-4 text-center">BMI</th>
+                      <th class="py-3.5 px-4">Notes</th>
+                      <th class="py-3.5 px-4 text-right rounded-r-xl">
+                        Actions
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody
+                    id="history-table-body"
+                    class="divide-y divide-slate-100 dark:divide-slate-700/50 text-sm font-semibold"
+                  >
+                    <!-- Populated dynamic list -->
+                  </tbody>
+                </table>
+                <div
+                  id="history-empty"
+                  class="hidden flex flex-col items-center justify-center p-12 text-center text-slate-400"
+                >
+                  <div
+                    class="w-16 h-16 bg-slate-100 dark:bg-slate-700/50 rounded-2xl flex items-center justify-center text-2xl mb-4 text-slate-300"
+                  >
+                    <i class="fa-solid fa-receipt"></i>
+                  </div>
+                  <h4 class="font-bold text-slate-700 dark:text-slate-300">
+                    No Metrics Found
+                  </h4>
+                  <p class="text-xs max-w-xs leading-relaxed mt-1">
+                    There are no records matching your current filter. Try
+                    adding some metrics on the daily log tab!
+                  </p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- 4. GOOGLE SHEETS SYNC TAB -->
+          <section
+            id="tab-sync"
+            class="hidden max-w-3xl mx-auto w-full flex flex-col gap-6"
+          >
+            <!-- Integration Panel Card -->
+            <div
+              class="bg-white dark:bg-slate-800 p-6 sm:p-8 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm flex flex-col gap-6"
+            >
+              <div
+                class="border-b border-slate-200 dark:border-slate-700 pb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-2"
+              >
+                <div>
+                  <h3 class="text-xl font-bold">Google Sheets Integration</h3>
+                  <p class="text-xs text-slate-400">
+                    Link your body metric records straight to your online weight
+                    tracking sheet
+                  </p>
+                </div>
+                <!-- Connected state label -->
+                <span
+                  id="sync-status-badge"
+                  class="px-3 py-1.5 rounded-full text-xs font-bold bg-amber-500/10 text-amber-500 self-start sm:self-auto flex items-center gap-1.5"
+                >
+                  <span
+                    class="w-2 h-2 rounded-full bg-amber-500 animate-pulse"
+                  ></span>
+                  Offline Mode
+                </span>
+              </div>
+
+              <!-- Target Sheet Info -->
+              <div
+                class="p-4 bg-sky-50 dark:bg-sky-950/30 border border-sky-200 dark:border-sky-900 rounded-xl flex items-start gap-3"
+              >
+                <div class="text-brand-500 text-lg mt-0.5">
+                  <i class="fa-solid fa-file-excel"></i>
+                </div>
+                <div>
+                  <h4 class="text-xs font-bold text-sky-800 dark:text-sky-300">
+                    Target Google Spreadsheet:
+                  </h4>
+                  <a
+                    href="https://docs.google.com/spreadsheets/d/11A2dpJMcoOMd6YCFozaYvlitrg4WTZKhLo49BHoh26c/edit?usp=sharing"
+                    target="_blank"
+                    class="text-sm font-bold text-brand-500 hover:text-brand-600 underline break-all inline-flex items-center gap-1"
+                  >
+                    Weight Tracker Sheet
+                    <i class="fa-solid fa-external-link text-xs"></i>
+                  </a>
+                  <p class="text-[10px] text-slate-400 leading-relaxed mt-1">
+                    Spreadsheet ID:
+                    <code
+                      class="font-mono bg-slate-100 dark:bg-slate-900 px-1 py-0.5 rounded"
+                      >11A2dpJMcoOMd6YCFozaYvlitrg4WTZKhLo49BHoh26c</code
+                    >
+                  </p>
+                </div>
+              </div>
+
+              <!-- Configuration Input -->
+              <div class="flex flex-col gap-3">
+                <label for="sync-script-url" class="text-sm font-bold"
+                  >Google Apps Script Web App URL</label
+                >
+                <input
+                  type="url"
+                  id="sync-script-url"
+                  oninput="saveSyncUrl()"
+                  placeholder="https://script.google.com/macros/s/.../exec"
+                  class="w-full px-4 py-3 border border-slate-200 dark:border-slate-700 rounded-xl bg-slate-50 dark:bg-slate-900 font-medium text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition"
+                />
+                <p class="text-[11px] text-slate-400 leading-relaxed">
+                  Pasting your compiled Web App URL links this web app to your
+                  Google Sheet automatically. Read the setup wizard below to get
+                  your URL.
+                </p>
+              </div>
+
+              <!-- Sync Action Buttons -->
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <button
+                  id="btn-test-sync"
+                  onclick="testSheetConnection()"
+                  class="h-11 border border-slate-200 dark:border-slate-700 rounded-xl font-bold text-xs hover:bg-slate-50 dark:hover:bg-slate-700 transition flex items-center justify-center gap-2"
+                >
+                  <i class="fa-solid fa-plug text-slate-400"></i> Test
+                  Connection
+                </button>
+                <button
+                  id="btn-pull-sync"
+                  onclick="pullDataFromSheet()"
+                  class="h-11 border border-slate-200 dark:border-slate-700 rounded-xl font-bold text-xs hover:bg-slate-50 dark:hover:bg-slate-700 transition flex items-center justify-center gap-2"
+                >
+                  <i class="fa-solid fa-download text-slate-400"></i> Pull Sheet
+                  Data
+                </button>
+                <button
+                  id="btn-push-sync"
+                  onclick="pushLocalDataToSheet()"
+                  class="h-11 bg-brand-500 hover:bg-brand-600 text-white rounded-xl font-bold text-xs transition flex items-center justify-center gap-2 shadow-md shadow-brand-500/10"
+                >
+                  <i class="fa-solid fa-upload"></i> Push All to Sheet
+                </button>
+              </div>
+
+              <!-- Clear Local Cache -->
+              <div
+                class="border-t border-slate-200 dark:border-slate-700 pt-4 flex items-center justify-between"
+              >
+                <div class="flex flex-col">
+                  <span
+                    class="text-xs font-bold text-slate-700 dark:text-slate-300"
+                    >Local Browser Cache</span
+                  >
+                  <span class="text-[11px] text-slate-400"
+                    >Reset local memory storage without deleting values from
+                    Google Sheets.</span
+                  >
+                </div>
+                <button
+                  onclick="clearLocalCache()"
+                  class="px-3 h-9 bg-slate-100 hover:bg-slate-200 dark:bg-slate-700 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-200 text-xs font-bold rounded-lg transition"
+                >
+                  Clear Cache
+                </button>
+              </div>
+            </div>
+
+            <!-- Setup Wizard Card -->
+            <div
+              class="bg-white dark:bg-slate-800 p-6 sm:p-8 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm flex flex-col gap-5"
+            >
+              <div
+                class="flex items-center gap-2 border-b border-slate-200 dark:border-slate-700 pb-3"
+              >
+                <div
+                  class="w-8 h-8 rounded-lg bg-emerald-100 dark:bg-emerald-950/50 text-emerald-500 flex items-center justify-center"
+                >
+                  <i class="fa-solid fa-graduation-cap"></i>
+                </div>
+                <h3 class="font-bold text-lg">Spreadsheet Setup Wizard</h3>
+              </div>
+
+              <p
+                class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed"
+              >
+                Because this metric web tracker runs purely in your web browser,
+                it securely communicates with your Google Spreadsheet through a
+                <strong>Google Apps Script Web App</strong>. Follow these 5
+                steps to create one for free:
+              </p>
+
+              <!-- Step Timeline list -->
+              <ol class="flex flex-col gap-5 text-sm">
+                <li class="flex gap-4">
+                  <div
+                    class="w-6 h-6 rounded-full bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-300 font-bold text-xs flex items-center justify-center shrink-0"
+                  >
+                    1
+                  </div>
+                  <div class="flex flex-col gap-1">
+                    <p class="font-bold text-slate-700 dark:text-slate-200">
+                      Open your Google Sheet
+                    </p>
+                    <p class="text-xs text-slate-400">
+                      Open
+                      <a
+                        href="https://docs.google.com/spreadsheets/d/11A2dpJMcoOMd6YCFozaYvlitrg4WTZKhLo49BHoh26c/edit"
+                        target="_blank"
+                        class="text-brand-500 font-bold hover:underline"
+                        >your Weight Tracker Sheet</a
+                      >. Log in with your active Google account.
+                    </p>
+                  </div>
+                </li>
+
+                <li class="flex gap-4">
+                  <div
+                    class="w-6 h-6 rounded-full bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-300 font-bold text-xs flex items-center justify-center shrink-0"
+                  >
+                    2
+                  </div>
+                  <div class="flex flex-col gap-1">
+                    <p class="font-bold text-slate-700 dark:text-slate-200">
+                      Open Google Apps Script
+                    </p>
+                    <p class="text-xs text-slate-400">
+                      In your spreadsheet's top menu bar, click on
+                      <strong>Extensions > Apps Script</strong>. This will open
+                      an editor window.
+                    </p>
+                  </div>
+                </li>
+
+                <li class="flex gap-4">
+                  <div
+                    class="w-6 h-6 rounded-full bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-300 font-bold text-xs flex items-center justify-center shrink-0"
+                  >
+                    3
+                  </div>
+                  <div class="flex flex-col gap-2 w-full">
+                    <p class="font-bold text-slate-700 dark:text-slate-200">
+                      Paste the Web Connector Code
+                    </p>
+                    <p class="text-xs text-slate-400">
+                      Delete any code in the editor, and paste the code snippet
+                      below:
+                    </p>
+
+                    <!-- Script Snippet Box -->
+                    <div class="relative w-full">
+                      <button
+                        onclick="copyAppsScript()"
+                        class="absolute right-3 top-3 px-2.5 py-1 bg-slate-800 text-white rounded text-[10px] font-bold hover:bg-slate-900 transition flex items-center gap-1"
+                      >
+                        <i class="fa-solid fa-copy"></i> Copy Code
+                      </button>
+                      <pre
+                        class="bg-slate-900 text-slate-300 p-4 rounded-xl text-[11px] font-mono overflow-x-auto w-full max-h-[160px] border border-slate-700"
+                        id="apps-script-code"
+                      >
+function doGet(e) {
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+  var data = sheet.getDataRange().getValues();
+  if (data.length <= 1) {
+    return ContentService.createTextOutput(JSON.stringify([]))
+      .setMimeType(ContentService.MimeType.JSON);
+  }
+  var headers = data[0];
+  var rows = [];
+  for (var i = 1; i < data.length; i++) {
+    var row = {};
+    for (var j = 0; j < headers.length; j++) {
+      row[headers[j]] = data[i][j];
+    }
+    rows.push(row);
+  }
+  return ContentService.createTextOutput(JSON.stringify(rows))
+    .setMimeType(ContentService.MimeType.JSON);
+}
+
+function doPost(e) {
+  try {
+    var params = JSON.parse(e.postData.contents);
+    var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+    
+    // Create headers if empty
+    if (sheet.getLastRow() === 0) {
+      sheet.appendRow(["Date", "Weight (kg)", "Body Fat (%)", "Visceral Fat", "BMI", "Notes"]);
+    }
+    
+    // Check if params is an array of entries (bulk upload)
+    if (Array.isArray(params)) {
+      var data = sheet.getDataRange().getValues();
+      var dateToRowIndex = {};
+      for (var i = 1; i < data.length; i++) {
+        var sheetDate = data[i][0];
+        if (sheetDate instanceof Date) {
+          var tzOffset = sheetDate.getTimezoneOffset() * 60000;
+          sheetDate = new Date(sheetDate.getTime() - tzOffset).toISOString().split('T')[0];
+        } else {
+          sheetDate = String(sheetDate).trim();
+        }
+        dateToRowIndex[sheetDate] = i + 1;
+      }
+      
+      for (var k = 0; k < params.length; k++) {
+        var p = params[k];
+        var targetDate = p.Date;
+        var rowData = [
+          p.Date,
+          parseFloat(p.Weight),
+          parseFloat(p.BodyFat),
+          parseFloat(p.VisceralFat),
+          parseFloat(p.BMI || 0),
+          p.Notes || ""
+        ];
+        var rIdx = dateToRowIndex[targetDate];
+        if (rIdx) {
+          sheet.getRange(rIdx, 1, 1, rowData.length).setValues([rowData]);
+        } else {
+          sheet.appendRow(rowData);
+          dateToRowIndex[targetDate] = sheet.getLastRow();
+        }
+      }
+      return ContentService.createTextOutput(JSON.stringify({ status: "success", message: "Successfully synced " + params.length + " entries to sheet" }))
+        .setMimeType(ContentService.MimeType.JSON);
+    }
+    
+    // Process single entry
+    var data = sheet.getDataRange().getValues();
+    var dateIndex = -1;
+    var targetDate = params.Date; // Format YYYY-MM-DD
+    
+    for (var i = 1; i < data.length; i++) {
+      var sheetDate = data[i][0];
+      if (sheetDate instanceof Date) {
+        var tzOffset = sheetDate.getTimezoneOffset() * 60000;
+        sheetDate = new Date(sheetDate.getTime() - tzOffset).toISOString().split('T')[0];
+      } else {
+        sheetDate = String(sheetDate).trim();
+      }
+      if (sheetDate === targetDate) {
+        dateIndex = i + 1;
+        break;
+      }
+    }
+    
+    var rowData = [
+      params.Date,
+      parseFloat(params.Weight),
+      parseFloat(params.BodyFat),
+      parseFloat(params.VisceralFat),
+      parseFloat(params.BMI || 0),
+      params.Notes || ""
+    ];
+    
+    if (dateIndex !== -1) {
+      sheet.getRange(dateIndex, 1, 1, rowData.length).setValues([rowData]);
+    } else {
+      sheet.appendRow(rowData);
+    }
+    
+    return ContentService.createTextOutput(JSON.stringify({ status: "success", message: "Successfully saved to sheet" }))
+      .setMimeType(ContentService.MimeType.JSON);
+  } catch (err) {
+    return ContentService.createTextOutput(JSON.stringify({ status: "error", message: err.toString() }))
+      .setMimeType(ContentService.MimeType.JSON);
+  }
+}</pre
+                      >
+                    </div>
+                  </div>
+                </li>
+
+                <li class="flex gap-4">
+                  <div
+                    class="w-6 h-6 rounded-full bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-300 font-bold text-xs flex items-center justify-center shrink-0"
+                  >
+                    4
+                  </div>
+                  <div class="flex flex-col gap-1">
+                    <p class="font-bold text-slate-700 dark:text-slate-200">
+                      Save and Deploy
+                    </p>
+                    <p class="text-xs text-slate-400">
+                      Click the <strong>Save</strong> disk icon. Then click the
+                      blue <strong>Deploy > New deployment</strong> button.
+                      Select the Gear icon next to "Select type" and choose
+                      <strong>Web app</strong>.
+                    </p>
+                  </div>
+                </li>
+
+                <li class="flex gap-4">
+                  <div
+                    class="w-6 h-6 rounded-full bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-300 font-bold text-xs flex items-center justify-center shrink-0"
+                  >
+                    5
+                  </div>
+                  <div class="flex flex-col gap-2">
+                    <p class="font-bold text-slate-700 dark:text-slate-200">
+                      Configure Web App Access Settings
+                    </p>
+                    <p class="text-xs text-slate-400 leading-relaxed">
+                      Ensure configuration has these settings exactly:
+                    </p>
+                    <ul
+                      class="list-disc pl-5 text-xs text-slate-400 flex flex-col gap-1"
+                    >
+                      <li>
+                        <strong>Execute as:</strong> "Me (your-email-address)"
+                      </li>
+                      <li>
+                        <strong>Who has access:</strong>
+                        <strong class="text-amber-500">"Anyone"</strong>
+                        (Crucial so that your web browser can write metrics
+                        securely!)
+                      </li>
+                    </ul>
+                    <p class="text-xs text-slate-400 leading-relaxed">
+                      Click <strong>Deploy</strong>. If prompted, click
+                      <strong>Authorize access</strong> and grant permission
+                      under your email. Once complete, copy the generated
+                      <strong>Web App URL</strong> and paste it in the script
+                      field above!
+                    </p>
+                  </div>
+                </li>
+              </ol>
+            </div>
+          </section>
+        </main>
+      </div>
+
+      <!-- Height Setup Modal Dialog -->
+      <div
+        id="height-modal"
+        class="hidden fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 flex items-center justify-center p-4 backdrop-blur-sm"
+      >
+        <div
+          class="bg-white dark:bg-slate-800 rounded-2xl max-w-sm w-full p-6 border border-slate-200 dark:border-slate-700 shadow-xl flex flex-col gap-4"
+        >
+          <div class="flex items-center gap-2">
+            <div
+              class="w-8 h-8 rounded-lg bg-sky-100 dark:bg-sky-950 text-sky-500 flex items-center justify-center"
+            >
+              <i class="fa-solid fa-ruler-vertical"></i>
+            </div>
+            <h4 class="font-bold text-base">Configure Height</h4>
+          </div>
+          <p class="text-xs text-slate-400">
+            Your height is used to calculate accurate Body Mass Index (BMI)
+            diagnostics metrics daily.
+          </p>
+          <div class="flex flex-col gap-1.5">
+            <label
+              for="user-height"
+              class="text-xs font-semibold text-slate-400 uppercase tracking-wide"
+              >Height (in cm)</label
+            >
+            <input
+              type="number"
+              id="user-height"
+              placeholder="e.g. 175"
+              class="w-full px-4 h-11 border border-slate-200 dark:border-slate-700 rounded-xl bg-slate-50 dark:bg-slate-900 font-bold focus:outline-none focus:ring-2 focus:ring-brand-500/20 transition"
+            />
+          </div>
+          <div class="flex items-center gap-2 mt-2">
+            <button
+              onclick="closeHeightModal()"
+              class="flex-1 h-10 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700 font-bold text-xs rounded-xl transition"
+            >
+              Cancel
+            </button>
+            <button
+              onclick="saveHeight()"
+              class="flex-1 h-10 bg-brand-500 hover:bg-brand-600 text-white font-bold text-xs rounded-xl transition shadow-md shadow-brand-500/10"
+            >
+              Save Height
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Delete Confirmation Modal -->
+      <div
+        id="delete-modal"
+        class="hidden fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 flex items-center justify-center p-4 backdrop-blur-sm"
+      >
+        <div
+          class="bg-white dark:bg-slate-800 rounded-2xl max-w-sm w-full p-6 border border-slate-200 dark:border-slate-700 shadow-xl flex flex-col gap-4"
+        >
+          <div class="flex items-center gap-2 text-rose-500">
+            <div
+              class="w-8 h-8 rounded-lg bg-rose-100 dark:bg-rose-950/50 flex items-center justify-center text-rose-500"
+            >
+              <i class="fa-solid fa-trash-can"></i>
+            </div>
+            <h4 class="font-bold text-base">Delete Entry</h4>
+          </div>
+          <p class="text-xs text-slate-500 dark:text-slate-400">
+            Are you sure you want to permanently delete your logged metrics for
+            <span
+              id="delete-date-label"
+              class="font-bold text-slate-800 dark:text-white"
+              >--</span
+            >? This action cannot be undone.
+          </p>
+          <div class="flex items-center gap-2 mt-2">
+            <button
+              onclick="closeDeleteModal()"
+              class="flex-1 h-10 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700 font-bold text-xs rounded-xl transition"
+            >
+              Cancel
+            </button>
+            <button
+              id="btn-confirm-delete"
+              class="flex-1 h-10 bg-rose-500 hover:bg-rose-600 text-white font-bold text-xs rounded-xl transition shadow-md shadow-rose-500/10"
+            >
+              Delete Log
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Custom Success/Notice Toast Notification -->
+      <div
+        id="custom-toast"
+        class="opacity-0 translate-y-4 pointer-events-none fixed bottom-6 right-6 z-50 bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 px-4 py-3 rounded-2xl border border-slate-800 dark:border-slate-200 shadow-xl flex items-center gap-3 transition-all duration-300 max-w-md"
+      >
+        <div
+          id="toast-icon-bg"
+          class="w-7 h-7 rounded-lg bg-emerald-500 text-white flex items-center justify-center text-sm"
+        >
+          <i class="fa-solid fa-check"></i>
+        </div>
+        <div class="flex-1">
+          <h5 id="toast-title" class="text-xs font-extrabold tracking-tight">
+            Saved
+          </h5>
+          <p
+            id="toast-message"
+            class="text-[11px] font-semibold text-slate-300 dark:text-slate-600 mt-0.5"
+          >
+            Your metric entry has been logged locally.
+          </p>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <footer
+        class="bg-white dark:bg-slate-800 border-t border-slate-200 dark:border-slate-700 py-6 text-center text-xs text-slate-400 transition-colors duration-200"
+      >
+        <div
+          class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4"
+        >
+          <p>
+            © 2026 Vigor Fitness Metric Analytics. Built for tracking health
+            parameters safely.
+          </p>
+          <div class="flex items-center gap-4">
+            <a
+              href="https://docs.google.com/spreadsheets/d/11A2dpJMcoOMd6YCFozaYvlitrg4WTZKhLo49BHoh26c/edit"
+              target="_blank"
+              class="hover:text-slate-600 dark:hover:text-slate-200 transition"
+              ><i class="fa-solid fa-file-excel"></i> Weight Tracker Sheet</a
+            >
+          </div>
+        </div>
+      </footer>
+    </div>
+
+    <!-- JavaScript logic -->
+    <script src="js/app.js"></script>
+  </body>
+</html>
