@@ -25,8 +25,8 @@ const Post = ({ post }: Props) => {
 
   return (
     <BlogLayout
-      title="Tsara Sudrajat - Software Engineer"
-      description="Blog posts"
+      title={`${post.title} - Tsara Fatma`}
+      description={post.excerpt}
     >
       <div className="py-20">
         <PostTitle title={post.title} date={format(parsedPostedAt, "PPP")} />
