@@ -16,10 +16,12 @@ function PostContent({ content, image }: Props) {
       <Image
         src={image.url}
         alt={image.caption}
-        width="1000"
-        height="1000"
+        width={1000}
+        height={1000}
+        loading="eager"
         style={{
-          maxWidth: "100%"
+          maxWidth: "100%",
+          height: "auto"
         }}
       />
       <span className="text-sm text-right text-dove-gray block">{image.caption}</span>

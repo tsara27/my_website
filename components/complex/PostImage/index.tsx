@@ -13,8 +13,12 @@ const PostImage = ({ imageName }: Props) => {
         src={image}
         //src={vercel}
         alt="Photo by Anna Pelzer on Unsplash"
-        width="100"
-        height="100"
+        width={800}
+        height={600}
+        style={{
+          width: "100%",
+          height: "auto"
+        }}
       />
     </div>
   );

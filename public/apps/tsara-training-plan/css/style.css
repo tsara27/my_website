@@ -1,0 +1,190 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap');
+
+:root{
+  --bg: #12151b;
+  --card: #1a1e27;
+  --card-border: #262b37;
+  --ink: #eef0f4;
+  --ink-dim: #8b93a3;
+  --ink-faint: #565e6e;
+
+  --easy: #7bc86c;
+  --hard: #e2664f;
+  --long: #9a7de8;
+  --lower: #4fb8d6;
+  --upper: #e0a94f;
+  --rest: #3a4152;
+}
+
+*{ box-sizing: border-box; }
+html,body{ margin:0; padding:0; }
+body{
+  background: radial-gradient(circle at 20% 0%, #171b24 0%, var(--bg) 55%);
+  color: var(--ink);
+  font-family: 'Inter', -apple-system, 'Segoe UI', sans-serif;
+  min-height: 100vh;
+  padding: 28px 16px 60px;
+}
+
+.wrap{ max-width: 560px; margin: 0 auto; }
+
+.header{ margin-bottom: 26px; }
+.eyebrow{
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin-bottom: 8px;
+}
+h1{
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: 30px;
+  margin: 0 0 6px;
+  letter-spacing: -0.01em;
+}
+.sub{
+  color: var(--ink-dim);
+  font-size: 14px;
+  line-height: 1.5;
+  max-width: 46ch;
+}
+
+.legend{
+  display:flex; flex-wrap: wrap; gap: 14px;
+  margin: 20px 0 24px;
+  padding: 12px 14px;
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+}
+.legend-item{ display:flex; align-items:center; gap:6px; font-size: 11.5px; color: var(--ink-dim); font-family:'IBM Plex Mono', monospace; }
+.dot{ width:8px; height:8px; border-radius:50%; flex-shrink:0; }
+
+.day{
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: 16px;
+  margin-bottom: 10px;
+  overflow: hidden;
+  transition: border-color 0.2s ease;
+}
+.day[data-open="true"]{ border-color: #333a49; }
+
+.day-head{
+  display:flex; align-items:center; gap:14px;
+  padding: 16px 16px;
+  cursor: pointer;
+  user-select: none;
+}
+.day-head:active{ background: rgba(255,255,255,0.02); }
+
+.bar{ width:4px; align-self:stretch; border-radius: 3px; flex-shrink:0; min-height: 40px; }
+
+.day-main{ flex:1; min-width:0; }
+.day-date{
+  font-family:'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin-bottom: 3px;
+}
+.day-title{
+  font-family:'Space Grotesk', sans-serif;
+  font-weight: 600;
+  font-size: 16.5px;
+}
+.day-tag{
+  font-size: 12.5px;
+  color: var(--ink-dim);
+  margin-top: 2px;
+}
+
+.dial{ flex-shrink:0; display:flex; flex-direction:column; align-items:center; gap:2px; }
+.dial svg{ display:block; }
+.dial-label{
+  font-family:'IBM Plex Mono', monospace;
+  font-size: 9.5px;
+  color: var(--ink-faint);
+  letter-spacing: 0.05em;
+}
+
+.chev{
+  width: 18px; height:18px; flex-shrink:0;
+  color: var(--ink-faint);
+  transition: transform 0.25s ease;
+}
+.day[data-open="true"] .chev{ transform: rotate(180deg); }
+
+.day-body{
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+}
+.day[data-open="true"] .day-body{ max-height: 900px; }
+
+.day-body-inner{ padding: 0 16px 18px 34px; }
+
+.note{
+  font-size: 12.5px;
+  color: var(--ink-dim);
+  line-height: 1.55;
+  margin: 0 0 12px;
+  padding: 10px 12px;
+  background: rgba(255,255,255,0.02);
+  border-left: 2px solid var(--card-border);
+  border-radius: 4px;
+}
+
+table{ width:100%; border-collapse: collapse; }
+thead th{
+  font-family:'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  text-align: left;
+  font-weight: 500;
+  padding: 0 0 8px;
+  border-bottom: 1px solid var(--card-border);
+}
+tbody td{
+  padding: 9px 4px;
+  font-size: 13.5px;
+  border-bottom: 1px solid rgba(255,255,255,0.03);
+}
+tbody tr:last-child td{ border-bottom: none; }
+td.mv{ color: var(--ink); }
+td.sr, td.rpe{
+  font-family:'IBM Plex Mono', monospace;
+  font-size: 12.5px;
+  color: var(--ink-dim);
+  white-space: nowrap;
+  text-align: right;
+}
+td.rpe{ width: 44px; }
+
+.run-detail{
+  font-size: 13.5px;
+  line-height: 1.65;
+  color: #cbd0da;
+}
+.run-detail b{ color: var(--ink); font-weight:600; }
+
+.rest-detail{
+  font-size: 13.5px;
+  color: var(--ink-dim);
+  line-height: 1.6;
+}
+
+.footer-note{
+  margin-top: 24px;
+  font-size: 12px;
+  color: var(--ink-faint);
+  line-height: 1.6;
+  padding: 14px 16px;
+  border: 1px dashed var(--card-border);
+  border-radius: 12px;
+}

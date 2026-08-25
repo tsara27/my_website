@@ -1,0 +1,90 @@
+[
+  {
+    "day": "MON",
+    "title": "Lower Body",
+    "tag": "Light / accessory",
+    "type": "lower",
+    "rpe": 5,
+    "rows": [
+      ["Goblet squat or leg press (moderate depth)", "3 x 12", "5"],
+      ["Single-leg RDL", "3 x 10/leg", "5"],
+      ["Banded lateral walks", "3 x 15 steps", "4"],
+      ["Spanish squat or wall sit (isometric)", "3 x 30–45s", "5"],
+      ["Standing calf raises", "3 x 15", "5"]
+    ],
+    "note": "Primes the tendon without digging into recovery ahead of Thursday's hard session."
+  },
+  {
+    "day": "TUE",
+    "title": "Upper Body + Easy Run",
+    "tag": "Strength then 5.5km easy",
+    "type": "upper",
+    "rpe": 7,
+    "rows": [
+      ["Bench press or push-up", "4 x 8", "7"],
+      ["Bent-over row or lat pulldown", "4 x 8", "7"],
+      ["Overhead press", "3 x 10", "6"],
+      ["Pull-ups (or assisted)", "3 x AMRAP", "7"],
+      ["Plank", "3 x 40s", "6"]
+    ],
+    "extra": "run",
+    "runText": "<b>Easy Run · 5.5km</b><br>Target RPE 3–4, conversational pace. Doesn't compete with the lifting — legs stay fresh."
+  },
+  {
+    "day": "WED",
+    "title": "Rest",
+    "tag": "Full rest day",
+    "type": "rest",
+    "rpe": 0,
+    "restText": "No structured training. Optional light walk or mobility work if you feel like moving."
+  },
+  {
+    "day": "THU",
+    "title": "Run — Tempo / Hills / Time Trial",
+    "tag": "Hard session · varies weekly per Runna",
+    "type": "hard",
+    "rpe": 8,
+    "extra": "run",
+    "runText": "<b>Hard run day</b><br>Follow Runna's prescribed structure for the week (tempo, hills, or time trial). Target RPE 7–8 on the working portions. This is one of the two key quality sessions."
+  },
+  {
+    "day": "FRI",
+    "title": "Lower Body",
+    "tag": "Heavy · main lower day",
+    "type": "lower",
+    "rpe": 8,
+    "rows": [
+      ["Hack squat (cleared stance/depth)", "4 x 6", "8"],
+      ["Sumo deadlift or RDL", "4 x 6", "7–8"],
+      ["Bulgarian split squat", "3 x 8/leg", "7"],
+      ["Hip thrust", "3 x 10", "7"],
+      ["Calf raises", "3 x 12", "6"]
+    ],
+    "note": "48h after Thursday's hard run, 48h before Sunday's long run — Saturday's easy run sits as a buffer in between."
+  },
+  {
+    "day": "SAT",
+    "title": "Upper Body + Easy Run",
+    "tag": "Strength then 5km easy",
+    "type": "upper",
+    "rpe": 7,
+    "rows": [
+      ["Bench press or push-up", "4 x 8", "7"],
+      ["Bent-over row or lat pulldown", "4 x 8", "7"],
+      ["Overhead press", "3 x 10", "6"],
+      ["Pull-ups (or assisted)", "3 x AMRAP", "7"],
+      ["Plank", "3 x 40s", "6"]
+    ],
+    "extra": "run",
+    "runText": "<b>Easy Run · 5km</b><br>Target RPE 3–4. Second lifted easy-run day of the week."
+  },
+  {
+    "day": "SUN",
+    "title": "Run — Long Run",
+    "tag": "Hard · progressive",
+    "type": "long",
+    "rpe": 8,
+    "extra": "run",
+    "runText": "<b>Long Run · progressive</b><br>Start easy (RPE 4–5) and build to a stronger finish (RPE 7–8) over the closing portion. Second key quality session of the week."
+  }
+]

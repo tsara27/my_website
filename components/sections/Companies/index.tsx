@@ -12,10 +12,9 @@ function Companies({ companies }: Props) {
 
   const companyLists = companies.map((company, index) => {
     return (
-      <div className="h-20 m-14 grayscale xs:h-8 xs:m-6">
+      <div className="h-20 m-14 grayscale xs:h-8 xs:m-6" key={index}>
         <Image
           alt="Company image"
-          key={index}
           src={company["logo"]}
           height={company["height"]}
           width={company["width"]}

@@ -22,11 +22,9 @@ function BlogPosts({ posts }: Props) {
         <div className="sm:block w-2/5 h-72 relative xs:hidden">
           <Image
             alt="Blog image"
-            key={index}
-            layout="fill"
-            placeholder="blur"
-            blurDataURL="https://via.placeholder.com/350x250?text=Placeholder"
-            objectFit="cover"
+            fill
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            style={{objectFit: "cover"}}
             src={post.ogImage.url}
           />
         </div>
@@ -38,7 +36,6 @@ function BlogPosts({ posts }: Props) {
           </Link>
           <div className="text-dove-gray flex flex-row justify-start content-center items-center xs:pb-10 sm:pb-5 gap-2">
             <Image
-              layout="fixed"
               width={15}
               height={15}
               src={"/assets/images/Icons/calendar.webp"}
