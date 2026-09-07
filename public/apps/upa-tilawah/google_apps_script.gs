@@ -1,7 +1,7 @@
 // Google Apps Script for Quran Reading Progress Tracker
 // Deploy as web app: Execute as > Me, Who has access > Anyone
 
-const SPREADSHEET_ID = "YOUR_SPREADSHEET_ID_HERE"; // Replace with your Google Sheet ID
+const SPREADSHEET_ID = "1A7Eh2Td8zJukkOkASmhgmFLFhc0dFEb4hqwmrS9JwiA"; // Replace with your Google Sheet ID
 const USERS_SHEET = "Users";
 const READING_PROGRESS_SHEET = "Reading_Progress";
 
@@ -60,7 +60,8 @@ function findUserByName(name) {
   const data = usersSheet.getDataRange().getValues();
 
   for (let i = 1; i < data.length; i++) { // Skip header
-    if (data[i][1].toLowerCase().trim() === name.toLowerCase().trim()) {
+    const rowName = data[i][1];
+    if (rowName && String(rowName).toLowerCase().trim() === name.toLowerCase().trim()) {
       return {
         user_id: data[i][0],
         name: data[i][1],
@@ -221,10 +222,7 @@ function doPost(e) {
         success: false,
         error: "Name is required"
       }))
-        .setMimeType(ContentService.MimeType.JSON)
-        .setHeader('Access-Control-Allow-Origin', '*')
-        .setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
-        .setHeader('Access-Control-Allow-Headers', 'Content-Type');
+        .setMimeType(ContentService.MimeType.JSON);
     }
 
     // Get or create user
@@ -245,10 +243,7 @@ function doPost(e) {
       progress_id: result.progress_id,
       message: result.message
     }))
-      .setMimeType(ContentService.MimeType.JSON)
-      .setHeader('Access-Control-Allow-Origin', '*')
-      .setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
-      .setHeader('Access-Control-Allow-Headers', 'Content-Type');
+      .setMimeType(ContentService.MimeType.JSON);
 
   } catch (error) {
     Logger.log("Error in doPost: " + error.toString());
@@ -256,10 +251,7 @@ function doPost(e) {
       success: false,
       error: error.toString()
     }))
-      .setMimeType(ContentService.MimeType.JSON)
-      .setHeader('Access-Control-Allow-Origin', '*')
-      .setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
-      .setHeader('Access-Control-Allow-Headers', 'Content-Type');
+      .setMimeType(ContentService.MimeType.JSON);
   }
 }
 
@@ -278,10 +270,7 @@ function doGet(e) {
         success: true,
         data: progress
       }))
-        .setMimeType(ContentService.MimeType.JSON)
-        .setHeader('Access-Control-Allow-Origin', '*')
-        .setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
-        .setHeader('Access-Control-Allow-Headers', 'Content-Type');
+        .setMimeType(ContentService.MimeType.JSON);
     }
 
     if (action === "getAllHistory") {
@@ -292,42 +281,22 @@ function doGet(e) {
         records: records,
         count: records.length
       }))
-        .setMimeType(ContentService.MimeType.JSON)
-        .setHeader('Access-Control-Allow-Origin', '*')
-        .setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
-        .setHeader('Access-Control-Allow-Headers', 'Content-Type');
+        .setMimeType(ContentService.MimeType.JSON);
     }
 
     return ContentService.createTextOutput(JSON.stringify({
       success: false,
       error: "Invalid request"
     }))
-      .setMimeType(ContentService.MimeType.JSON)
-      .setHeader('Access-Control-Allow-Origin', '*')
-      .setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
-      .setHeader('Access-Control-Allow-Headers', 'Content-Type');
+      .setMimeType(ContentService.MimeType.JSON);
 
   } catch (error) {
     return ContentService.createTextOutput(JSON.stringify({
       success: false,
       error: error.toString()
     }))
-      .setMimeType(ContentService.MimeType.JSON)
-      .setHeader('Access-Control-Allow-Origin', '*')
-      .setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
-      .setHeader('Access-Control-Allow-Headers', 'Content-Type');
+      .setMimeType(ContentService.MimeType.JSON);
   }
-}
-
-// ============================================================
-// 7. HANDLE PREFLIGHT REQUESTS (CORS)
-// ============================================================
-
-function doOptions() {
-  return ContentService.createTextOutput('')
-    .setHeader('Access-Control-Allow-Origin', '*')
-    .setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
-    .setHeader('Access-Control-Allow-Headers', 'Content-Type');
 }
 
 // ============================================================
