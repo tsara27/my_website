@@ -1,405 +1,840 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Khatm & Tilawah — Daily Quran Checkpoint Tracker</title>
-  <!-- Tailwind CSS CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            emerald: {
-              850: '#064e3b',
-              950: '#022c22',
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Khatm & Tilawah — Daily Quran Checkpoint Tracker</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              emerald: {
+                850: "#064e3b",
+                950: "#022c22",
+              },
+              gold: {
+                400: "#fbbf24",
+                500: "#f59e0b",
+                600: "#d97706",
+              },
             },
-            gold: {
-              400: '#fbbf24',
-              500: '#f59e0b',
-              600: '#d97706',
-            }
-          }
-        }
-      }
-    }
-  </script>
-  <link rel="stylesheet" href="/apps/upa-tilawah/css/styles.css">
-</head>
-<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col antialiased selection:bg-emerald-100 selection:text-emerald-900">
+          },
+        },
+      };
+    </script>
+    <link rel="stylesheet" href="/apps/upa-tilawah/css/styles.css" />
+  </head>
+  <body
+    class="bg-slate-50 text-slate-800 min-h-screen flex flex-col antialiased selection:bg-emerald-100 selection:text-emerald-900"
+  >
+    <!-- Toast Notification Container -->
+    <div
+      id="toast-container"
+      class="fixed top-4 right-4 z-50 flex flex-col gap-2 pointer-events-none"
+    ></div>
 
-  <!-- Toast Notification Container -->
-  <div id="toast-container" class="fixed top-4 right-4 z-50 flex flex-col gap-2 pointer-events-none"></div>
-
-  <!-- Name Collection Modal (Cookies based) -->
-  <div id="name-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4 hidden">
-    <div class="bg-white rounded-3xl shadow-2xl max-w-md w-full p-6 sm:p-8 transform transition-all border border-emerald-100">
-      <div class="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center mx-auto mb-4">
-        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
-        </svg>
-      </div>
-      <h3 class="text-xl font-bold text-center text-slate-900">Welcome to Tilawah Tracker</h3>
-      <p class="text-sm text-slate-500 text-center mt-1 mb-6">
-        Please provide your name and email to personalize your daily Quran journey. We'll remember them in your browser cookies for tomorrow and beyond!
-      </p>
-
-      <form id="name-form" class="space-y-4">
-        <div>
-          <label for="user-name-input" class="block text-xs font-semibold uppercase tracking-wider text-slate-600 mb-1">Your Name</label>
-          <input type="text" id="user-name-input" required placeholder="e.g. Ahmad, Sarah, Fatima..."
-            class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-slate-800 font-medium placeholder-slate-400">
-        </div>
-        <div>
-          <label for="user-email-input" class="block text-xs font-semibold uppercase tracking-wider text-slate-600 mb-1">Your Email</label>
-          <input type="email" id="user-email-input" required placeholder="e.g. ahmad@example.com"
-            class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-slate-800 font-medium placeholder-slate-400">
-        </div>
-        <button type="submit"
-          class="w-full py-3.5 px-4 bg-emerald-600 hover:bg-emerald-700 active:scale-[0.99] text-white font-semibold rounded-xl shadow-lg shadow-emerald-600/20 transition duration-150">
-          Save & Proceed
-        </button>
-      </form>
-    </div>
-  </div>
-
-  <!-- Header -->
-  <header class="bg-gradient-to-r from-emerald-900 via-emerald-850 to-teal-900 text-white shadow-lg sticky top-0 z-30">
-    <div class="max-w-4xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between mb-4">
-      <div class="flex items-center gap-3">
-        <div class="w-10 h-10 rounded-xl bg-emerald-500/20 border border-emerald-400/30 flex items-center justify-center text-gold-400">
-          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+    <!-- Name Collection Modal (Cookies based) -->
+    <div
+      id="name-modal"
+      class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4 hidden"
+    >
+      <div
+        class="bg-white rounded-3xl shadow-2xl max-w-md w-full p-6 sm:p-8 transform transition-all border border-emerald-100"
+      >
+        <div
+          class="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center mx-auto mb-4"
+        >
+          <svg
+            class="w-6 h-6"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+            ></path>
           </svg>
         </div>
-        <div>
-          <h1 class="text-lg sm:text-xl font-bold tracking-tight text-white flex items-center gap-2">
-            Tilawah Checkpoints
-            <span class="text-xs bg-emerald-700/60 text-emerald-200 px-2 py-0.5 rounded-full font-medium border border-emerald-600/50">Daily</span>
-          </h1>
-          <p id="user-greeting" class="text-xs text-emerald-200/90 font-medium">Assalamu'alaikum!</p>
+        <h3 class="text-xl font-bold text-center text-slate-900">
+          Welcome to Tilawah Tracker
+        </h3>
+        <p class="text-sm text-slate-500 text-center mt-1 mb-6">
+          Please provide your name and email to personalize your daily Quran
+          journey. We'll remember them in your browser cookies for tomorrow and
+          beyond!
+        </p>
+
+        <form id="name-form" class="space-y-4">
+          <div>
+            <label
+              for="user-name-input"
+              class="block text-xs font-semibold uppercase tracking-wider text-slate-600 mb-1"
+              >Your Name</label
+            >
+            <input
+              type="text"
+              id="user-name-input"
+              required
+              placeholder="e.g. Ahmad, Sarah, Fatima..."
+              class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-slate-800 font-medium placeholder-slate-400"
+            />
+          </div>
+          <div>
+            <label
+              for="user-email-input"
+              class="block text-xs font-semibold uppercase tracking-wider text-slate-600 mb-1"
+              >Your Email</label
+            >
+            <input
+              type="email"
+              id="user-email-input"
+              required
+              placeholder="e.g. ahmad@example.com"
+              class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-slate-800 font-medium placeholder-slate-400"
+            />
+          </div>
+          <button
+            type="submit"
+            class="w-full py-3.5 px-4 bg-emerald-600 hover:bg-emerald-700 active:scale-[0.99] text-white font-semibold rounded-xl shadow-lg shadow-emerald-600/20 transition duration-150"
+          >
+            Save & Proceed
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Header -->
+    <header
+      class="bg-gradient-to-r from-emerald-900 via-emerald-850 to-teal-900 text-white shadow-lg sticky top-0 z-30"
+    >
+      <div
+        class="max-w-4xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between mb-4"
+      >
+        <div class="flex items-center gap-3">
+          <div
+            class="w-10 h-10 rounded-xl bg-emerald-500/20 border border-emerald-400/30 flex items-center justify-center text-gold-400"
+          >
+            <svg
+              class="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="1.75"
+                d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
+              ></path>
+            </svg>
+          </div>
+          <div>
+            <h1
+              class="text-lg sm:text-xl font-bold tracking-tight text-white flex items-center gap-2"
+            >
+              Tilawah Checkpoints
+              <span
+                class="text-xs bg-emerald-700/60 text-emerald-200 px-2 py-0.5 rounded-full font-medium border border-emerald-600/50"
+                >Daily</span
+              >
+            </h1>
+            <p
+              id="user-greeting"
+              class="text-xs text-emerald-200/90 font-medium"
+            >
+              Assalamu'alaikum!
+            </p>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <div class="text-right text-xs text-emerald-200">
+            <span id="today-date" class="font-medium block"></span>
+          </div>
         </div>
       </div>
 
-      <div class="flex items-center gap-2">
-        <div id="user-badge" class="hidden sm:flex items-center gap-2 bg-emerald-950/50 border border-emerald-700/50 px-3 py-1.5 rounded-full text-xs font-medium text-emerald-100">
-          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-          <span id="badge-name-text">Reader</span>
-          <button id="edit-name-btn" title="Change name" class="text-emerald-400 hover:text-white ml-1">
-            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path>
+      <!-- Navigation Tabs -->
+      <div class="border-t border-emerald-700/50">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 flex gap-6">
+          <button
+            id="tab-today"
+            class="nav-tab active py-3 text-sm font-semibold text-emerald-200 border-b-2 border-gold-400 transition-colors hover:text-white flex items-center gap-2"
+          >
+            <svg
+              class="w-4 h-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+              ></path>
             </svg>
+            Today
+          </button>
+          <button
+            id="tab-history"
+            class="nav-tab py-3 text-sm font-semibold text-emerald-300/70 border-b-2 border-transparent transition-colors hover:text-emerald-200 flex items-center gap-2"
+          >
+            <svg
+              class="w-4 h-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+              ></path>
+            </svg>
+            History
           </button>
         </div>
-        <div class="text-right text-xs text-emerald-200">
-          <span id="today-date" class="font-medium block"></span>
+      </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="flex-1 max-w-4xl w-full mx-auto p-4 sm:p-6 md:p-8 space-y-6">
+      <div
+        id="user-badge"
+        class="hidden sm:flex items-center gap-2 bg-emerald-950/50 border border-emerald-700/50 px-3 py-1.5 rounded-full text-xs font-medium text-emerald-100"
+      >
+        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+        <span id="badge-name-text">Reader</span>
+        <button
+          id="edit-name-btn"
+          title="Change name"
+          class="text-emerald-400 hover:text-white ml-1"
+        >
+          <svg
+            class="w-3.5 h-3.5"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
+            ></path>
+          </svg>
+        </button>
+      </div>
+
+      <!-- History Dashboard (Hidden by default) -->
+      <div id="history-view" class="hidden space-y-6">
+        <!-- User Filter Card -->
+        <section
+          class="bg-white rounded-2xl p-6 sm:p-7 shadow-sm border border-slate-200/80"
+        >
+          <div
+            class="flex flex-col sm:flex-row sm:items-center justify-between gap-4"
+          >
+            <div>
+              <span
+                class="text-xs font-bold uppercase tracking-wider text-emerald-600"
+                >Dashboard</span
+              >
+              <h2 class="text-lg font-bold text-slate-900 mt-0.5">
+                Tilawah History & Insights
+              </h2>
+            </div>
+            <div class="flex items-center gap-3 flex-wrap">
+              <div class="flex-1 sm:flex-none">
+                <select
+                  id="user-filter"
+                  class="w-full px-4 py-2 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 text-sm bg-white font-medium"
+                >
+                  <option value="">Loading users...</option>
+                </select>
+              </div>
+              <button
+                id="refresh-history-btn"
+                class="px-4 py-2 mt-6 sm:mt-0 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold rounded-lg transition flex items-center gap-2"
+              >
+                <svg
+                  class="w-4 h-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                  ></path>
+                </svg>
+                Refresh
+              </button>
+            </div>
+          </div>
+
+          <!-- Stats Summary -->
+          <div
+            id="history-stats"
+            class="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-6"
+          >
+            <div
+              class="bg-slate-50 rounded-xl p-4 text-center border border-slate-100"
+            >
+              <span class="text-xs text-slate-400 block font-medium"
+                >Total Sessions</span
+              >
+              <span
+                id="stat-total-sessions"
+                class="text-2xl font-extrabold text-slate-800 mt-1"
+                >0</span
+              >
+            </div>
+            <div
+              class="bg-slate-50 rounded-xl p-4 text-center border border-slate-100"
+            >
+              <span class="text-xs text-slate-400 block font-medium"
+                >Total Pages</span
+              >
+              <span
+                id="stat-history-pages"
+                class="text-2xl font-extrabold text-slate-800 mt-1"
+                >0</span
+              >
+            </div>
+            <div
+              class="bg-emerald-50/70 rounded-xl p-4 text-center border border-emerald-100"
+            >
+              <span class="text-xs text-emerald-600 block font-medium"
+                >Avg/Session</span
+              >
+              <span
+                id="stat-avg-pages"
+                class="text-2xl font-extrabold text-emerald-800 mt-1"
+                >0</span
+              >
+            </div>
+            <div
+              class="bg-gold-50 rounded-xl p-4 text-center border border-gold-100"
+            >
+              <span class="text-xs text-gold-600 block font-medium"
+                >Last Read</span
+              >
+              <span
+                id="stat-last-read"
+                class="text-sm font-extrabold text-gold-800 mt-1"
+                >--</span
+              >
+            </div>
+          </div>
+        </section>
+
+        <!-- History Records Container -->
+        <div id="history-records" class="space-y-3">
+          <!-- Rendered dynamically -->
+        </div>
+
+        <!-- Empty State -->
+        <div
+          id="history-empty"
+          class="bg-white rounded-2xl p-12 text-center border border-slate-200/80 hidden"
+        >
+          <svg
+            class="w-16 h-16 text-slate-200 mx-auto mb-4"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="1.5"
+              d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+            ></path>
+          </svg>
+          <h3 class="text-lg font-bold text-slate-600 mb-1">No History Yet</h3>
+          <p class="text-sm text-slate-400">
+            Complete today's session to see it in your history dashboard.
+          </p>
+        </div>
+
+        <!-- Loading State -->
+        <div
+          id="history-loading"
+          class="bg-white rounded-2xl p-12 text-center border border-slate-200/80"
+        >
+          <div class="inline-block">
+            <div
+              class="w-8 h-8 border-4 border-emerald-200 border-t-emerald-600 rounded-full animate-spin"
+            ></div>
+          </div>
+          <p class="text-sm text-slate-500 mt-3">Loading history...</p>
         </div>
       </div>
-    </div>
 
-    <!-- Navigation Tabs -->
-    <div class="border-t border-emerald-700/50">
-      <div class="max-w-4xl mx-auto px-4 sm:px-6 flex gap-6">
-        <button id="tab-today" class="nav-tab active py-3 text-sm font-semibold text-emerald-200 border-b-2 border-gold-400 transition-colors hover:text-white flex items-center gap-2">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-          </svg>
-          Today
-        </button>
-        <button id="tab-history" class="nav-tab py-3 text-sm font-semibold text-emerald-300/70 border-b-2 border-transparent transition-colors hover:text-emerald-200 flex items-center gap-2">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-          </svg>
-          History
-        </button>
-      </div>
-    </div>
-  </header>
-
-  <!-- Main Container -->
-  <main class="flex-1 max-w-4xl w-full mx-auto p-4 sm:p-6 md:p-8 space-y-6">
-
-    <!-- History Dashboard (Hidden by default) -->
-    <div id="history-view" class="hidden space-y-6">
-
-      <!-- User Filter Card -->
-      <section class="bg-white rounded-2xl p-6 sm:p-7 shadow-sm border border-slate-200/80">
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div>
-            <span class="text-xs font-bold uppercase tracking-wider text-emerald-600">Dashboard</span>
-            <h2 class="text-lg font-bold text-slate-900 mt-0.5">Tilawah History & Insights</h2>
-          </div>
-          <div class="flex items-center gap-3 flex-wrap">
-            <div class="flex-1 sm:flex-none">
-              <select id="user-filter" class="w-full px-4 py-2 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 text-sm bg-white font-medium">
-                <option value="">Loading users...</option>
-              </select>
+      <!-- Today's View (Default) -->
+      <div id="today-view">
+        <!-- Card 1: Today's Target Setup -->
+        <section
+          class="bg-white rounded-2xl p-6 sm:p-7 shadow-sm border border-slate-200/80"
+        >
+          <div
+            class="flex flex-col sm:flex-row sm:items-center justify-between pb-5 border-b border-slate-100 gap-2"
+          >
+            <div>
+              <span
+                class="text-xs font-bold uppercase tracking-wider text-emerald-600"
+                >Step 1 • Daily Strategy</span
+              >
+              <h2 class="text-lg font-bold text-slate-900 mt-0.5">
+                Customize Today's Quran Target
+              </h2>
             </div>
-            <button id="refresh-history-btn" class="px-4 py-2 mt-6 sm:mt-0 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold rounded-lg transition flex items-center gap-2">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+            <div
+              id="plan-status-badge"
+              class="self-start sm:self-auto text-xs px-3 py-1 rounded-full bg-slate-100 text-slate-600 font-medium"
+            >
+              New Plan Needed
+            </div>
+          </div>
+
+          <form
+            id="daily-plan-form"
+            class="mt-5 grid grid-cols-1 md:grid-cols-2 gap-5"
+          >
+            <div>
+              <label
+                for="checkpoints-input"
+                class="block text-sm font-semibold text-slate-700 mb-1"
+              >
+                1. How many checkpoints today?
+              </label>
+              <div class="relative">
+                <input
+                  type="number"
+                  id="checkpoints-input"
+                  min="1"
+                  max="20"
+                  value="4"
+                  required
+                  class="w-full pl-4 pr-12 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-slate-900 font-semibold text-lg"
+                />
+                <span
+                  class="absolute right-3.5 top-3.5 text-xs font-semibold text-slate-400 pointer-events-none"
+                  >times</span
+                >
+              </div>
+              <p class="text-xs text-slate-400 mt-1.5">
+                e.g. 5 times (after each Fardh prayer) or 3 times a day.
+              </p>
+            </div>
+
+            <div>
+              <label
+                for="pages-input"
+                class="block text-sm font-semibold text-slate-700 mb-1"
+              >
+                2. How many total pages today?
+              </label>
+              <div class="relative">
+                <input
+                  type="number"
+                  id="pages-input"
+                  min="1"
+                  max="604"
+                  value="20"
+                  required
+                  class="w-full pl-4 pr-14 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-slate-900 font-semibold text-lg"
+                />
+                <span
+                  class="absolute right-3.5 top-3.5 text-xs font-semibold text-slate-400 pointer-events-none"
+                  >pages</span
+                >
+              </div>
+              <p class="text-xs text-slate-400 mt-1.5">
+                Standard 1 Juz is 20 pages. Total Quran is 604 pages.
+              </p>
+            </div>
+
+            <div
+              class="md:col-span-2 pt-2 flex items-center justify-between flex-wrap gap-4"
+            >
+              <div
+                id="math-preview"
+                class="text-sm text-slate-600 bg-emerald-50/80 border border-emerald-100 rounded-xl px-4 py-2.5 flex items-center gap-2"
+              >
+                <svg
+                  class="w-5 h-5 text-emerald-600 shrink-0"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"
+                  ></path>
+                </svg>
+                <span
+                  >Target Volume:
+                  <strong class="text-emerald-800 font-bold" id="preview-volume"
+                    >5</strong
+                  >
+                  pages per checkpoint (rounded up).</span
+                >
+              </div>
+
+              <button
+                type="submit"
+                class="ml-auto px-6 py-3 bg-emerald-700 hover:bg-emerald-800 active:scale-[0.99] text-white text-sm font-semibold rounded-xl shadow-md shadow-emerald-800/20 transition flex items-center gap-2"
+              >
+                <svg
+                  class="w-4 h-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M13 10V3L4 14h7v7l9-11h-7z"
+                  ></path>
+                </svg>
+                Generate Today's Checkpoints
+              </button>
+            </div>
+          </form>
+        </section>
+
+        <!-- Card 2: Interactive Checkpoints Checklist -->
+        <section
+          id="checkpoints-section"
+          class="bg-white rounded-2xl p-6 sm:p-7 shadow-sm border border-slate-200/80 hidden transition-all"
+        >
+          <div
+            class="flex flex-col sm:flex-row sm:items-center justify-between pb-5 border-b border-slate-100 gap-3"
+          >
+            <div>
+              <span
+                class="text-xs font-bold uppercase tracking-wider text-emerald-600"
+                >Step 2 • Checkpoints Checklist</span
+              >
+              <h2 class="text-lg font-bold text-slate-900 mt-0.5">
+                Today's Reading Progression
+              </h2>
+            </div>
+
+            <!-- Progress Counter -->
+            <div class="flex items-center gap-3">
+              <div class="text-right">
+                <span
+                  id="progress-stats"
+                  class="text-xs font-bold text-slate-800"
+                  >0 of 4 Completed</span
+                >
+                <span
+                  id="progress-pct"
+                  class="block text-[11px] text-slate-500 font-medium"
+                  >0% Completed</span
+                >
+              </div>
+              <div class="w-24 bg-slate-100 rounded-full h-2.5 overflow-hidden">
+                <div
+                  id="progress-bar-fill"
+                  class="bg-emerald-600 h-2.5 rounded-full transition-all duration-300 w-0"
+                ></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Overview stats tags -->
+          <div class="grid grid-cols-3 gap-3 my-5">
+            <div
+              class="bg-slate-50 rounded-xl p-3 text-center border border-slate-100"
+            >
+              <span class="text-xs text-slate-400 block font-medium"
+                >Total Checkpoints</span
+              >
+              <span
+                id="stat-total-checkpoints"
+                class="text-lg font-extrabold text-slate-800"
+                >0</span
+              >
+            </div>
+            <div
+              class="bg-slate-50 rounded-xl p-3 text-center border border-slate-100"
+            >
+              <span class="text-xs text-slate-400 block font-medium"
+                >Target Pages</span
+              >
+              <span
+                id="stat-total-pages"
+                class="text-lg font-extrabold text-slate-800"
+                >0</span
+              >
+            </div>
+            <div
+              class="bg-emerald-50/70 rounded-xl p-3 text-center border border-emerald-100"
+            >
+              <span class="text-xs text-emerald-600 block font-medium"
+                >Volume / Session</span
+              >
+              <span
+                id="stat-volume-each"
+                class="text-lg font-extrabold text-emerald-800"
+                >0</span
+              >
+            </div>
+          </div>
+
+          <!-- Checklist Container -->
+          <div class="space-y-3" id="checklist-container">
+            <!-- Rendered dynamically -->
+          </div>
+        </section>
+
+        <!-- Card 3: End of Day Reflection & Record -->
+        <section
+          id="end-day-section"
+          class="bg-white rounded-2xl p-6 sm:p-7 shadow-sm border border-slate-200/80 hidden"
+        >
+          <div
+            class="pb-5 border-b border-slate-100 flex items-center justify-between"
+          >
+            <div>
+              <span
+                class="text-xs font-bold uppercase tracking-wider text-emerald-600"
+                >Step 3 • End of the Day</span
+              >
+              <h2 class="text-lg font-bold text-slate-900 mt-0.5">
+                Record Final Surah, Ayah & Notes
+              </h2>
+            </div>
+            <span
+              class="w-8 h-8 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center"
+            >
+              <svg
+                class="w-4 h-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M5 13l4 4L19 7"
+                ></path>
               </svg>
-              Refresh
+            </span>
+          </div>
+
+          <form id="end-day-form" class="mt-5 space-y-5">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label
+                  for="surah-select"
+                  class="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-1"
+                >
+                  Surah Reached By End of Day
+                </label>
+                <select
+                  id="surah-select"
+                  required
+                  class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 text-slate-800 bg-white font-medium"
+                >
+                  <option value="" disabled selected>Select Surah...</option>
+                  <!-- Populated by JS -->
+                </select>
+              </div>
+
+              <div>
+                <label
+                  for="ayah-input"
+                  class="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-1"
+                >
+                  Ayah Number Reached
+                </label>
+                <div class="relative">
+                  <input
+                    type="number"
+                    id="ayah-input"
+                    min="1"
+                    max="286"
+                    placeholder="e.g. 142"
+                    required
+                    class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 text-slate-800 font-medium"
+                  />
+                  <span
+                    class="absolute right-3.5 top-3.5 text-xs text-slate-400 font-medium"
+                    >Ayah</span
+                  >
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <label
+                for="reflection-notes"
+                class="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-1"
+              >
+                Personal Notes & Tadabbur Reflection
+              </label>
+              <textarea
+                id="reflection-notes"
+                rows="3"
+                placeholder="Key lessons, touching verses, or thoughts on today's tilawah..."
+                class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 text-slate-800 text-sm font-normal"
+              ></textarea>
+            </div>
+
+            <div class="pt-2 flex justify-end">
+              <button
+                type="submit"
+                class="px-6 py-3.5 bg-emerald-700 hover:bg-emerald-800 active:scale-[0.99] text-white text-sm font-semibold rounded-xl shadow-md shadow-emerald-800/20 transition flex items-center gap-2"
+              >
+                <svg
+                  class="w-4 h-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"
+                  ></path>
+                </svg>
+                Save Today's Tilawah Record
+              </button>
+            </div>
+          </form>
+        </section>
+
+        <!-- Card 4: Daily Log Completed Summary -->
+        <section
+          id="summary-section"
+          class="bg-gradient-to-br from-emerald-900 to-slate-900 text-white rounded-2xl p-6 sm:p-7 shadow-xl hidden"
+        >
+          <div
+            class="flex items-center justify-between mb-4 pb-4 border-b border-emerald-800/60"
+          >
+            <div class="flex items-center gap-3">
+              <div
+                class="w-10 h-10 rounded-full bg-gold-500/20 text-gold-400 border border-gold-400/30 flex items-center justify-center"
+              >
+                <svg
+                  class="w-5 h-5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"
+                  ></path>
+                </svg>
+              </div>
+              <div>
+                <h3 class="font-bold text-white text-base sm:text-lg">
+                  Alhamdulillah! Daily Tilawah Completed
+                </h3>
+                <p class="text-xs text-emerald-300">
+                  Logged for <span id="summary-date-text">Today</span>
+                </p>
+              </div>
+            </div>
+            <button
+              id="reset-day-btn"
+              class="text-xs text-emerald-300 hover:text-white underline underline-offset-4"
+            >
+              Start New Plan
             </button>
           </div>
-        </div>
 
-        <!-- Stats Summary -->
-        <div id="history-stats" class="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-6">
-          <div class="bg-slate-50 rounded-xl p-4 text-center border border-slate-100">
-            <span class="text-xs text-slate-400 block font-medium">Total Sessions</span>
-            <span id="stat-total-sessions" class="text-2xl font-extrabold text-slate-800 mt-1">0</span>
-          </div>
-          <div class="bg-slate-50 rounded-xl p-4 text-center border border-slate-100">
-            <span class="text-xs text-slate-400 block font-medium">Total Pages</span>
-            <span id="stat-history-pages" class="text-2xl font-extrabold text-slate-800 mt-1">0</span>
-          </div>
-          <div class="bg-emerald-50/70 rounded-xl p-4 text-center border border-emerald-100">
-            <span class="text-xs text-emerald-600 block font-medium">Avg/Session</span>
-            <span id="stat-avg-pages" class="text-2xl font-extrabold text-emerald-800 mt-1">0</span>
-          </div>
-          <div class="bg-gold-50 rounded-xl p-4 text-center border border-gold-100">
-            <span class="text-xs text-gold-600 block font-medium">Last Read</span>
-            <span id="stat-last-read" class="text-sm font-extrabold text-gold-800 mt-1">--</span>
-          </div>
-        </div>
-      </section>
-
-      <!-- History Records Container -->
-      <div id="history-records" class="space-y-3">
-        <!-- Rendered dynamically -->
-      </div>
-
-      <!-- Empty State -->
-      <div id="history-empty" class="bg-white rounded-2xl p-12 text-center border border-slate-200/80 hidden">
-        <svg class="w-16 h-16 text-slate-200 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-        </svg>
-        <h3 class="text-lg font-bold text-slate-600 mb-1">No History Yet</h3>
-        <p class="text-sm text-slate-400">Complete today's session to see it in your history dashboard.</p>
-      </div>
-
-      <!-- Loading State -->
-      <div id="history-loading" class="bg-white rounded-2xl p-12 text-center border border-slate-200/80">
-        <div class="inline-block">
-          <div class="w-8 h-8 border-4 border-emerald-200 border-t-emerald-600 rounded-full animate-spin"></div>
-        </div>
-        <p class="text-sm text-slate-500 mt-3">Loading history...</p>
-      </div>
-    </div>
-
-    <!-- Today's View (Default) -->
-    <div id="today-view">
-
-    <!-- Card 1: Today's Target Setup -->
-    <section class="bg-white rounded-2xl p-6 sm:p-7 shadow-sm border border-slate-200/80">
-      <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-5 border-b border-slate-100 gap-2">
-        <div>
-          <span class="text-xs font-bold uppercase tracking-wider text-emerald-600">Step 1 • Daily Strategy</span>
-          <h2 class="text-lg font-bold text-slate-900 mt-0.5">Customize Today's Quran Target</h2>
-        </div>
-        <div id="plan-status-badge" class="self-start sm:self-auto text-xs px-3 py-1 rounded-full bg-slate-100 text-slate-600 font-medium">
-          New Plan Needed
-        </div>
-      </div>
-
-      <form id="daily-plan-form" class="mt-5 grid grid-cols-1 md:grid-cols-2 gap-5">
-        <div>
-          <label for="checkpoints-input" class="block text-sm font-semibold text-slate-700 mb-1">
-            1. How many checkpoints today?
-          </label>
-          <div class="relative">
-            <input type="number" id="checkpoints-input" min="1" max="20" value="4" required
-              class="w-full pl-4 pr-12 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-slate-900 font-semibold text-lg">
-            <span class="absolute right-3.5 top-3.5 text-xs font-semibold text-slate-400 pointer-events-none">times</span>
-          </div>
-          <p class="text-xs text-slate-400 mt-1.5">e.g. 5 times (after each Fardh prayer) or 3 times a day.</p>
-        </div>
-
-        <div>
-          <label for="pages-input" class="block text-sm font-semibold text-slate-700 mb-1">
-            2. How many total pages today?
-          </label>
-          <div class="relative">
-            <input type="number" id="pages-input" min="1" max="604" value="20" required
-              class="w-full pl-4 pr-14 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-slate-900 font-semibold text-lg">
-            <span class="absolute right-3.5 top-3.5 text-xs font-semibold text-slate-400 pointer-events-none">pages</span>
-          </div>
-          <p class="text-xs text-slate-400 mt-1.5">Standard 1 Juz is 20 pages. Total Quran is 604 pages.</p>
-        </div>
-
-        <div class="md:col-span-2 pt-2 flex items-center justify-between flex-wrap gap-4">
-          <div id="math-preview" class="text-sm text-slate-600 bg-emerald-50/80 border border-emerald-100 rounded-xl px-4 py-2.5 flex items-center gap-2">
-            <svg class="w-5 h-5 text-emerald-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
-            </svg>
-            <span>Target Volume: <strong class="text-emerald-800 font-bold" id="preview-volume">5</strong> pages per checkpoint (rounded up).</span>
-          </div>
-
-          <button type="submit"
-            class="ml-auto px-6 py-3 bg-emerald-700 hover:bg-emerald-800 active:scale-[0.99] text-white text-sm font-semibold rounded-xl shadow-md shadow-emerald-800/20 transition flex items-center gap-2">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
-            </svg>
-            Generate Today's Checkpoints
-          </button>
-        </div>
-      </form>
-    </section>
-
-    <!-- Card 2: Interactive Checkpoints Checklist -->
-    <section id="checkpoints-section" class="bg-white rounded-2xl p-6 sm:p-7 shadow-sm border border-slate-200/80 hidden transition-all">
-      <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-5 border-b border-slate-100 gap-3">
-        <div>
-          <span class="text-xs font-bold uppercase tracking-wider text-emerald-600">Step 2 • Checkpoints Checklist</span>
-          <h2 class="text-lg font-bold text-slate-900 mt-0.5">Today's Reading Progression</h2>
-        </div>
-
-        <!-- Progress Counter -->
-        <div class="flex items-center gap-3">
-          <div class="text-right">
-            <span id="progress-stats" class="text-xs font-bold text-slate-800">0 of 4 Completed</span>
-            <span id="progress-pct" class="block text-[11px] text-slate-500 font-medium">0% Completed</span>
-          </div>
-          <div class="w-24 bg-slate-100 rounded-full h-2.5 overflow-hidden">
-            <div id="progress-bar-fill" class="bg-emerald-600 h-2.5 rounded-full transition-all duration-300 w-0"></div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Overview stats tags -->
-      <div class="grid grid-cols-3 gap-3 my-5">
-        <div class="bg-slate-50 rounded-xl p-3 text-center border border-slate-100">
-          <span class="text-xs text-slate-400 block font-medium">Total Checkpoints</span>
-          <span id="stat-total-checkpoints" class="text-lg font-extrabold text-slate-800">0</span>
-        </div>
-        <div class="bg-slate-50 rounded-xl p-3 text-center border border-slate-100">
-          <span class="text-xs text-slate-400 block font-medium">Target Pages</span>
-          <span id="stat-total-pages" class="text-lg font-extrabold text-slate-800">0</span>
-        </div>
-        <div class="bg-emerald-50/70 rounded-xl p-3 text-center border border-emerald-100">
-          <span class="text-xs text-emerald-600 block font-medium">Volume / Session</span>
-          <span id="stat-volume-each" class="text-lg font-extrabold text-emerald-800">0</span>
-        </div>
-      </div>
-
-      <!-- Checklist Container -->
-      <div class="space-y-3" id="checklist-container">
-        <!-- Rendered dynamically -->
-      </div>
-    </section>
-
-    <!-- Card 3: End of Day Reflection & Record -->
-    <section id="end-day-section" class="bg-white rounded-2xl p-6 sm:p-7 shadow-sm border border-slate-200/80 hidden">
-      <div class="pb-5 border-b border-slate-100 flex items-center justify-between">
-        <div>
-          <span class="text-xs font-bold uppercase tracking-wider text-emerald-600">Step 3 • End of the Day</span>
-          <h2 class="text-lg font-bold text-slate-900 mt-0.5">Record Final Surah, Ayah & Notes</h2>
-        </div>
-        <span class="w-8 h-8 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-          </svg>
-        </span>
-      </div>
-
-      <form id="end-day-form" class="mt-5 space-y-5">
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div>
-            <label for="surah-select" class="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-1">
-              Surah Reached By End of Day
-            </label>
-            <select id="surah-select" required
-              class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 text-slate-800 bg-white font-medium">
-              <option value="" disabled selected>Select Surah...</option>
-              <!-- Populated by JS -->
-            </select>
-          </div>
-
-          <div>
-            <label for="ayah-input" class="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-1">
-              Ayah Number Reached
-            </label>
-            <div class="relative">
-              <input type="number" id="ayah-input" min="1" max="286" placeholder="e.g. 142" required
-                class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 text-slate-800 font-medium">
-              <span class="absolute right-3.5 top-3.5 text-xs text-slate-400 font-medium">Ayah</span>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-4">
+            <div
+              class="bg-emerald-850/60 border border-emerald-700/50 p-3.5 rounded-xl"
+            >
+              <span class="text-xs text-emerald-300 block"
+                >Checkpoints Done</span
+              >
+              <p
+                id="sum-checkpoints"
+                class="text-lg font-bold text-white mt-0.5"
+              >
+                --
+              </p>
+            </div>
+            <div
+              class="bg-emerald-850/60 border border-emerald-700/50 p-3.5 rounded-xl"
+            >
+              <span class="text-xs text-emerald-300 block">Pages Read</span>
+              <p id="sum-pages" class="text-lg font-bold text-white mt-0.5">
+                --
+              </p>
+            </div>
+            <div
+              class="bg-emerald-850/60 border border-emerald-700/50 p-3.5 rounded-xl"
+            >
+              <span class="text-xs text-emerald-300 block">Stop Position</span>
+              <p
+                id="sum-position"
+                class="text-lg font-bold text-gold-400 mt-0.5"
+              >
+                --
+              </p>
             </div>
           </div>
-        </div>
 
-        <div>
-          <label for="reflection-notes" class="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-1">
-            Personal Notes & Tadabbur Reflection
-          </label>
-          <textarea id="reflection-notes" rows="3" placeholder="Key lessons, touching verses, or thoughts on today's tilawah..."
-            class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 text-slate-800 text-sm font-normal"></textarea>
-        </div>
-
-        <div class="pt-2 flex justify-end">
-          <button type="submit"
-            class="px-6 py-3.5 bg-emerald-700 hover:bg-emerald-800 active:scale-[0.99] text-white text-sm font-semibold rounded-xl shadow-md shadow-emerald-800/20 transition flex items-center gap-2">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"></path>
-            </svg>
-            Save Today's Tilawah Record
-          </button>
-        </div>
-      </form>
-    </section>
-
-    <!-- Card 4: Daily Log Completed Summary -->
-    <section id="summary-section" class="bg-gradient-to-br from-emerald-900 to-slate-900 text-white rounded-2xl p-6 sm:p-7 shadow-xl hidden">
-      <div class="flex items-center justify-between mb-4 pb-4 border-b border-emerald-800/60">
-        <div class="flex items-center gap-3">
-          <div class="w-10 h-10 rounded-full bg-gold-500/20 text-gold-400 border border-gold-400/30 flex items-center justify-center">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path>
-            </svg>
+          <div
+            id="sum-notes-box"
+            class="bg-emerald-950/70 border border-emerald-800/80 rounded-xl p-4 text-xs sm:text-sm text-emerald-100"
+          >
+            <span class="font-bold text-gold-400 block mb-1"
+              >Today's Notes & Tadabbur:</span
+            >
+            <p
+              id="sum-notes-text"
+              class="italic whitespace-pre-wrap leading-relaxed"
+            >
+              No notes recorded.
+            </p>
           </div>
-          <div>
-            <h3 class="font-bold text-white text-base sm:text-lg">Alhamdulillah! Daily Tilawah Completed</h3>
-            <p class="text-xs text-emerald-300">Logged for <span id="summary-date-text">Today</span></p>
-          </div>
-        </div>
-        <button id="reset-day-btn" class="text-xs text-emerald-300 hover:text-white underline underline-offset-4">
-          Start New Plan
-        </button>
+        </section>
       </div>
+    </main>
 
-      <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-4">
-        <div class="bg-emerald-850/60 border border-emerald-700/50 p-3.5 rounded-xl">
-          <span class="text-xs text-emerald-300 block">Checkpoints Done</span>
-          <p id="sum-checkpoints" class="text-lg font-bold text-white mt-0.5">--</p>
-        </div>
-        <div class="bg-emerald-850/60 border border-emerald-700/50 p-3.5 rounded-xl">
-          <span class="text-xs text-emerald-300 block">Pages Read</span>
-          <p id="sum-pages" class="text-lg font-bold text-white mt-0.5">--</p>
-        </div>
-        <div class="bg-emerald-850/60 border border-emerald-700/50 p-3.5 rounded-xl">
-          <span class="text-xs text-emerald-300 block">Stop Position</span>
-          <p id="sum-position" class="text-lg font-bold text-gold-400 mt-0.5">--</p>
-        </div>
+    <footer
+      class="mt-auto border-t border-slate-200 bg-white py-4 text-center text-xs text-slate-400"
+    >
+      <div
+        class="max-w-4xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-2"
+      >
+        <p>
+          Tilawah Checkpoint Assistant • Keep your heart connected to the Quran
+        </p>
+        <p class="text-[11px] text-slate-400">
+          Cookies securely store your user profile locally.
+        </p>
       </div>
+    </footer>
 
-      <div id="sum-notes-box" class="bg-emerald-950/70 border border-emerald-800/80 rounded-xl p-4 text-xs sm:text-sm text-emerald-100">
-        <span class="font-bold text-gold-400 block mb-1">Today's Notes & Tadabbur:</span>
-        <p id="sum-notes-text" class="italic whitespace-pre-wrap leading-relaxed">No notes recorded.</p>
-      </div>
-    </section>
-
-    </div>
-
-  </main>
-
-  <footer class="mt-auto border-t border-slate-200 bg-white py-4 text-center text-xs text-slate-400">
-    <div class="max-w-4xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-2">
-      <p>Tilawah Checkpoint Assistant • Keep your heart connected to the Quran</p>
-      <p class="text-[11px] text-slate-400">Cookies securely store your user profile locally.</p>
-    </div>
-  </footer>
-
-  <script src="/apps/upa-tilawah/js/app.js"></script>
-</body>
+    <script src="/apps/upa-tilawah/js/app.js"></script>
+  </body>
 </html>
