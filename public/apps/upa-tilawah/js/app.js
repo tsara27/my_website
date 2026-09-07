@@ -678,7 +678,7 @@ function updateProgressIndicators() {
 function syncToGoogleSheets(userName) {
   const completedCount = state.checkpoints.filter(c => c.completed).length;
 
-  const payload = new URLSearchParams({
+  const payload = {
     name: userName,
     email: getCookie("tilawah_reader_email") || "",
     surah: state.surah,
@@ -686,11 +686,14 @@ function syncToGoogleSheets(userName) {
     notes: state.notes,
     checkpointsCompleted: completedCount,
     totalPages: state.totalPages
-  });
+  };
 
   fetch(GOOGLE_APPS_SCRIPT_URL, {
     method: 'POST',
-    body: payload
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(payload)
   })
   .then(response => response.text())
   .then(text => {
