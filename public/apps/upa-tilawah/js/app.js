@@ -7,7 +7,7 @@
 // 2. Click Deploy > New deployment > Web app
 // 3. Execute as: Me, Anyone with the link
 // 4. Copy the deployment URL below
-const GOOGLE_APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwDtcI9PkYaF1FG-vMGldeftB0w-cfacjYdK9B45E0MDQA9pvkXG4moMQZ0hstncNdE/exec";
+const GOOGLE_APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzTn4Blc0Is5lGm14MAA7Z28lgpZrf3hWryQ72kS4kckBepuS-mNaOsA3eGjcYJh5zI/exec";
 const ENABLE_GOOGLE_SHEETS_SYNC = true; // Set to true after deployment URL is configured
 
 /* =========================================================
