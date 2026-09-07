@@ -142,13 +142,13 @@ function updateGreeting() {
   const badgeEl = document.getElementById('user-badge');
   const badgeNameText = document.getElementById('badge-name-text');
 
+  badgeEl.classList.remove('hidden');
   if (savedName) {
     greetingEl.textContent = `Assalamu'alaikum, ${savedName}! ✨`;
-    badgeEl.classList.remove('hidden');
     badgeNameText.textContent = savedName;
   } else {
     greetingEl.textContent = "Assalamu'alaikum, Dedicated Reader ✨";
-    badgeEl.classList.add('hidden');
+    badgeNameText.textContent = "Reader";
   }
 }
 
