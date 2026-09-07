@@ -673,7 +673,7 @@ function updateProgressIndicators() {
 function syncToGoogleSheets(userName) {
   const completedCount = state.checkpoints.filter(c => c.completed).length;
 
-  const payload = {
+  const payload = new URLSearchParams({
     name: userName,
     email: getCookie("tilawah_reader_email") || "",
     surah: state.surah,
@@ -681,28 +681,31 @@ function syncToGoogleSheets(userName) {
     notes: state.notes,
     checkpointsCompleted: completedCount,
     totalPages: state.totalPages
-  };
+  });
 
   fetch(GOOGLE_APPS_SCRIPT_URL, {
     method: 'POST',
-    body: JSON.stringify(payload),
-    headers: {
-      'Content-Type': 'application/json'
-    }
+    body: payload
   })
-  .then(response => response.json())
-  .then(data => {
-    if (data.success) {
-      console.log('Data synced to Google Sheets:', data);
-      showToast('Progress saved to cloud ☁️', 'success');
-    } else {
-      console.warn('Sync warning:', data.error);
+  .then(response => response.text())
+  .then(text => {
+    try {
+      const data = JSON.parse(text);
+      if (data.success) {
+        console.log('Data synced to Google Sheets:', data);
+        showToast('Progress saved to cloud ☁️', 'success');
+      } else {
+        console.warn('Sync warning:', data.error);
+        showToast('Local save OK, cloud sync skipped', 'warning');
+      }
+    } catch (e) {
+      console.warn('Failed to parse response:', text);
       showToast('Local save OK, cloud sync skipped', 'warning');
     }
   })
   .catch(error => {
     console.warn('Google Sheets sync failed:', error);
-    // Silently fail - user's data is still saved locally
+    showToast('Local save OK, cloud sync skipped', 'warning');
   });
 }
 

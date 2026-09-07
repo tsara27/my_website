@@ -206,7 +206,14 @@ function getAllHistoryWithUsers(daysBack = 90) {
 
 function doPost(e) {
   try {
-    const data = JSON.parse(e.postData.contents);
+    // Handle both JSON and form-encoded data
+    let data;
+    if (e.postData && e.postData.type === 'application/json') {
+      data = JSON.parse(e.postData.contents);
+    } else {
+      // Form-encoded data
+      data = e.parameter || {};
+    }
 
     // Validate required fields
     if (!data.name) {
