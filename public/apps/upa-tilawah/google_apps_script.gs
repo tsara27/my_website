@@ -220,7 +220,11 @@ function doPost(e) {
       return ContentService.createTextOutput(JSON.stringify({
         success: false,
         error: "Name is required"
-      })).setMimeType(ContentService.MimeType.JSON);
+      }))
+        .setMimeType(ContentService.MimeType.JSON)
+        .setHeader('Access-Control-Allow-Origin', '*')
+        .setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
+        .setHeader('Access-Control-Allow-Headers', 'Content-Type');
     }
 
     // Get or create user
@@ -240,14 +244,22 @@ function doPost(e) {
       user_id: userId,
       progress_id: result.progress_id,
       message: result.message
-    })).setMimeType(ContentService.MimeType.JSON);
+    }))
+      .setMimeType(ContentService.MimeType.JSON)
+      .setHeader('Access-Control-Allow-Origin', '*')
+      .setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
+      .setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
   } catch (error) {
     Logger.log("Error in doPost: " + error.toString());
     return ContentService.createTextOutput(JSON.stringify({
       success: false,
       error: error.toString()
-    })).setMimeType(ContentService.MimeType.JSON);
+    }))
+      .setMimeType(ContentService.MimeType.JSON)
+      .setHeader('Access-Control-Allow-Origin', '*')
+      .setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
+      .setHeader('Access-Control-Allow-Headers', 'Content-Type');
   }
 }
 
@@ -265,7 +277,11 @@ function doGet(e) {
       return ContentService.createTextOutput(JSON.stringify({
         success: true,
         data: progress
-      })).setMimeType(ContentService.MimeType.JSON);
+      }))
+        .setMimeType(ContentService.MimeType.JSON)
+        .setHeader('Access-Control-Allow-Origin', '*')
+        .setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
+        .setHeader('Access-Control-Allow-Headers', 'Content-Type');
     }
 
     if (action === "getAllHistory") {
@@ -275,24 +291,47 @@ function doGet(e) {
         success: true,
         records: records,
         count: records.length
-      })).setMimeType(ContentService.MimeType.JSON);
+      }))
+        .setMimeType(ContentService.MimeType.JSON)
+        .setHeader('Access-Control-Allow-Origin', '*')
+        .setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
+        .setHeader('Access-Control-Allow-Headers', 'Content-Type');
     }
 
     return ContentService.createTextOutput(JSON.stringify({
       success: false,
       error: "Invalid request"
-    })).setMimeType(ContentService.MimeType.JSON);
+    }))
+      .setMimeType(ContentService.MimeType.JSON)
+      .setHeader('Access-Control-Allow-Origin', '*')
+      .setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
+      .setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
   } catch (error) {
     return ContentService.createTextOutput(JSON.stringify({
       success: false,
       error: error.toString()
-    })).setMimeType(ContentService.MimeType.JSON);
+    }))
+      .setMimeType(ContentService.MimeType.JSON)
+      .setHeader('Access-Control-Allow-Origin', '*')
+      .setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
+      .setHeader('Access-Control-Allow-Headers', 'Content-Type');
   }
 }
 
 // ============================================================
-// 7. TEST FUNCTION (Optional - for development)
+// 7. HANDLE PREFLIGHT REQUESTS (CORS)
+// ============================================================
+
+function doOptions() {
+  return ContentService.createTextOutput('')
+    .setHeader('Access-Control-Allow-Origin', '*')
+    .setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
+    .setHeader('Access-Control-Allow-Headers', 'Content-Type');
+}
+
+// ============================================================
+// 8. TEST FUNCTION (Optional - for development)
 // ============================================================
 
 function testScript() {
