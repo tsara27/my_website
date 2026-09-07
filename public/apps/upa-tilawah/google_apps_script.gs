@@ -207,12 +207,18 @@ function getAllHistoryWithUsers(daysBack = 90) {
 
 function doPost(e) {
   try {
-    // Handle both JSON and form-encoded data
+    // Handle both JSON and form-encoded data.
+    // The client sends JSON with Content-Type: text/plain (to avoid CORS
+    // preflight), so e.postData.type is never 'application/json' here -
+    // try parsing the body as JSON first and fall back to e.parameter.
     let data;
-    if (e.postData && e.postData.type === 'application/json') {
-      data = JSON.parse(e.postData.contents);
+    if (e.postData && e.postData.contents) {
+      try {
+        data = JSON.parse(e.postData.contents);
+      } catch (parseError) {
+        data = e.parameter || {};
+      }
     } else {
-      // Form-encoded data
       data = e.parameter || {};
     }
 
