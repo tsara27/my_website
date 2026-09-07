@@ -22,3 +22,29 @@ body {
   background: #cbd5e1;
   border-radius: 9999px;
 }
+
+/* Tab Navigation Styles */
+.nav-tab {
+  border-bottom-color: transparent !important;
+  transition: all 0.3s ease;
+}
+
+.nav-tab.active {
+  border-bottom-color: currentColor !important;
+}
+
+/* History Card Animations */
+#history-records > div {
+  animation: slideIn 0.3s ease forwards;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

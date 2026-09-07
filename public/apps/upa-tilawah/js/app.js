@@ -7,7 +7,7 @@
 // 2. Click Deploy > New deployment > Web app
 // 3. Execute as: Me, Anyone with the link
 // 4. Copy the deployment URL below
-const GOOGLE_APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxaG_u1-YSigp6vee5HPDdbqFN6pRAEZ6P2crHMSUbEQmfZnaJ-du6JUqKmUeJZh4BM/exec";
+const GOOGLE_APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbztl833P4fagQOSoMjVDLrHBhj903L8SJ7tTf9L8P37V-P7gE8rMnlY1S7LlSnWG_uD/exec";
 const ENABLE_GOOGLE_SHEETS_SYNC = true; // Set to true after deployment URL is configured
 
 /* =========================================================
@@ -89,7 +89,11 @@ const state = {
   ayah: "",
   notes: "",
   isCompletedForToday: false,
-  pendingAction: null // Callback if name modal needed
+  pendingAction: null, // Callback if name modal needed
+  currentView: 'today', // 'today' or 'history'
+  historyData: [], // Array of historical records
+  allUsers: [], // Array of all users
+  selectedUser: null // Currently selected user for history view
 };
 
 /* =========================================================
@@ -159,7 +163,219 @@ function requireUserName(onSuccess) {
 }
 
 /* =========================================================
-   6. Initialization & Form Handlers
+   6. Tab Switching & History Dashboard
+   ========================================================= */
+function switchTab(tabName) {
+  state.currentView = tabName;
+
+  const todayView = document.getElementById('today-view');
+  const historyView = document.getElementById('history-view');
+  const tabToday = document.getElementById('tab-today');
+  const tabHistory = document.getElementById('tab-history');
+
+  if (tabName === 'today') {
+    todayView.classList.remove('hidden');
+    historyView.classList.add('hidden');
+    tabToday.classList.add('active', 'border-gold-400', 'text-emerald-200');
+    tabToday.classList.remove('border-transparent', 'text-emerald-300/70');
+    tabHistory.classList.remove('active', 'border-gold-400', 'text-emerald-200');
+    tabHistory.classList.add('border-transparent', 'text-emerald-300/70');
+  } else {
+    todayView.classList.add('hidden');
+    historyView.classList.remove('hidden');
+    tabHistory.classList.add('active', 'border-gold-400', 'text-emerald-200');
+    tabHistory.classList.remove('border-transparent', 'text-emerald-300/70');
+    tabToday.classList.remove('active', 'border-gold-400', 'text-emerald-200');
+    tabToday.classList.add('border-transparent', 'text-emerald-300/70');
+    loadHistoryData();
+  }
+}
+
+async function fetchHistoryData() {
+  if (!ENABLE_GOOGLE_SHEETS_SYNC) {
+    console.warn('Google Sheets sync is disabled');
+    return [];
+  }
+
+  try {
+    const response = await fetch(GOOGLE_APPS_SCRIPT_URL + '?action=getAllHistory');
+    const data = await response.json();
+
+    if (data.success && Array.isArray(data.records)) {
+      state.historyData = data.records;
+
+      // Extract unique users
+      const uniqueUsers = [...new Set(data.records.map(r => r.name))].filter(Boolean).sort();
+      state.allUsers = uniqueUsers;
+
+      return data.records;
+    }
+  } catch (error) {
+    console.warn('Failed to fetch history:', error);
+  }
+  return [];
+}
+
+function populateUserFilter() {
+  const userFilter = document.getElementById('user-filter');
+  const currentUser = getCookie(USER_NAME_COOKIE);
+
+  // Clear existing options
+  userFilter.innerHTML = '';
+
+  // Add "My Records" option
+  const myOption = document.createElement('option');
+  myOption.value = currentUser || '';
+  myOption.textContent = `My Records (${currentUser || 'Guest'})`;
+  userFilter.appendChild(myOption);
+
+  // Add other users
+  state.allUsers.forEach(user => {
+    if (user !== currentUser) {
+      const option = document.createElement('option');
+      option.value = user;
+      option.textContent = `${user}'s Records`;
+      userFilter.appendChild(option);
+    }
+  });
+
+  // Set default selection
+  state.selectedUser = currentUser;
+  userFilter.value = currentUser;
+}
+
+function renderHistoryRecords(records) {
+  const container = document.getElementById('history-records');
+  const emptyState = document.getElementById('history-empty');
+  const currentUser = getCookie(USER_NAME_COOKIE);
+  const isViewingOwnData = state.selectedUser === currentUser;
+
+  container.innerHTML = '';
+
+  if (records.length === 0) {
+    emptyState.classList.remove('hidden');
+    return;
+  }
+
+  emptyState.classList.add('hidden');
+
+  // Sort by date descending
+  const sortedRecords = [...records].sort((a, b) => {
+    return new Date(b.date || 0) - new Date(a.date || 0);
+  });
+
+  sortedRecords.forEach((record, idx) => {
+    const card = document.createElement('div');
+    card.className = 'bg-white rounded-2xl p-5 sm:p-6 shadow-sm border border-slate-200/80 hover:shadow-md transition';
+
+    const recordDate = record.date ? new Date(record.date).toLocaleDateString(undefined, {
+      weekday: 'short',
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric'
+    }) : 'Unknown Date';
+
+    const readOnly = !isViewingOwnData;
+
+    card.innerHTML = `
+      <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-4 mb-4 pb-4 border-b border-slate-100">
+        <div>
+          <div class="flex items-center gap-2 mb-1">
+            <h3 class="font-bold text-slate-900">${record.name || 'Unknown Reader'}</h3>
+            ${readOnly ? '<span class="text-xs px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 font-medium">Read-only</span>' : ''}
+          </div>
+          <p class="text-xs text-slate-500 font-medium">${recordDate}</p>
+        </div>
+        <div class="flex items-center gap-3">
+          <div class="text-right">
+            <span class="text-sm font-bold text-slate-900">${record.totalPages || 0} pages</span>
+            <p class="text-xs text-slate-500">${record.checkpointsCompleted || 0} sessions</p>
+          </div>
+          <div class="w-12 h-12 rounded-xl bg-emerald-50 border border-emerald-200 flex items-center justify-center">
+            <svg class="w-6 h-6 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-3 gap-3 mb-4">
+        <div class="bg-slate-50 rounded-lg p-3 text-center border border-slate-100">
+          <span class="text-xs text-slate-400 block font-medium">Checkpoints</span>
+          <span class="text-lg font-bold text-slate-800">${record.checkpointsCompleted || 0}</span>
+        </div>
+        <div class="bg-slate-50 rounded-lg p-3 text-center border border-slate-100">
+          <span class="text-xs text-slate-400 block font-medium">Pages</span>
+          <span class="text-lg font-bold text-slate-800">${record.totalPages || 0}</span>
+        </div>
+        <div class="bg-emerald-50 rounded-lg p-3 text-center border border-emerald-100">
+          <span class="text-xs text-emerald-600 block font-medium">Stop</span>
+          <span class="text-sm font-bold text-emerald-800">${record.surah ? record.surah.split('.').pop().trim() : '--'}</span>
+        </div>
+      </div>
+
+      ${record.notes ? `
+        <div class="bg-slate-50 rounded-lg p-3.5 border border-slate-100">
+          <p class="text-xs text-slate-500 font-semibold mb-1">Notes:</p>
+          <p class="text-xs text-slate-700 italic">"${record.notes}"</p>
+        </div>
+      ` : ''}
+    `;
+
+    container.appendChild(card);
+  });
+}
+
+function updateHistoryStats(records) {
+  const currentUser = getCookie(USER_NAME_COOKIE);
+  const userRecords = records.filter(r => r.name === state.selectedUser);
+
+  if (userRecords.length === 0) {
+    document.getElementById('stat-total-sessions').textContent = '0';
+    document.getElementById('stat-history-pages').textContent = '0';
+    document.getElementById('stat-avg-pages').textContent = '0';
+    document.getElementById('stat-last-read').textContent = '--';
+    return;
+  }
+
+  const totalSessions = userRecords.length;
+  const totalPages = userRecords.reduce((sum, r) => sum + (r.totalPages || 0), 0);
+  const avgPages = totalPages > 0 ? Math.round(totalPages / totalSessions) : 0;
+
+  const lastRecord = [...userRecords].sort((a, b) =>
+    new Date(b.date || 0) - new Date(a.date || 0)
+  )[0];
+
+  const lastDate = lastRecord?.date ? new Date(lastRecord.date).toLocaleDateString(undefined, {
+    month: 'short',
+    day: 'numeric'
+  }) : '--';
+
+  document.getElementById('stat-total-sessions').textContent = totalSessions;
+  document.getElementById('stat-history-pages').textContent = totalPages;
+  document.getElementById('stat-avg-pages').textContent = avgPages;
+  document.getElementById('stat-last-read').textContent = lastDate;
+}
+
+async function loadHistoryData() {
+  const loading = document.getElementById('history-loading');
+  loading.classList.remove('hidden');
+
+  const records = await fetchHistoryData();
+  populateUserFilter();
+
+  const currentUser = getCookie(USER_NAME_COOKIE);
+  state.selectedUser = currentUser;
+
+  const userRecords = records.filter(r => r.name === state.selectedUser);
+  renderHistoryRecords(userRecords);
+  updateHistoryStats(records);
+
+  loading.classList.add('hidden');
+}
+
+/* =========================================================
+   7. Initialization & Form Handlers
    ========================================================= */
 document.addEventListener('DOMContentLoaded', () => {
   // 1. Populate Surahs dropdown
@@ -317,6 +533,29 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('plan-status-badge').textContent = 'New Plan Needed';
     document.getElementById('plan-status-badge').className = 'text-xs px-3 py-1 rounded-full bg-slate-100 text-slate-600 font-medium';
     planForm.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+
+  // 10. Tab Navigation
+  document.getElementById('tab-today').addEventListener('click', () => switchTab('today'));
+  document.getElementById('tab-history').addEventListener('click', () => switchTab('history'));
+
+  // 11. History User Filter
+  document.getElementById('user-filter').addEventListener('change', async (e) => {
+    state.selectedUser = e.target.value;
+    const userRecords = state.historyData.filter(r => r.name === state.selectedUser);
+    renderHistoryRecords(userRecords);
+    updateHistoryStats(state.historyData);
+  });
+
+  // 12. Refresh History Button
+  document.getElementById('refresh-history-btn').addEventListener('click', async () => {
+    const btn = document.getElementById('refresh-history-btn');
+    btn.disabled = true;
+    btn.classList.add('opacity-50');
+    await loadHistoryData();
+    btn.disabled = false;
+    btn.classList.remove('opacity-50');
+    showToast('History updated!');
   });
 });
 

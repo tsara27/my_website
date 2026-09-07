@@ -158,6 +158,49 @@ function getReadingProgressByUserId(userId, daysBack = 30) {
 }
 
 // ============================================================
+// 4B. RETRIEVE ALL HISTORY WITH USER NAMES
+// ============================================================
+
+function getAllHistoryWithUsers(daysBack = 90) {
+  const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
+  const usersSheet = ss.getSheetByName(USERS_SHEET);
+  const progressSheet = ss.getSheetByName(READING_PROGRESS_SHEET);
+
+  const userData = usersSheet.getDataRange().getValues();
+  const progressData = progressSheet.getDataRange().getValues();
+
+  // Build user map for quick lookup
+  const userMap = {};
+  for (let i = 1; i < userData.length; i++) {
+    userMap[userData[i][0]] = userData[i][1]; // user_id -> name
+  }
+
+  const results = [];
+  const cutoffDate = new Date();
+  cutoffDate.setDate(cutoffDate.getDate() - daysBack);
+
+  for (let i = 1; i < progressData.length; i++) {
+    const recordDate = new Date(progressData[i][2]);
+    if (recordDate >= cutoffDate) {
+      results.push({
+        progress_id: progressData[i][0],
+        user_id: progressData[i][1],
+        name: userMap[progressData[i][1]] || "Unknown",
+        date: progressData[i][2],
+        surah: progressData[i][3],
+        ayah: progressData[i][4],
+        notes: progressData[i][5],
+        checkpointsCompleted: progressData[i][6],
+        totalPages: progressData[i][7],
+        updated_at: progressData[i][8]
+      });
+    }
+  }
+
+  return results.reverse(); // Most recent first
+}
+
+// ============================================================
 // 5. WEB APP ENDPOINT (POST from HTML form)
 // ============================================================
 
@@ -215,6 +258,16 @@ function doGet(e) {
       return ContentService.createTextOutput(JSON.stringify({
         success: true,
         data: progress
+      })).setMimeType(ContentService.MimeType.JSON);
+    }
+
+    if (action === "getAllHistory") {
+      const daysBack = e.parameter.days ? parseInt(e.parameter.days) : 90;
+      const records = getAllHistoryWithUsers(daysBack);
+      return ContentService.createTextOutput(JSON.stringify({
+        success: true,
+        records: records,
+        count: records.length
       })).setMimeType(ContentService.MimeType.JSON);
     }
 

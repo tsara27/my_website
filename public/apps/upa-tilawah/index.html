@@ -61,7 +61,7 @@
 
   <!-- Header -->
   <header class="bg-gradient-to-r from-emerald-900 via-emerald-850 to-teal-900 text-white shadow-lg sticky top-0 z-30">
-    <div class="max-w-4xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between mb-4">
       <div class="flex items-center gap-3">
         <div class="w-10 h-10 rounded-xl bg-emerald-500/20 border border-emerald-400/30 flex items-center justify-center text-gold-400">
           <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -92,10 +92,101 @@
         </div>
       </div>
     </div>
+
+    <!-- Navigation Tabs -->
+    <div class="border-t border-emerald-700/50">
+      <div class="max-w-4xl mx-auto px-4 sm:px-6 flex gap-6">
+        <button id="tab-today" class="nav-tab active py-3 text-sm font-semibold text-emerald-200 border-b-2 border-gold-400 transition-colors hover:text-white flex items-center gap-2">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+          </svg>
+          Today
+        </button>
+        <button id="tab-history" class="nav-tab py-3 text-sm font-semibold text-emerald-300/70 border-b-2 border-transparent transition-colors hover:text-emerald-200 flex items-center gap-2">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+          </svg>
+          History
+        </button>
+      </div>
+    </div>
   </header>
 
   <!-- Main Container -->
   <main class="flex-1 max-w-4xl w-full mx-auto p-4 sm:p-6 md:p-8 space-y-6">
+
+    <!-- History Dashboard (Hidden by default) -->
+    <div id="history-view" class="hidden space-y-6">
+
+      <!-- User Filter Card -->
+      <section class="bg-white rounded-2xl p-6 sm:p-7 shadow-sm border border-slate-200/80">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <span class="text-xs font-bold uppercase tracking-wider text-emerald-600">Dashboard</span>
+            <h2 class="text-lg font-bold text-slate-900 mt-0.5">Tilawah History & Insights</h2>
+          </div>
+          <div class="flex items-center gap-3 flex-wrap">
+            <div class="flex-1 sm:flex-none">
+              <label for="user-filter" class="block text-xs font-semibold text-slate-600 mb-2">View User:</label>
+              <select id="user-filter" class="w-full px-4 py-2 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 text-sm bg-white font-medium">
+                <option value="">Loading users...</option>
+              </select>
+            </div>
+            <button id="refresh-history-btn" class="px-4 py-2 mt-6 sm:mt-0 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold rounded-lg transition flex items-center gap-2">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+              </svg>
+              Refresh
+            </button>
+          </div>
+        </div>
+
+        <!-- Stats Summary -->
+        <div id="history-stats" class="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-6">
+          <div class="bg-slate-50 rounded-xl p-4 text-center border border-slate-100">
+            <span class="text-xs text-slate-400 block font-medium">Total Sessions</span>
+            <span id="stat-total-sessions" class="text-2xl font-extrabold text-slate-800 mt-1">0</span>
+          </div>
+          <div class="bg-slate-50 rounded-xl p-4 text-center border border-slate-100">
+            <span class="text-xs text-slate-400 block font-medium">Total Pages</span>
+            <span id="stat-history-pages" class="text-2xl font-extrabold text-slate-800 mt-1">0</span>
+          </div>
+          <div class="bg-emerald-50/70 rounded-xl p-4 text-center border border-emerald-100">
+            <span class="text-xs text-emerald-600 block font-medium">Avg/Session</span>
+            <span id="stat-avg-pages" class="text-2xl font-extrabold text-emerald-800 mt-1">0</span>
+          </div>
+          <div class="bg-gold-50 rounded-xl p-4 text-center border border-gold-100">
+            <span class="text-xs text-gold-600 block font-medium">Last Read</span>
+            <span id="stat-last-read" class="text-sm font-extrabold text-gold-800 mt-1">--</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- History Records Container -->
+      <div id="history-records" class="space-y-3">
+        <!-- Rendered dynamically -->
+      </div>
+
+      <!-- Empty State -->
+      <div id="history-empty" class="bg-white rounded-2xl p-12 text-center border border-slate-200/80 hidden">
+        <svg class="w-16 h-16 text-slate-200 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+        </svg>
+        <h3 class="text-lg font-bold text-slate-600 mb-1">No History Yet</h3>
+        <p class="text-sm text-slate-400">Complete today's session to see it in your history dashboard.</p>
+      </div>
+
+      <!-- Loading State -->
+      <div id="history-loading" class="bg-white rounded-2xl p-12 text-center border border-slate-200/80">
+        <div class="inline-block">
+          <div class="w-8 h-8 border-4 border-emerald-200 border-t-emerald-600 rounded-full animate-spin"></div>
+        </div>
+        <p class="text-sm text-slate-500 mt-3">Loading history...</p>
+      </div>
+    </div>
+
+    <!-- Today's View (Default) -->
+    <div id="today-view">
 
     <!-- Card 1: Today's Target Setup -->
     <section class="bg-white rounded-2xl p-6 sm:p-7 shadow-sm border border-slate-200/80">
@@ -293,6 +384,8 @@
         <p id="sum-notes-text" class="italic whitespace-pre-wrap leading-relaxed">No notes recorded.</p>
       </div>
     </section>
+
+    </div>
 
   </main>
 
