@@ -131,9 +131,10 @@ function showToast(message, type = 'success') {
 }
 
 /* =========================================================
-   5. Name Cookie Logic
+   5. Name & Email Cookie Logic
    ========================================================= */
 const USER_NAME_COOKIE = "tilawah_reader_name";
+const USER_EMAIL_COOKIE = "tilawah_reader_email";
 
 function updateGreeting() {
   const savedName = getCookie(USER_NAME_COOKIE);
@@ -417,13 +418,15 @@ document.addEventListener('DOMContentLoaded', () => {
   nameForm.addEventListener('submit', (e) => {
     e.preventDefault();
     const inputName = document.getElementById('user-name-input').value.trim();
-    if (!inputName) return;
+    const inputEmail = document.getElementById('user-email-input').value.trim();
+    if (!inputName || !inputEmail) return;
 
     // Store into browser cookie (valid for 365 days)
     setCookie(USER_NAME_COOKIE, inputName, 365);
+    setCookie(USER_EMAIL_COOKIE, inputEmail, 365);
     updateGreeting();
     document.getElementById('name-modal').classList.add('hidden');
-    showToast(`Welcome, ${inputName}! Your name has been saved.`);
+    showToast(`Welcome, ${inputName}! Your profile has been saved.`);
 
     if (state.pendingAction) {
       const action = state.pendingAction;
@@ -434,11 +437,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Edit name button
   document.getElementById('edit-name-btn').addEventListener('click', () => {
-    const current = getCookie(USER_NAME_COOKIE);
-    document.getElementById('user-name-input').value = current || '';
+    const currentName = getCookie(USER_NAME_COOKIE);
+    const currentEmail = getCookie(USER_EMAIL_COOKIE);
+    document.getElementById('user-name-input').value = currentName || '';
+    document.getElementById('user-email-input').value = currentEmail || '';
     document.getElementById('name-modal').classList.remove('hidden');
     state.pendingAction = () => {
-      showToast("Profile name updated!");
+      showToast("Profile updated!");
     };
   });
 
@@ -699,7 +704,8 @@ function syncToGoogleSheets(userName) {
         showToast('Local save OK, cloud sync skipped', 'warning');
       }
     } catch (e) {
-      console.warn('Failed to parse response:', text);
+      console.warn('Failed to parse response. Raw response:', text);
+      console.warn('Parse error details:', e.message);
       showToast('Local save OK, cloud sync skipped', 'warning');
     }
   })

@@ -42,13 +42,18 @@
       </div>
       <h3 class="text-xl font-bold text-center text-slate-900">Welcome to Tilawah Tracker</h3>
       <p class="text-sm text-slate-500 text-center mt-1 mb-6">
-        Please tell us your name so we can personalize your daily Quran journey. We'll remember it in your browser cookies for tomorrow and beyond!
+        Please provide your name and email to personalize your daily Quran journey. We'll remember them in your browser cookies for tomorrow and beyond!
       </p>
 
       <form id="name-form" class="space-y-4">
         <div>
           <label for="user-name-input" class="block text-xs font-semibold uppercase tracking-wider text-slate-600 mb-1">Your Name</label>
           <input type="text" id="user-name-input" required placeholder="e.g. Ahmad, Sarah, Fatima..."
+            class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-slate-800 font-medium placeholder-slate-400">
+        </div>
+        <div>
+          <label for="user-email-input" class="block text-xs font-semibold uppercase tracking-wider text-slate-600 mb-1">Your Email</label>
+          <input type="email" id="user-email-input" required placeholder="e.g. ahmad@example.com"
             class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-slate-800 font-medium placeholder-slate-400">
         </div>
         <button type="submit"
