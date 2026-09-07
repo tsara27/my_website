@@ -690,6 +690,9 @@ function syncToGoogleSheets(userName) {
 
   fetch(GOOGLE_APPS_SCRIPT_URL, {
     method: 'POST',
+    headers: {
+      'Content-Type': 'text/plain;charset=utf-8'
+    },
     body: JSON.stringify(payload)
   })
   .then(response => response.text())
