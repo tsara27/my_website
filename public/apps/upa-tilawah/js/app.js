@@ -7,7 +7,7 @@
 // 2. Click Deploy > New deployment > Web app
 // 3. Execute as: Me, Anyone with the link
 // 4. Copy the deployment URL below
-const GOOGLE_APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzTn4Blc0Is5lGm14MAA7Z28lgpZrf3hWryQ72kS4kckBepuS-mNaOsA3eGjcYJh5zI/exec";
+const GOOGLE_APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxAR629TKyquGAQWkm9d6SBdh7nXVc8lIytCC0MvfsEOPu-wchi6CxN9KtpM1T-kGNq/exec";
 const ENABLE_GOOGLE_SHEETS_SYNC = true; // Set to true after deployment URL is configured
 
 /* =========================================================
@@ -89,12 +89,64 @@ const state = {
   ayah: "",
   notes: "",
   isCompletedForToday: false,
+  progressId: null, // Server-side id of today's synced record (for editing)
   pendingAction: null, // Callback if name modal needed
   currentView: 'today', // 'today' or 'history'
   historyData: [], // Array of historical records
   allUsers: [], // Array of all users
   selectedUser: null // Currently selected user for history view
 };
+
+/* =========================================================
+   3B. Local Per-Day Persistence (so a filled-in form/checkpoint
+   list survives a page reload on the same day)
+   ========================================================= */
+function getTodayDateKey() {
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+}
+
+function getLocalStateKey() {
+  const name = getCookie(USER_NAME_COOKIE) || 'guest';
+  return `tilawah_day_state_${name}_${getTodayDateKey()}`;
+}
+
+function saveLocalState() {
+  try {
+    const snapshot = {
+      checkpointsCount: state.checkpointsCount,
+      totalPages: state.totalPages,
+      volumePerCheckpoint: state.volumePerCheckpoint,
+      checkpoints: state.checkpoints,
+      surah: state.surah,
+      ayah: state.ayah,
+      notes: state.notes,
+      isCompletedForToday: state.isCompletedForToday,
+      progressId: state.progressId
+    };
+    localStorage.setItem(getLocalStateKey(), JSON.stringify(snapshot));
+  } catch (error) {
+    console.warn('Failed to save local daily state:', error);
+  }
+}
+
+function loadLocalState() {
+  try {
+    const raw = localStorage.getItem(getLocalStateKey());
+    return raw ? JSON.parse(raw) : null;
+  } catch (error) {
+    console.warn('Failed to load local daily state:', error);
+    return null;
+  }
+}
+
+function clearLocalState() {
+  try {
+    localStorage.removeItem(getLocalStateKey());
+  } catch (error) {
+    console.warn('Failed to clear local daily state:', error);
+  }
+}
 
 /* =========================================================
    4. UI Utilities (No alert, clean toasts)
@@ -297,6 +349,13 @@ function renderHistoryRecords(records) {
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
             </svg>
           </div>
+          ${!readOnly ? `
+            <button type="button" class="edit-record-btn w-9 h-9 rounded-lg bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-500 hover:text-emerald-700 flex items-center justify-center transition" data-progress-id="${record.progress_id || ''}" title="Edit record">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path>
+              </svg>
+            </button>
+          ` : ''}
         </div>
       </div>
 
@@ -325,6 +384,78 @@ function renderHistoryRecords(records) {
 
     container.appendChild(card);
   });
+
+  // Attach edit handlers for own records
+  container.querySelectorAll('.edit-record-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const progressId = btn.getAttribute('data-progress-id');
+      const record = state.historyData.find(r => r.progress_id === progressId);
+      if (record) openEditModal(record);
+    });
+  });
+}
+
+/* =========================================================
+   6B. Edit an Existing History Record
+   ========================================================= */
+function openEditModal(record) {
+  document.getElementById('edit-progress-id').value = record.progress_id || '';
+  document.getElementById('edit-surah-select').value = record.surah || '';
+  document.getElementById('edit-ayah-input').value = record.ayah || '';
+  document.getElementById('edit-checkpoints-input').value = record.checkpointsCompleted || 0;
+  document.getElementById('edit-pages-input').value = record.totalPages || 0;
+  document.getElementById('edit-notes-input').value = record.notes || '';
+  document.getElementById('edit-record-modal').classList.remove('hidden');
+}
+
+function submitEditedRecord() {
+  const progressId = document.getElementById('edit-progress-id').value;
+  const userName = getCookie(USER_NAME_COOKIE);
+
+  if (!progressId || !userName) {
+    showToast('Unable to edit this record.', 'warning');
+    return;
+  }
+
+  const payload = {
+    action: 'update',
+    progress_id: progressId,
+    name: userName,
+    email: getCookie(USER_EMAIL_COOKIE) || '',
+    surah: document.getElementById('edit-surah-select').value,
+    ayah: document.getElementById('edit-ayah-input').value,
+    notes: document.getElementById('edit-notes-input').value,
+    checkpointsCompleted: parseInt(document.getElementById('edit-checkpoints-input').value, 10) || 0,
+    totalPages: parseInt(document.getElementById('edit-pages-input').value, 10) || 0
+  };
+
+  fetch(GOOGLE_APPS_SCRIPT_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+    body: JSON.stringify(payload)
+  })
+    .then(response => response.text())
+    .then(async text => {
+      let data;
+      try {
+        data = JSON.parse(text);
+      } catch (e) {
+        showToast('Failed to update record.', 'warning');
+        return;
+      }
+
+      if (data.success) {
+        document.getElementById('edit-record-modal').classList.add('hidden');
+        showToast('Record updated successfully!');
+        await loadHistoryData();
+      } else {
+        showToast(data.error || 'Failed to update record.', 'warning');
+      }
+    })
+    .catch(error => {
+      console.warn('Failed to update record:', error);
+      showToast('Failed to update record.', 'warning');
+    });
 }
 
 function updateHistoryStats(records) {
@@ -498,6 +629,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Scroll smoothly to checklist
     document.getElementById('checkpoints-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
 
+    saveLocalState();
     showToast(`Created ${checkpointsCount} checkpoints (~${volume} pages each).`);
   });
 
@@ -527,6 +659,7 @@ document.addEventListener('DOMContentLoaded', () => {
         syncToGoogleSheets(userName);
       }
 
+      saveLocalState();
       renderSummary(userName);
       showToast(`May Allah accept your tilawah, ${userName}! ✨`);
     });
@@ -534,9 +667,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // 9. Start New Plan button
   document.getElementById('reset-day-btn').addEventListener('click', () => {
+    clearLocalState();
+
+    state.checkpointsCount = 0;
+    state.totalPages = 0;
+    state.volumePerCheckpoint = 0;
+    state.checkpoints = [];
+    state.surah = '';
+    state.ayah = '';
+    state.notes = '';
+    state.isCompletedForToday = false;
+    state.progressId = null;
+
     document.getElementById('summary-section').classList.add('hidden');
+    document.getElementById('checkpoints-section').classList.add('hidden');
+    document.getElementById('end-day-section').classList.add('hidden');
     document.getElementById('plan-status-badge').textContent = 'New Plan Needed';
     document.getElementById('plan-status-badge').className = 'text-xs px-3 py-1 rounded-full bg-slate-100 text-slate-600 font-medium';
+    endDayForm.reset();
     planForm.scrollIntoView({ behavior: 'smooth', block: 'start' });
   });
 
@@ -562,7 +710,75 @@ document.addEventListener('DOMContentLoaded', () => {
     btn.classList.remove('opacity-50');
     showToast('History updated!');
   });
+
+  // 13. Edit Record Modal setup
+  const editSurahSelect = document.getElementById('edit-surah-select');
+  QURAN_SURAHS.forEach(surah => {
+    const opt = document.createElement('option');
+    opt.value = surah;
+    opt.textContent = surah;
+    editSurahSelect.appendChild(opt);
+  });
+
+  document.getElementById('edit-record-cancel-btn').addEventListener('click', () => {
+    document.getElementById('edit-record-modal').classList.add('hidden');
+  });
+
+  document.getElementById('edit-record-form').addEventListener('submit', (e) => {
+    e.preventDefault();
+    submitEditedRecord();
+  });
+
+  // 14. Restore today's saved form/checkpoints if already filled in
+  restoreTodayState();
 });
+
+/* =========================================================
+   7B. Restore Today's Saved State (per-day local persistence)
+   ========================================================= */
+function restoreTodayState() {
+  const saved = loadLocalState();
+  if (!saved || !saved.checkpointsCount) return;
+
+  state.checkpointsCount = saved.checkpointsCount;
+  state.totalPages = saved.totalPages;
+  state.volumePerCheckpoint = saved.volumePerCheckpoint;
+  state.checkpoints = saved.checkpoints || [];
+  state.surah = saved.surah || '';
+  state.ayah = saved.ayah || '';
+  state.notes = saved.notes || '';
+  state.isCompletedForToday = !!saved.isCompletedForToday;
+  state.progressId = saved.progressId || null;
+
+  // Pre-fill Step 1 form to match the saved plan
+  document.getElementById('checkpoints-input').value = state.checkpointsCount;
+  document.getElementById('pages-input').value = state.totalPages;
+  document.getElementById('preview-volume').textContent = state.volumePerCheckpoint;
+
+  renderCheckpoints();
+  document.getElementById('checkpoints-section').classList.remove('hidden');
+  document.getElementById('end-day-section').classList.remove('hidden');
+  document.getElementById('plan-status-badge').textContent = 'Plan Active (Saved Today)';
+  document.getElementById('plan-status-badge').className = 'text-xs px-3 py-1 rounded-full bg-emerald-100 text-emerald-800 font-semibold';
+
+  // Pre-fill Step 3 form if end-of-day details were already recorded
+  if (state.surah) {
+    document.getElementById('surah-select').value = state.surah;
+  }
+  if (state.ayah) {
+    document.getElementById('ayah-input').value = state.ayah;
+  }
+  if (state.notes) {
+    document.getElementById('reflection-notes').value = state.notes;
+  }
+
+  if (state.isCompletedForToday) {
+    const userName = getCookie(USER_NAME_COOKIE);
+    renderSummary(userName || 'Reader');
+  }
+
+  showToast("Today's checkpoints were already started — restored where you left off.");
+}
 
 /* =========================================================
    7. Render Checklist & Checkpoint Interaction
@@ -650,6 +866,7 @@ function handleCheckpointToggle(index) {
       const now = new Date();
       cp.completedAt = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
       renderCheckpoints();
+      saveLocalState();
       showToast(`Masha'Allah! ${cp.label} done.`);
     });
   } else {
@@ -657,6 +874,7 @@ function handleCheckpointToggle(index) {
     cp.completed = false;
     cp.completedAt = null;
     renderCheckpoints();
+    saveLocalState();
   }
 }
 
@@ -688,6 +906,13 @@ function syncToGoogleSheets(userName) {
     totalPages: state.totalPages
   };
 
+  // If today's record already exists (from an earlier save this session),
+  // update it in place instead of creating a duplicate row.
+  if (state.progressId) {
+    payload.action = 'update';
+    payload.progress_id = state.progressId;
+  }
+
   fetch(GOOGLE_APPS_SCRIPT_URL, {
     method: 'POST',
     headers: {
@@ -701,6 +926,10 @@ function syncToGoogleSheets(userName) {
       const data = JSON.parse(text);
       if (data.success) {
         console.log('Data synced to Google Sheets:', data);
+        if (data.progress_id) {
+          state.progressId = data.progress_id;
+          saveLocalState();
+        }
         showToast('Progress saved to cloud ☁️', 'success');
       } else {
         console.warn('Sync warning:', data.error);

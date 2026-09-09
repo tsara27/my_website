@@ -5,12 +5,34 @@ const SPREADSHEET_ID = "1A7Eh2Td8zJukkOkASmhgmFLFhc0dFEb4hqwmrS9JwiA"; // Replac
 const USERS_SHEET = "Users";
 const READING_PROGRESS_SHEET = "Reading_Progress";
 
+// Reading_Progress column numbers (1-indexed, matching the sheet layout below)
+const PROGRESS_COLUMNS = {
+  PROGRESS_ID: 1,
+  USER_ID: 2,
+  DATE: 3,
+  SURAH: 4,
+  AYAH: 5,
+  NOTES: 6,
+  CHECKPOINTS_COMPLETED: 7,
+  TOTAL_PAGES: 8,
+  UPDATED_AT: 9
+};
+
 // ============================================================
 // 1. INITIALIZE SHEETS (Run this once to set up headers)
 // ============================================================
 
+function getSS() {
+  return SpreadsheetApp.openById(SPREADSHEET_ID);
+}
+
+function jsonResponse(obj) {
+  return ContentService.createTextOutput(JSON.stringify(obj))
+    .setMimeType(ContentService.MimeType.JSON);
+}
+
 function initializeSheets() {
-  const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
+  const ss = getSS();
 
   // Create or get Users sheet
   let usersSheet = ss.getSheetByName(USERS_SHEET);
@@ -55,7 +77,7 @@ function getCurrentTimestamp() {
 }
 
 function findUserByName(name) {
-  const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
+  const ss = getSS();
   const usersSheet = ss.getSheetByName(USERS_SHEET);
   const data = usersSheet.getDataRange().getValues();
 
@@ -80,7 +102,7 @@ function getOrCreateUser(name, email = "") {
   }
 
   // Create new user
-  const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
+  const ss = getSS();
   const usersSheet = ss.getSheetByName(USERS_SHEET);
   const userId = generateId("USR");
   const now = getCurrentTimestamp();
@@ -95,7 +117,7 @@ function getOrCreateUser(name, email = "") {
 // ============================================================
 
 function saveReadingProgress(userId, data) {
-  const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
+  const ss = getSS();
   const progressSheet = ss.getSheetByName(READING_PROGRESS_SHEET);
 
   const progressId = generateId("PRG");
@@ -124,11 +146,51 @@ function saveReadingProgress(userId, data) {
 }
 
 // ============================================================
+// 3B. UPDATE READING PROGRESS (edit an existing record)
+// ============================================================
+
+function updateReadingProgress(progressId, userId, data) {
+  const ss = getSS();
+  const progressSheet = ss.getSheetByName(READING_PROGRESS_SHEET);
+  const values = progressSheet.getDataRange().getValues();
+
+  for (let i = 1; i < values.length; i++) {
+    if (values[i][PROGRESS_COLUMNS.PROGRESS_ID - 1] === progressId) {
+      // Ownership check: only the record's own user may edit it
+      if (values[i][PROGRESS_COLUMNS.USER_ID - 1] !== userId) {
+        return { success: false, error: "Not authorized to edit this record" };
+      }
+
+      const now = getCurrentTimestamp();
+      const rowNum = i + 1; // 1-indexed sheet row
+
+      // Columns SURAH..UPDATED_AT are contiguous, so write them in one call
+      progressSheet.getRange(rowNum, PROGRESS_COLUMNS.SURAH, 1, 6).setValues([[
+        data.surah || "",
+        data.ayah || "",
+        data.notes || "",
+        data.checkpointsCompleted || 0,
+        data.totalPages || 0,
+        now
+      ]]);
+
+      return {
+        success: true,
+        progress_id: progressId,
+        message: "Reading progress updated successfully"
+      };
+    }
+  }
+
+  return { success: false, error: "Record not found" };
+}
+
+// ============================================================
 // 4. RETRIEVE READING PROGRESS
 // ============================================================
 
 function getReadingProgressByUserId(userId, daysBack = 30) {
-  const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
+  const ss = getSS();
   const progressSheet = ss.getSheetByName(READING_PROGRESS_SHEET);
   const data = progressSheet.getDataRange().getValues();
 
@@ -136,20 +198,21 @@ function getReadingProgressByUserId(userId, daysBack = 30) {
   const cutoffDate = new Date();
   cutoffDate.setDate(cutoffDate.getDate() - daysBack);
 
+  const C = PROGRESS_COLUMNS;
   for (let i = 1; i < data.length; i++) { // Skip header
-    if (data[i][1] === userId) {
-      const recordDate = new Date(data[i][2]);
+    if (data[i][C.USER_ID - 1] === userId) {
+      const recordDate = new Date(data[i][C.DATE - 1]);
       if (recordDate >= cutoffDate) {
         results.push({
-          progress_id: data[i][0],
-          user_id: data[i][1],
-          date: data[i][2],
-          last_surah: data[i][3],
-          last_ayah: data[i][4],
-          notes: data[i][5],
-          checkpoints_completed: data[i][6],
-          total_pages: data[i][7],
-          updated_at: data[i][8]
+          progress_id: data[i][C.PROGRESS_ID - 1],
+          user_id: data[i][C.USER_ID - 1],
+          date: data[i][C.DATE - 1],
+          last_surah: data[i][C.SURAH - 1],
+          last_ayah: data[i][C.AYAH - 1],
+          notes: data[i][C.NOTES - 1],
+          checkpoints_completed: data[i][C.CHECKPOINTS_COMPLETED - 1],
+          total_pages: data[i][C.TOTAL_PAGES - 1],
+          updated_at: data[i][C.UPDATED_AT - 1]
         });
       }
     }
@@ -163,7 +226,7 @@ function getReadingProgressByUserId(userId, daysBack = 30) {
 // ============================================================
 
 function getAllHistoryWithUsers(daysBack = 90) {
-  const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
+  const ss = getSS();
   const usersSheet = ss.getSheetByName(USERS_SHEET);
   const progressSheet = ss.getSheetByName(READING_PROGRESS_SHEET);
 
@@ -180,20 +243,21 @@ function getAllHistoryWithUsers(daysBack = 90) {
   const cutoffDate = new Date();
   cutoffDate.setDate(cutoffDate.getDate() - daysBack);
 
+  const C = PROGRESS_COLUMNS;
   for (let i = 1; i < progressData.length; i++) {
-    const recordDate = new Date(progressData[i][2]);
+    const recordDate = new Date(progressData[i][C.DATE - 1]);
     if (recordDate >= cutoffDate) {
       results.push({
-        progress_id: progressData[i][0],
-        user_id: progressData[i][1],
-        name: userMap[progressData[i][1]] || "Unknown",
-        date: progressData[i][2],
-        surah: progressData[i][3],
-        ayah: progressData[i][4],
-        notes: progressData[i][5],
-        checkpointsCompleted: progressData[i][6],
-        totalPages: progressData[i][7],
-        updated_at: progressData[i][8]
+        progress_id: progressData[i][C.PROGRESS_ID - 1],
+        user_id: progressData[i][C.USER_ID - 1],
+        name: userMap[progressData[i][C.USER_ID - 1]] || "Unknown",
+        date: progressData[i][C.DATE - 1],
+        surah: progressData[i][C.SURAH - 1],
+        ayah: progressData[i][C.AYAH - 1],
+        notes: progressData[i][C.NOTES - 1],
+        checkpointsCompleted: progressData[i][C.CHECKPOINTS_COMPLETED - 1],
+        totalPages: progressData[i][C.TOTAL_PAGES - 1],
+        updated_at: progressData[i][C.UPDATED_AT - 1]
       });
     }
   }
@@ -224,15 +288,24 @@ function doPost(e) {
 
     // Validate required fields
     if (!data.name) {
-      return ContentService.createTextOutput(JSON.stringify({
-        success: false,
-        error: "Name is required"
-      }))
-        .setMimeType(ContentService.MimeType.JSON);
+      return jsonResponse({ success: false, error: "Name is required" });
     }
 
     // Get or create user
     const userId = getOrCreateUser(data.name, data.email || "");
+
+    // Editing an existing record vs. creating a new one
+    if (data.action === "update" && data.progress_id) {
+      const updateResult = updateReadingProgress(data.progress_id, userId, {
+        surah: data.surah || "",
+        ayah: data.ayah || "",
+        notes: data.notes || "",
+        checkpointsCompleted: data.checkpointsCompleted || 0,
+        totalPages: data.totalPages || 0
+      });
+
+      return jsonResponse(updateResult);
+    }
 
     // Save reading progress
     const result = saveReadingProgress(userId, {
@@ -243,21 +316,16 @@ function doPost(e) {
       totalPages: data.totalPages || 0
     });
 
-    return ContentService.createTextOutput(JSON.stringify({
+    return jsonResponse({
       success: true,
       user_id: userId,
       progress_id: result.progress_id,
       message: result.message
-    }))
-      .setMimeType(ContentService.MimeType.JSON);
+    });
 
   } catch (error) {
     Logger.log("Error in doPost: " + error.toString());
-    return ContentService.createTextOutput(JSON.stringify({
-      success: false,
-      error: error.toString()
-    }))
-      .setMimeType(ContentService.MimeType.JSON);
+    return jsonResponse({ success: false, error: error.toString() });
   }
 }
 
@@ -272,36 +340,19 @@ function doGet(e) {
 
     if (action === "getProgress" && userId) {
       const progress = getReadingProgressByUserId(userId, 30);
-      return ContentService.createTextOutput(JSON.stringify({
-        success: true,
-        data: progress
-      }))
-        .setMimeType(ContentService.MimeType.JSON);
+      return jsonResponse({ success: true, data: progress });
     }
 
     if (action === "getAllHistory") {
       const daysBack = e.parameter.days ? parseInt(e.parameter.days) : 90;
       const records = getAllHistoryWithUsers(daysBack);
-      return ContentService.createTextOutput(JSON.stringify({
-        success: true,
-        records: records,
-        count: records.length
-      }))
-        .setMimeType(ContentService.MimeType.JSON);
+      return jsonResponse({ success: true, records: records, count: records.length });
     }
 
-    return ContentService.createTextOutput(JSON.stringify({
-      success: false,
-      error: "Invalid request"
-    }))
-      .setMimeType(ContentService.MimeType.JSON);
+    return jsonResponse({ success: false, error: "Invalid request" });
 
   } catch (error) {
-    return ContentService.createTextOutput(JSON.stringify({
-      success: false,
-      error: error.toString()
-    }))
-      .setMimeType(ContentService.MimeType.JSON);
+    return jsonResponse({ success: false, error: error.toString() });
   }
 }
 
