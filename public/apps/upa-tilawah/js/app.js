@@ -569,7 +569,7 @@ function performDeleteRecord(progressId) {
 
         if (data.success) {
           showToast('Record deleted successfully!');
-          await loadHistoryData();
+          document.querySelector(`.delete-record-btn[data-progress-id="${progressId}"]`)?.closest('#history-records > div')?.remove();
         } else {
           showToast(data.error || 'Failed to delete record.', 'warning');
         }
