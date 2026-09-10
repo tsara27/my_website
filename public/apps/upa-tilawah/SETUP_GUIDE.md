@@ -216,3 +216,17 @@ To also save the user's email:
 **Support**: If you encounter issues, check the Apps Script Execution Log:
 - Click "Execution Log" (bottom of Apps Script editor)
 - Look for error messages and stack traces
+
+## Minified JS Bundle
+
+`index.html` loads `js/app.min.js`, a minified bundle built from `js/app.js` (with `js/firebase.js` inlined) using esbuild. The originals are kept unminified for editing/debugging.
+
+- **Edit source**: make changes in `js/app.js` and/or `js/firebase.js`, never in `js/app.min.js` directly.
+- **Rebuild** after any change to those files:
+
+  ```bash
+  npx esbuild public/apps/upa-tilawah/js/app.js --bundle --minify --format=esm "--external:https://*" --outfile=public/apps/upa-tilawah/js/app.min.js
+  ```
+
+- The `--external:https://*` flag keeps the Firebase CDN imports (`https://www.gstatic.com/...`) as external `import` statements instead of trying to bundle them.
+- `js/app.old.js` is a legacy/backup copy and is not referenced by `index.html`.
