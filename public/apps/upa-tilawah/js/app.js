@@ -218,7 +218,7 @@ function requireUserName(onSuccess) {
 /* =========================================================
    6. Tab Switching & History Dashboard
    ========================================================= */
-function switchTab(tabName) {
+function switchTab(tabName, forceRefresh = false) {
   state.currentView = tabName;
 
   const todayView = document.getElementById('today-view');
@@ -240,14 +240,46 @@ function switchTab(tabName) {
     tabHistory.classList.remove('border-transparent', 'text-emerald-300/70');
     tabToday.classList.remove('active', 'border-gold-400', 'text-emerald-200');
     tabToday.classList.add('border-transparent', 'text-emerald-300/70');
-    loadHistoryData();
+    loadHistoryData(forceRefresh);
   }
 }
 
-async function fetchHistoryData() {
+const HISTORY_CACHE_KEY = 'upaTilawahHistoryCache';
+
+function readHistoryCache() {
+  try {
+    const raw = sessionStorage.getItem(HISTORY_CACHE_KEY);
+    return raw ? JSON.parse(raw) : null;
+  } catch (error) {
+    return null;
+  }
+}
+
+function writeHistoryCache(records) {
+  try {
+    sessionStorage.setItem(HISTORY_CACHE_KEY, JSON.stringify(records));
+  } catch (error) {
+    // Ignore storage errors (e.g. private browsing quota)
+  }
+}
+
+async function fetchHistoryData(forceRefresh = false) {
   if (!ENABLE_GOOGLE_SHEETS_SYNC) {
     console.warn('Google Sheets sync is disabled');
     return [];
+  }
+
+  if (!forceRefresh && state.historyData.length > 0) {
+    return state.historyData;
+  }
+
+  if (!forceRefresh) {
+    const cached = readHistoryCache();
+    if (cached && Array.isArray(cached)) {
+      state.historyData = cached;
+      state.allUsers = [...new Set(cached.map(r => r.name))].filter(Boolean).sort();
+      return cached;
+    }
   }
 
   try {
@@ -260,6 +292,8 @@ async function fetchHistoryData() {
       // Extract unique users
       const uniqueUsers = [...new Set(data.records.map(r => r.name))].filter(Boolean).sort();
       state.allUsers = uniqueUsers;
+
+      writeHistoryCache(data.records);
 
       return data.records;
     }
@@ -504,8 +538,7 @@ function submitEditedRecord() {
         if (data.success) {
           document.getElementById('edit-record-modal').classList.add('hidden');
           showToast(isCreate ? 'Past record added successfully!' : 'Record updated successfully!');
-          switchTab('history');
-          await loadHistoryData();
+          switchTab('history', true);
         } else {
           showToast(data.error || `Failed to ${isCreate ? 'add' : 'update'} record.`, 'warning');
         }
@@ -530,17 +563,17 @@ function showDeleteRecordModal(onConfirm) {
   const modal = document.getElementById('delete-record-modal');
   const confirmBtn = document.getElementById('delete-record-confirm-btn');
 
-  const cleanup = () => {
-    modal.classList.add('hidden');
-    confirmBtn.removeEventListener('click', handleConfirm);
-  };
-  const handleConfirm = () => {
-    cleanup();
-    onConfirm();
-  };
+  modal._cleanupDeleteHandler?.();
+
+  const handleConfirm = () => onConfirm();
 
   confirmBtn.addEventListener('click', handleConfirm);
   modal.classList.remove('hidden');
+
+  modal._cleanupDeleteHandler = () => {
+    confirmBtn.removeEventListener('click', handleConfirm);
+    modal._cleanupDeleteHandler = null;
+  };
 }
 
 function performDeleteRecord(progressId) {
@@ -551,6 +584,17 @@ function performDeleteRecord(progressId) {
       action: 'delete',
       progress_id: progressId
     };
+
+    const modal = document.getElementById('delete-record-modal');
+    const confirmBtn = document.getElementById('delete-record-confirm-btn');
+    const cancelBtn = document.getElementById('delete-record-cancel-btn');
+    const closeBtn = document.getElementById('delete-record-modal-close-btn');
+    const confirmSpinner = document.getElementById('delete-record-confirm-spinner');
+    const confirmLabel = document.getElementById('delete-record-confirm-label');
+
+    setButtonLoading(confirmBtn, null, confirmSpinner, confirmLabel, 'Deleting...');
+    cancelBtn.disabled = true;
+    closeBtn.disabled = true;
 
     fetch(GOOGLE_APPS_SCRIPT_URL, {
       method: 'POST',
@@ -570,6 +614,8 @@ function performDeleteRecord(progressId) {
         if (data.success) {
           showToast('Record deleted successfully!');
           document.querySelector(`.delete-record-btn[data-progress-id="${progressId}"]`)?.closest('#history-records > div')?.remove();
+          modal.classList.add('hidden');
+          modal._cleanupDeleteHandler?.();
         } else {
           showToast(data.error || 'Failed to delete record.', 'warning');
         }
@@ -577,6 +623,11 @@ function performDeleteRecord(progressId) {
       .catch(error => {
         console.warn('Failed to delete record:', error);
         showToast('Failed to delete record.', 'warning');
+      })
+      .finally(() => {
+        clearButtonLoading(confirmBtn, null, confirmSpinner, confirmLabel, 'Delete');
+        cancelBtn.disabled = false;
+        closeBtn.disabled = false;
       });
   });
 }
@@ -612,11 +663,11 @@ function updateHistoryStats(records) {
   document.getElementById('stat-last-read').textContent = lastDate;
 }
 
-async function loadHistoryData() {
+async function loadHistoryData(forceRefresh = false) {
   const loading = document.getElementById('history-loading');
   loading.classList.remove('hidden');
 
-  const records = await fetchHistoryData();
+  const records = await fetchHistoryData(forceRefresh);
   populateUserFilter();
 
   const currentUser = getCookie(USER_NAME_COOKIE);
@@ -847,7 +898,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const btn = document.getElementById('refresh-history-btn');
     btn.disabled = true;
     btn.classList.add('opacity-50');
-    await loadHistoryData();
+    await loadHistoryData(true);
     btn.disabled = false;
     btn.classList.remove('opacity-50');
     showToast('History updated!');
@@ -877,11 +928,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // 14. Delete Confirmation Modal setup
   document.getElementById('delete-record-cancel-btn').addEventListener('click', () => {
-    document.getElementById('delete-record-modal').classList.add('hidden');
+    const modal = document.getElementById('delete-record-modal');
+    modal.classList.add('hidden');
+    modal._cleanupDeleteHandler?.();
   });
 
   document.getElementById('delete-record-modal-close-btn').addEventListener('click', () => {
-    document.getElementById('delete-record-modal').classList.add('hidden');
+    const modal = document.getElementById('delete-record-modal');
+    modal.classList.add('hidden');
+    modal._cleanupDeleteHandler?.();
   });
 
   // 14. Restore today's saved form/checkpoints if already filled in

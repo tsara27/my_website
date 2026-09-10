@@ -312,9 +312,18 @@
           <button
             type="button"
             id="delete-record-confirm-btn"
-            class="flex-1 py-3 px-4 bg-red-600 hover:bg-red-700 active:scale-[0.99] text-white font-semibold rounded-xl shadow-lg shadow-red-600/20 transition duration-150"
+            class="flex-1 py-3 px-4 bg-red-600 hover:bg-red-700 active:scale-[0.99] text-white font-semibold rounded-xl shadow-lg shadow-red-600/20 transition duration-150 disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2"
           >
-            Delete
+            <svg
+              id="delete-record-confirm-spinner"
+              class="hidden w-4 h-4 animate-spin"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+            </svg>
+            <span id="delete-record-confirm-label">Delete</span>
           </button>
         </div>
       </div>
