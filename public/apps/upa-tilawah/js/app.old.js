@@ -1,20 +1,14 @@
 /* =========================================================
-   0. FIRESTORE CONFIGURATION
+   0. GOOGLE SHEETS CONFIGURATION
    ========================================================= */
-import { db } from "./firebase.js";
-import {
-  collection,
-  addDoc,
-  updateDoc,
-  deleteDoc,
-  doc,
-  getDocs,
-  query,
-  where
-} from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
-
-const RECORDS_COLLECTION = "tilawah_records";
-const ENABLE_FIRESTORE_SYNC = true;
+// Replace with your deployed Google Apps Script URL
+// Steps to get this URL:
+// 1. Open google_apps_script.gs in Google Apps Script editor
+// 2. Click Deploy > New deployment > Web app
+// 3. Execute as: Me, Anyone with the link
+// 4. Copy the deployment URL below
+const GOOGLE_APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzYCnbKF8cIFGPl8MBV2G9TE8_-0P4m6zRPsOfS0_GzCK3nZ1eTPkvdA70Bywr8ooQi/exec";
+const ENABLE_GOOGLE_SHEETS_SYNC = true; // Set to true after deployment URL is configured
 
 /* =========================================================
    1. 114 Surahs Data for high-accuracy selection
@@ -95,7 +89,7 @@ const state = {
   ayah: "",
   notes: "",
   isCompletedForToday: false,
-  progressId: null, // Firestore doc id of today's synced record (for editing)
+  progressId: null, // Server-side id of today's synced record (for editing)
   pendingAction: null, // Callback if name modal needed
   currentView: 'today', // 'today' or 'history'
   historyData: [], // Array of historical records
@@ -269,80 +263,42 @@ function writeHistoryCache(records) {
   }
 }
 
-// Fetches only the list of distinct user names, for the filter dropdown.
-// (Firestore has no distinct/projection query, so this still reads every
-// record — but it's only used to populate the dropdown, not to render history.)
-async function fetchAllUsers(forceRefresh = false) {
-  if (!ENABLE_FIRESTORE_SYNC) {
-    console.warn('Firestore sync is disabled');
+async function fetchHistoryData(forceRefresh = false) {
+  if (!ENABLE_GOOGLE_SHEETS_SYNC) {
+    console.warn('Google Sheets sync is disabled');
     return [];
+  }
+
+  if (!forceRefresh && state.historyData.length > 0) {
+    return state.historyData;
   }
 
   if (!forceRefresh) {
     const cached = readHistoryCache();
     if (cached && Array.isArray(cached)) {
+      state.historyData = cached;
       state.allUsers = [...new Set(cached.map(r => r.name))].filter(Boolean).sort();
-      return state.allUsers;
+      return cached;
     }
   }
 
   try {
-    const snapshot = await getDocs(collection(db, RECORDS_COLLECTION));
-    const names = snapshot.docs.map(docSnap => docSnap.data().name);
-    state.allUsers = [...new Set(names)].filter(Boolean).sort();
-    writeHistoryCache(snapshot.docs.map(docSnap => ({ name: docSnap.data().name })));
-    return state.allUsers;
-  } catch (error) {
-    console.warn('Failed to fetch users:', error);
-  }
-  return [];
-}
+    const response = await fetch(GOOGLE_APPS_SCRIPT_URL + '?action=getAllHistory');
+    const data = await response.json();
 
-const userHistoryCacheKey = (userName) => `${HISTORY_CACHE_KEY}_user_${userName}`;
+    if (data.success && Array.isArray(data.records)) {
+      state.historyData = data.records;
 
-// Fetches only the selected user's records via a server-side where() query.
-async function fetchUserHistory(userName, forceRefresh = false) {
-  if (!ENABLE_FIRESTORE_SYNC) {
-    console.warn('Firestore sync is disabled');
-    return [];
-  }
+      // Extract unique users
+      const uniqueUsers = [...new Set(data.records.map(r => r.name))].filter(Boolean).sort();
+      state.allUsers = uniqueUsers;
 
-  if (!userName) return [];
+      writeHistoryCache(data.records);
 
-  if (!forceRefresh) {
-    try {
-      const raw = sessionStorage.getItem(userHistoryCacheKey(userName));
-      if (raw) {
-        const cached = JSON.parse(raw);
-        if (Array.isArray(cached)) {
-          state.historyData = cached;
-          return cached;
-        }
-      }
-    } catch (error) {
-      // Ignore cache read errors
+      return data.records;
     }
-  }
-
-  try {
-    const userQuery = query(collection(db, RECORDS_COLLECTION), where('name', '==', userName));
-    const snapshot = await getDocs(userQuery);
-    const records = snapshot.docs.map(docSnap => ({
-      progress_id: docSnap.id,
-      ...docSnap.data()
-    }));
-
-    state.historyData = records;
-
-    try {
-      sessionStorage.setItem(userHistoryCacheKey(userName), JSON.stringify(records));
-    } catch (error) {
-      // Ignore storage errors (e.g. private browsing quota)
-    }
-
-    return records;
   } catch (error) {
-    console.warn('Failed to fetch user history:', error);
+    console.warn('Failed to fetch history:', error);
   }
   return [];
 }
@@ -537,11 +493,11 @@ function clearButtonLoading(btn, icon, spinner, label, originalText) {
   if (label) label.textContent = originalText;
 }
 
-async function submitEditedRecord() {
+function submitEditedRecord() {
   const progressId = document.getElementById('edit-progress-id').value;
   const isCreate = !progressId;
 
-  requireUserName(async (userName) => {
+  requireUserName((userName) => {
     const payload = {
       name: userName,
       email: getCookie(USER_EMAIL_COOKIE) || '',
@@ -554,6 +510,9 @@ async function submitEditedRecord() {
 
     if (isCreate) {
       payload.date = document.getElementById('edit-date-input').value;
+    } else {
+      payload.action = 'update';
+      payload.progress_id = progressId;
     }
 
     const submitBtn = document.getElementById('edit-record-submit-btn');
@@ -561,22 +520,36 @@ async function submitEditedRecord() {
     const submitLabel = document.getElementById('edit-record-submit-label');
     setButtonLoading(submitBtn, null, submitSpinner, submitLabel, 'Saving...');
 
-    try {
-      if (isCreate) {
-        await addDoc(collection(db, RECORDS_COLLECTION), payload);
-      } else {
-        await updateDoc(doc(db, RECORDS_COLLECTION, progressId), payload);
-      }
+    fetch(GOOGLE_APPS_SCRIPT_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify(payload)
+    })
+      .then(response => response.text())
+      .then(async text => {
+        let data;
+        try {
+          data = JSON.parse(text);
+        } catch (e) {
+          showToast(`Failed to ${isCreate ? 'add' : 'update'} record.`, 'warning');
+          return;
+        }
 
-      document.getElementById('edit-record-modal').classList.add('hidden');
-      showToast(isCreate ? 'Past record added successfully!' : 'Record updated successfully!');
-      switchTab('history', true);
-    } catch (error) {
-      console.warn(`Failed to ${isCreate ? 'add' : 'update'} record:`, error);
-      showToast(`Failed to ${isCreate ? 'add' : 'update'} record.`, 'warning');
-    } finally {
-      clearButtonLoading(submitBtn, null, submitSpinner, submitLabel, 'Save Changes');
-    }
+        if (data.success) {
+          document.getElementById('edit-record-modal').classList.add('hidden');
+          showToast(isCreate ? 'Past record added successfully!' : 'Record updated successfully!');
+          switchTab('history', true);
+        } else {
+          showToast(data.error || `Failed to ${isCreate ? 'add' : 'update'} record.`, 'warning');
+        }
+      })
+      .catch(error => {
+        console.warn(`Failed to ${isCreate ? 'add' : 'update'} record:`, error);
+        showToast(`Failed to ${isCreate ? 'add' : 'update'} record.`, 'warning');
+      })
+      .finally(() => {
+        clearButtonLoading(submitBtn, null, submitSpinner, submitLabel, 'Save Changes');
+      });
   });
 }
 
@@ -603,8 +576,15 @@ function showDeleteRecordModal(onConfirm) {
   };
 }
 
-async function performDeleteRecord(progressId) {
-  requireUserName(async () => {
+function performDeleteRecord(progressId) {
+  requireUserName((userName) => {
+    const payload = {
+      name: userName,
+      email: getCookie(USER_EMAIL_COOKIE) || '',
+      action: 'delete',
+      progress_id: progressId
+    };
+
     const modal = document.getElementById('delete-record-modal');
     const confirmBtn = document.getElementById('delete-record-confirm-btn');
     const cancelBtn = document.getElementById('delete-record-cancel-btn');
@@ -616,25 +596,46 @@ async function performDeleteRecord(progressId) {
     cancelBtn.disabled = true;
     closeBtn.disabled = true;
 
-    try {
-      await deleteDoc(doc(db, RECORDS_COLLECTION, progressId));
+    fetch(GOOGLE_APPS_SCRIPT_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify(payload)
+    })
+      .then(response => response.text())
+      .then(async text => {
+        let data;
+        try {
+          data = JSON.parse(text);
+        } catch (e) {
+          showToast('Failed to delete record.', 'warning');
+          return;
+        }
 
-      showToast('Record deleted successfully!');
-      document.querySelector(`.delete-record-btn[data-progress-id="${progressId}"]`)?.closest('#history-records > div')?.remove();
-      modal.classList.add('hidden');
-      modal._cleanupDeleteHandler?.();
-    } catch (error) {
-      console.warn('Failed to delete record:', error);
-      showToast('Failed to delete record.', 'warning');
-    } finally {
-      clearButtonLoading(confirmBtn, null, confirmSpinner, confirmLabel, 'Delete');
-      cancelBtn.disabled = false;
-      closeBtn.disabled = false;
-    }
+        if (data.success) {
+          showToast('Record deleted successfully!');
+          document.querySelector(`.delete-record-btn[data-progress-id="${progressId}"]`)?.closest('#history-records > div')?.remove();
+          modal.classList.add('hidden');
+          modal._cleanupDeleteHandler?.();
+        } else {
+          showToast(data.error || 'Failed to delete record.', 'warning');
+        }
+      })
+      .catch(error => {
+        console.warn('Failed to delete record:', error);
+        showToast('Failed to delete record.', 'warning');
+      })
+      .finally(() => {
+        clearButtonLoading(confirmBtn, null, confirmSpinner, confirmLabel, 'Delete');
+        cancelBtn.disabled = false;
+        closeBtn.disabled = false;
+      });
   });
 }
 
-function updateHistoryStats(userRecords) {
+function updateHistoryStats(records) {
+  const currentUser = getCookie(USER_NAME_COOKIE);
+  const userRecords = records.filter(r => r.name === state.selectedUser);
+
   if (userRecords.length === 0) {
     document.getElementById('stat-total-sessions').textContent = '0';
     document.getElementById('stat-history-pages').textContent = '0';
@@ -666,15 +667,15 @@ async function loadHistoryData(forceRefresh = false) {
   const loading = document.getElementById('history-loading');
   loading.classList.remove('hidden');
 
-  await fetchAllUsers(forceRefresh);
+  const records = await fetchHistoryData(forceRefresh);
   populateUserFilter();
 
   const currentUser = getCookie(USER_NAME_COOKIE);
   state.selectedUser = currentUser;
 
-  const userRecords = await fetchUserHistory(state.selectedUser, forceRefresh);
+  const userRecords = records.filter(r => r.name === state.selectedUser);
   renderHistoryRecords(userRecords);
-  updateHistoryStats(userRecords);
+  updateHistoryStats(records);
 
   loading.classList.add('hidden');
 }
@@ -847,9 +848,9 @@ document.addEventListener('DOMContentLoaded', () => {
         clearButtonLoading(submitBtn, submitIcon, submitSpinner, submitLabel, "Save Today's Tilawah Record");
       };
 
-      // Optionally sync to Firestore
-      if (ENABLE_FIRESTORE_SYNC) {
-        syncToFirestore(userName).finally(finish);
+      // Optionally sync to Google Sheets
+      if (ENABLE_GOOGLE_SHEETS_SYNC) {
+        syncToGoogleSheets(userName).finally(finish);
       } else {
         finish();
       }
@@ -887,12 +888,9 @@ document.addEventListener('DOMContentLoaded', () => {
   // 11. History User Filter
   document.getElementById('user-filter').addEventListener('change', async (e) => {
     state.selectedUser = e.target.value;
-    const loading = document.getElementById('history-loading');
-    loading.classList.remove('hidden');
-    const userRecords = await fetchUserHistory(state.selectedUser);
+    const userRecords = state.historyData.filter(r => r.name === state.selectedUser);
     renderHistoryRecords(userRecords);
-    updateHistoryStats(userRecords);
-    loading.classList.add('hidden');
+    updateHistoryStats(state.historyData);
   });
 
   // 12. Refresh History Button
@@ -1103,14 +1101,14 @@ function updateProgressIndicators() {
 }
 
 /* =========================================================
-   8. Firestore Sync
+   8. Google Sheets Sync
    ========================================================= */
-async function syncToFirestore(userName) {
+function syncToGoogleSheets(userName) {
   const completedCount = state.checkpoints.filter(c => c.completed).length;
 
   const payload = {
     name: userName,
-    email: getCookie(USER_EMAIL_COOKIE) || "",
+    email: getCookie("tilawah_reader_email") || "",
     surah: state.surah,
     ayah: state.ayah,
     notes: state.notes,
@@ -1118,24 +1116,45 @@ async function syncToFirestore(userName) {
     totalPages: state.totalPages
   };
 
-  try {
-    // If today's record already exists (from an earlier save this session),
-    // update it in place instead of creating a duplicate document.
-    if (state.progressId) {
-      await updateDoc(doc(db, RECORDS_COLLECTION, state.progressId), payload);
-    } else {
-      payload.date = getTodayDateKey();
-      const docRef = await addDoc(collection(db, RECORDS_COLLECTION), payload);
-      state.progressId = docRef.id;
-      saveLocalState();
-    }
-
-    console.log('Data synced to Firestore');
-    showToast('Progress saved to cloud ☁️', 'success');
-  } catch (error) {
-    console.warn('Firestore sync failed:', error);
-    showToast('Local save OK, cloud sync skipped', 'warning');
+  // If today's record already exists (from an earlier save this session),
+  // update it in place instead of creating a duplicate row.
+  if (state.progressId) {
+    payload.action = 'update';
+    payload.progress_id = state.progressId;
   }
+
+  return fetch(GOOGLE_APPS_SCRIPT_URL, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'text/plain;charset=utf-8'
+    },
+    body: JSON.stringify(payload)
+  })
+  .then(response => response.text())
+  .then(text => {
+    try {
+      const data = JSON.parse(text);
+      if (data.success) {
+        console.log('Data synced to Google Sheets:', data);
+        if (data.progress_id) {
+          state.progressId = data.progress_id;
+          saveLocalState();
+        }
+        showToast('Progress saved to cloud ☁️', 'success');
+      } else {
+        console.warn('Sync warning:', data.error);
+        showToast('Local save OK, cloud sync skipped', 'warning');
+      }
+    } catch (e) {
+      console.warn('Failed to parse response. Raw response:', text);
+      console.warn('Parse error details:', e.message);
+      showToast('Local save OK, cloud sync skipped', 'warning');
+    }
+  })
+  .catch(error => {
+    console.warn('Google Sheets sync failed:', error);
+    showToast('Local save OK, cloud sync skipped', 'warning');
+  });
 }
 
 /* =========================================================

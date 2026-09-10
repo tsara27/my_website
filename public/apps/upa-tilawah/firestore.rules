@@ -1,0 +1,53 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Tilawah progress records — no login in this app, so access is open,
+    // but writes must match the expected shape to block junk/spam data.
+    match /tilawah_records/{recordId} {
+      allow read: if true;
+
+      allow create: if request.resource.data.keys().hasAll(
+                        ['name', 'email', 'surah', 'ayah', 'notes',
+                         'checkpointsCompleted', 'totalPages', 'date']
+                      )
+                    && request.resource.data.name is string
+                    && request.resource.data.name.size() > 0
+                    && request.resource.data.name.size() < 100
+                    && request.resource.data.email is string
+                    && request.resource.data.email.size() < 200
+                    && request.resource.data.surah is string
+                    && request.resource.data.ayah is string
+                    && request.resource.data.notes is string
+                    && request.resource.data.notes.size() < 5000
+                    && request.resource.data.checkpointsCompleted is int
+                    && request.resource.data.checkpointsCompleted >= 0
+                    && request.resource.data.checkpointsCompleted <= 50
+                    && request.resource.data.totalPages is int
+                    && request.resource.data.totalPages >= 0
+                    && request.resource.data.totalPages <= 604
+                    && request.resource.data.date is string;
+
+      allow update: if request.resource.data.keys().hasAll(
+                        ['name', 'email', 'surah', 'ayah', 'notes',
+                         'checkpointsCompleted', 'totalPages']
+                      )
+                    && request.resource.data.name is string
+                    && request.resource.data.name.size() > 0
+                    && request.resource.data.name.size() < 100
+                    && request.resource.data.notes is string
+                    && request.resource.data.notes.size() < 5000
+                    && request.resource.data.checkpointsCompleted is int
+                    && request.resource.data.checkpointsCompleted >= 0
+                    && request.resource.data.checkpointsCompleted <= 50
+                    && request.resource.data.totalPages is int
+                    && request.resource.data.totalPages >= 0
+                    && request.resource.data.totalPages <= 604
+                    // date field must not be tampered with on update
+                    && request.resource.data.date == resource.data.date;
+
+      allow delete: if true;
+    }
+  }
+}
