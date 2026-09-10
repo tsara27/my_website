@@ -432,6 +432,20 @@ function openAddPastRecordModal() {
   document.getElementById('edit-record-modal').classList.remove('hidden');
 }
 
+function setButtonLoading(btn, icon, spinner, label, loadingText) {
+  btn.disabled = true;
+  if (icon) icon.classList.add('hidden');
+  if (spinner) spinner.classList.remove('hidden');
+  if (label) label.textContent = loadingText;
+}
+
+function clearButtonLoading(btn, icon, spinner, label, originalText) {
+  btn.disabled = false;
+  if (icon) icon.classList.remove('hidden');
+  if (spinner) spinner.classList.add('hidden');
+  if (label) label.textContent = originalText;
+}
+
 function submitEditedRecord() {
   const progressId = document.getElementById('edit-progress-id').value;
   const isCreate = !progressId;
@@ -453,6 +467,11 @@ function submitEditedRecord() {
       payload.action = 'update';
       payload.progress_id = progressId;
     }
+
+    const submitBtn = document.getElementById('edit-record-submit-btn');
+    const submitSpinner = document.getElementById('edit-record-submit-spinner');
+    const submitLabel = document.getElementById('edit-record-submit-label');
+    setButtonLoading(submitBtn, null, submitSpinner, submitLabel, 'Saving...');
 
     fetch(GOOGLE_APPS_SCRIPT_URL, {
       method: 'POST',
@@ -481,6 +500,9 @@ function submitEditedRecord() {
       .catch(error => {
         console.warn(`Failed to ${isCreate ? 'add' : 'update'} record:`, error);
         showToast(`Failed to ${isCreate ? 'add' : 'update'} record.`, 'warning');
+      })
+      .finally(() => {
+        clearButtonLoading(submitBtn, null, submitSpinner, submitLabel, 'Save Changes');
       });
   });
 }
@@ -688,14 +710,25 @@ document.addEventListener('DOMContentLoaded', () => {
       state.notes = notes;
       state.isCompletedForToday = true;
 
+      const submitBtn = document.getElementById('end-day-submit-btn');
+      const submitIcon = document.getElementById('end-day-submit-icon');
+      const submitSpinner = document.getElementById('end-day-submit-spinner');
+      const submitLabel = document.getElementById('end-day-submit-label');
+      setButtonLoading(submitBtn, submitIcon, submitSpinner, submitLabel, 'Saving...');
+
+      const finish = () => {
+        saveLocalState();
+        renderSummary(userName);
+        showToast(`May Allah accept your tilawah, ${userName}! ✨`);
+        clearButtonLoading(submitBtn, submitIcon, submitSpinner, submitLabel, "Save Today's Tilawah Record");
+      };
+
       // Optionally sync to Google Sheets
       if (ENABLE_GOOGLE_SHEETS_SYNC) {
-        syncToGoogleSheets(userName);
+        syncToGoogleSheets(userName).finally(finish);
+      } else {
+        finish();
       }
-
-      saveLocalState();
-      renderSummary(userName);
-      showToast(`May Allah accept your tilawah, ${userName}! ✨`);
     });
   });
 
@@ -952,7 +985,7 @@ function syncToGoogleSheets(userName) {
     payload.progress_id = state.progressId;
   }
 
-  fetch(GOOGLE_APPS_SCRIPT_URL, {
+  return fetch(GOOGLE_APPS_SCRIPT_URL, {
     method: 'POST',
     headers: {
       'Content-Type': 'text/plain;charset=utf-8'

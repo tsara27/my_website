@@ -239,9 +239,19 @@
             </button>
             <button
               type="submit"
-              class="flex-1 py-3 px-4 bg-emerald-600 hover:bg-emerald-700 active:scale-[0.99] text-white font-semibold rounded-xl shadow-lg shadow-emerald-600/20 transition duration-150"
+              id="edit-record-submit-btn"
+              class="flex-1 py-3 px-4 bg-emerald-600 hover:bg-emerald-700 active:scale-[0.99] text-white font-semibold rounded-xl shadow-lg shadow-emerald-600/20 transition duration-150 disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2"
             >
-              Save Changes
+              <svg
+                id="edit-record-submit-spinner"
+                class="hidden w-4 h-4 animate-spin"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+              </svg>
+              <span id="edit-record-submit-label">Save Changes</span>
             </button>
           </div>
         </form>
@@ -863,9 +873,11 @@
             <div class="pt-2 flex justify-end">
               <button
                 type="submit"
-                class="px-6 py-3.5 bg-emerald-700 hover:bg-emerald-800 active:scale-[0.99] text-white text-sm font-semibold rounded-xl shadow-md shadow-emerald-800/20 transition flex items-center gap-2"
+                id="end-day-submit-btn"
+                class="px-6 py-3.5 bg-emerald-700 hover:bg-emerald-800 active:scale-[0.99] text-white text-sm font-semibold rounded-xl shadow-md shadow-emerald-800/20 transition flex items-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed"
               >
                 <svg
+                  id="end-day-submit-icon"
                   class="w-4 h-4"
                   fill="none"
                   stroke="currentColor"
@@ -878,7 +890,16 @@
                     d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"
                   ></path>
                 </svg>
-                Save Today's Tilawah Record
+                <svg
+                  id="end-day-submit-spinner"
+                  class="hidden w-4 h-4 animate-spin"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                  <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+                </svg>
+                <span id="end-day-submit-label">Save Today's Tilawah Record</span>
               </button>
             </div>
           </form>
