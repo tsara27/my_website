@@ -7,7 +7,7 @@
 // 2. Click Deploy > New deployment > Web app
 // 3. Execute as: Me, Anyone with the link
 // 4. Copy the deployment URL below
-const GOOGLE_APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzg9XumVQna0-W-NxwZCy5PP-GpfCdY7nGEyZSrF-cBr-dQCpnR2el1WywwuJLnTNA3/exec";
+const GOOGLE_APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzYCnbKF8cIFGPl8MBV2G9TE8_-0P4m6zRPsOfS0_GzCK3nZ1eTPkvdA70Bywr8ooQi/exec";
 const ENABLE_GOOGLE_SHEETS_SYNC = true; // Set to true after deployment URL is configured
 
 /* =========================================================
@@ -355,6 +355,11 @@ function renderHistoryRecords(records) {
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path>
               </svg>
             </button>
+            <button type="button" class="delete-record-btn w-9 h-9 rounded-lg bg-slate-50 hover:bg-red-50 border border-slate-200 hover:border-red-200 text-slate-500 hover:text-red-600 flex items-center justify-center transition" data-progress-id="${record.progress_id || ''}" title="Delete record">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6M9.5 4h5a1 1 0 011 1v2h-7V5a1 1 0 011-1z"></path>
+              </svg>
+            </button>
           ` : ''}
         </div>
       </div>
@@ -391,6 +396,14 @@ function renderHistoryRecords(records) {
       const progressId = btn.getAttribute('data-progress-id');
       const record = state.historyData.find(r => r.progress_id === progressId);
       if (record) openEditModal(record);
+    });
+  });
+
+  // Attach delete handlers for own records
+  container.querySelectorAll('.delete-record-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const progressId = btn.getAttribute('data-progress-id');
+      deleteRecord(progressId);
     });
   });
 }
@@ -503,6 +516,67 @@ function submitEditedRecord() {
       })
       .finally(() => {
         clearButtonLoading(submitBtn, null, submitSpinner, submitLabel, 'Save Changes');
+      });
+  });
+}
+
+function deleteRecord(progressId) {
+  if (!progressId) return;
+
+  showDeleteRecordModal(() => performDeleteRecord(progressId));
+}
+
+function showDeleteRecordModal(onConfirm) {
+  const modal = document.getElementById('delete-record-modal');
+  const confirmBtn = document.getElementById('delete-record-confirm-btn');
+
+  const cleanup = () => {
+    modal.classList.add('hidden');
+    confirmBtn.removeEventListener('click', handleConfirm);
+  };
+  const handleConfirm = () => {
+    cleanup();
+    onConfirm();
+  };
+
+  confirmBtn.addEventListener('click', handleConfirm);
+  modal.classList.remove('hidden');
+}
+
+function performDeleteRecord(progressId) {
+  requireUserName((userName) => {
+    const payload = {
+      name: userName,
+      email: getCookie(USER_EMAIL_COOKIE) || '',
+      action: 'delete',
+      progress_id: progressId
+    };
+
+    fetch(GOOGLE_APPS_SCRIPT_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify(payload)
+    })
+      .then(response => response.text())
+      .then(async text => {
+        let data;
+        try {
+          data = JSON.parse(text);
+        } catch (e) {
+          showToast('Failed to delete record.', 'warning');
+          return;
+        }
+
+        if (data.success) {
+          showToast('Record deleted successfully!');
+          await loadHistoryData();
+        } else {
+          showToast(data.error || 'Failed to delete record.', 'warning');
+        }
+      })
+      .catch(error => {
+        console.warn('Failed to delete record:', error);
+        showToast('Failed to delete record.', 'warning');
       });
   });
 }
@@ -799,6 +873,15 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('edit-record-form').addEventListener('submit', (e) => {
     e.preventDefault();
     submitEditedRecord();
+  });
+
+  // 14. Delete Confirmation Modal setup
+  document.getElementById('delete-record-cancel-btn').addEventListener('click', () => {
+    document.getElementById('delete-record-modal').classList.add('hidden');
+  });
+
+  document.getElementById('delete-record-modal-close-btn').addEventListener('click', () => {
+    document.getElementById('delete-record-modal').classList.add('hidden');
   });
 
   // 14. Restore today's saved form/checkpoints if already filled in

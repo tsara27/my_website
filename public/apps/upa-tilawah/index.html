@@ -258,6 +258,68 @@
       </div>
     </div>
 
+    <!-- Delete Confirmation Modal -->
+    <div
+      id="delete-record-modal"
+      class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4 hidden"
+    >
+      <div
+        class="relative bg-white rounded-3xl shadow-2xl max-w-md w-full p-6 sm:p-8 transform transition-all border border-emerald-100"
+      >
+        <button
+          type="button"
+          id="delete-record-modal-close-btn"
+          aria-label="Close"
+          class="absolute top-4 right-4 w-8 h-8 rounded-full flex items-center justify-center text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition"
+        >
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
+        <div
+          class="w-12 h-12 rounded-2xl bg-red-100 text-red-600 flex items-center justify-center mx-auto mb-4"
+        >
+          <svg
+            class="w-6 h-6"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+            ></path>
+          </svg>
+        </div>
+        <h3 class="text-xl font-bold text-center text-slate-900">
+          Delete This Record?
+        </h3>
+        <p class="text-sm text-slate-500 text-center mt-1 mb-6">
+          This will permanently remove this tilawah record. This action cannot
+          be undone.
+        </p>
+
+        <div class="flex items-center gap-3">
+          <button
+            type="button"
+            id="delete-record-cancel-btn"
+            class="flex-1 py-3 px-4 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold rounded-xl transition duration-150"
+          >
+            Cancel
+          </button>
+          <button
+            type="button"
+            id="delete-record-confirm-btn"
+            class="flex-1 py-3 px-4 bg-red-600 hover:bg-red-700 active:scale-[0.99] text-white font-semibold rounded-xl shadow-lg shadow-red-600/20 transition duration-150"
+          >
+            Delete
+          </button>
+        </div>
+      </div>
+    </div>
+
     <!-- Header -->
     <header
       class="bg-gradient-to-r from-emerald-900 via-emerald-850 to-teal-900 text-white shadow-lg sticky top-0 z-30"

@@ -187,6 +187,36 @@ function updateReadingProgress(progressId, userId, data) {
 }
 
 // ============================================================
+// 3C. DELETE READING PROGRESS (remove an existing record)
+// ============================================================
+
+function deleteReadingProgress(progressId, userId) {
+  const ss = getSS();
+  const progressSheet = ss.getSheetByName(READING_PROGRESS_SHEET);
+  const values = progressSheet.getDataRange().getValues();
+
+  for (let i = 1; i < values.length; i++) {
+    if (values[i][PROGRESS_COLUMNS.PROGRESS_ID - 1] === progressId) {
+      // Ownership check: only the record's own user may delete it
+      if (values[i][PROGRESS_COLUMNS.USER_ID - 1] !== userId) {
+        return { success: false, error: "Not authorized to delete this record" };
+      }
+
+      const rowNum = i + 1; // 1-indexed sheet row
+      progressSheet.deleteRow(rowNum);
+
+      return {
+        success: true,
+        progress_id: progressId,
+        message: "Reading progress deleted successfully"
+      };
+    }
+  }
+
+  return { success: false, error: "Record not found" };
+}
+
+// ============================================================
 // 4. RETRIEVE READING PROGRESS
 // ============================================================
 
@@ -306,6 +336,12 @@ function doPost(e) {
       });
 
       return jsonResponse(updateResult);
+    }
+
+    // Deleting an existing record
+    if (data.action === "delete" && data.progress_id) {
+      const deleteResult = deleteReadingProgress(data.progress_id, userId);
+      return jsonResponse(deleteResult);
     }
 
     // Save reading progress
