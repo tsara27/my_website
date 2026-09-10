@@ -42,8 +42,18 @@
       class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4 hidden"
     >
       <div
-        class="bg-white rounded-3xl shadow-2xl max-w-md w-full p-6 sm:p-8 transform transition-all border border-emerald-100"
+        class="relative bg-white rounded-3xl shadow-2xl max-w-md w-full p-6 sm:p-8 transform transition-all border border-emerald-100"
       >
+        <button
+          type="button"
+          id="name-modal-close-btn"
+          aria-label="Close"
+          class="absolute top-4 right-4 w-8 h-8 rounded-full flex items-center justify-center text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition"
+        >
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
         <div
           class="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center mx-auto mb-4"
         >
@@ -115,17 +125,39 @@
       class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4 hidden"
     >
       <div
-        class="bg-white rounded-3xl shadow-2xl max-w-md w-full p-6 sm:p-8 transform transition-all border border-emerald-100 max-h-[90vh] overflow-y-auto"
+        class="relative bg-white rounded-3xl shadow-2xl max-w-md w-full p-6 sm:p-8 transform transition-all border border-emerald-100 max-h-[90vh] overflow-y-auto"
       >
-        <h3 class="text-xl font-bold text-center text-slate-900">
+        <button
+          type="button"
+          id="edit-record-modal-close-btn"
+          aria-label="Close"
+          class="absolute top-4 right-4 w-8 h-8 rounded-full flex items-center justify-center text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition"
+        >
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
+        <h3 id="edit-record-modal-title" class="text-xl font-bold text-center text-slate-900">
           Edit Tilawah Record
         </h3>
-        <p class="text-sm text-slate-500 text-center mt-1 mb-6">
+        <p id="edit-record-modal-desc" class="text-sm text-slate-500 text-center mt-1 mb-6">
           Update the details for this recorded session.
         </p>
 
         <form id="edit-record-form" class="space-y-4">
           <input type="hidden" id="edit-progress-id" />
+          <div id="edit-date-field" class="hidden">
+            <label
+              for="edit-date-input"
+              class="block text-xs font-semibold uppercase tracking-wider text-slate-600 mb-1"
+              >Date</label
+            >
+            <input
+              type="date"
+              id="edit-date-input"
+              class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 text-slate-800 font-medium"
+            />
+          </div>
           <div>
             <label
               for="edit-surah-select"
@@ -291,6 +323,25 @@
             Today
           </button>
           <button
+            id="tab-add-record"
+            class="nav-tab py-3 text-sm font-semibold text-emerald-300/70 border-b-2 border-transparent transition-colors hover:text-emerald-200 flex items-center gap-2"
+          >
+            <svg
+              class="w-4 h-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2zm7-7v4m-2-2h4"
+              ></path>
+            </svg>
+            Add Past Record
+          </button>
+          <button
             id="tab-history"
             class="nav-tab py-3 text-sm font-semibold text-emerald-300/70 border-b-2 border-transparent transition-colors hover:text-emerald-200 flex items-center gap-2"
           >
@@ -312,7 +363,8 @@
         </div>
         <div
           id="user-badge"
-          class="flex items-center gap-2 bg-emerald-950/50 border border-emerald-700/50 px-3 py-1.5 rounded-full text-xs font-medium text-emerald-100 mb-2 shrink-0"
+          title="Change name"
+          class="flex items-center gap-2 bg-emerald-950/50 border border-emerald-700/50 px-3 py-1.5 rounded-full text-xs font-medium text-emerald-100 mb-2 shrink-0 cursor-pointer hover:bg-emerald-900/60 transition-colors"
         >
           <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
           <span id="badge-name-text">Reader</span>

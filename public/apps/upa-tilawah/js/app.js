@@ -399,6 +399,11 @@ function renderHistoryRecords(records) {
    6B. Edit an Existing History Record
    ========================================================= */
 function openEditModal(record) {
+  document.getElementById('edit-record-modal-title').textContent = 'Edit Tilawah Record';
+  document.getElementById('edit-record-modal-desc').textContent = 'Update the details for this recorded session.';
+  document.getElementById('edit-date-field').classList.add('hidden');
+  document.getElementById('edit-date-input').required = false;
+
   document.getElementById('edit-progress-id').value = record.progress_id || '';
   document.getElementById('edit-surah-select').value = record.surah || '';
   document.getElementById('edit-ayah-input').value = record.ayah || '';
@@ -408,54 +413,76 @@ function openEditModal(record) {
   document.getElementById('edit-record-modal').classList.remove('hidden');
 }
 
+function openAddPastRecordModal() {
+  document.getElementById('edit-record-form').reset();
+  document.getElementById('edit-progress-id').value = '';
+
+  document.getElementById('edit-record-modal-title').textContent = 'Add Past Tilawah Record';
+  document.getElementById('edit-record-modal-desc').textContent = 'Log a session from a previous date.';
+  document.getElementById('edit-date-field').classList.remove('hidden');
+
+  const dateInput = document.getElementById('edit-date-input');
+  dateInput.required = true;
+  dateInput.max = getTodayDateKey();
+  dateInput.value = getTodayDateKey();
+
+  document.getElementById('edit-checkpoints-input').value = 0;
+  document.getElementById('edit-pages-input').value = 0;
+
+  document.getElementById('edit-record-modal').classList.remove('hidden');
+}
+
 function submitEditedRecord() {
   const progressId = document.getElementById('edit-progress-id').value;
-  const userName = getCookie(USER_NAME_COOKIE);
+  const isCreate = !progressId;
 
-  if (!progressId || !userName) {
-    showToast('Unable to edit this record.', 'warning');
-    return;
-  }
+  requireUserName((userName) => {
+    const payload = {
+      name: userName,
+      email: getCookie(USER_EMAIL_COOKIE) || '',
+      surah: document.getElementById('edit-surah-select').value,
+      ayah: document.getElementById('edit-ayah-input').value,
+      notes: document.getElementById('edit-notes-input').value,
+      checkpointsCompleted: parseInt(document.getElementById('edit-checkpoints-input').value, 10) || 0,
+      totalPages: parseInt(document.getElementById('edit-pages-input').value, 10) || 0
+    };
 
-  const payload = {
-    action: 'update',
-    progress_id: progressId,
-    name: userName,
-    email: getCookie(USER_EMAIL_COOKIE) || '',
-    surah: document.getElementById('edit-surah-select').value,
-    ayah: document.getElementById('edit-ayah-input').value,
-    notes: document.getElementById('edit-notes-input').value,
-    checkpointsCompleted: parseInt(document.getElementById('edit-checkpoints-input').value, 10) || 0,
-    totalPages: parseInt(document.getElementById('edit-pages-input').value, 10) || 0
-  };
+    if (isCreate) {
+      payload.date = document.getElementById('edit-date-input').value;
+    } else {
+      payload.action = 'update';
+      payload.progress_id = progressId;
+    }
 
-  fetch(GOOGLE_APPS_SCRIPT_URL, {
-    method: 'POST',
-    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-    body: JSON.stringify(payload)
-  })
-    .then(response => response.text())
-    .then(async text => {
-      let data;
-      try {
-        data = JSON.parse(text);
-      } catch (e) {
-        showToast('Failed to update record.', 'warning');
-        return;
-      }
-
-      if (data.success) {
-        document.getElementById('edit-record-modal').classList.add('hidden');
-        showToast('Record updated successfully!');
-        await loadHistoryData();
-      } else {
-        showToast(data.error || 'Failed to update record.', 'warning');
-      }
+    fetch(GOOGLE_APPS_SCRIPT_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify(payload)
     })
-    .catch(error => {
-      console.warn('Failed to update record:', error);
-      showToast('Failed to update record.', 'warning');
-    });
+      .then(response => response.text())
+      .then(async text => {
+        let data;
+        try {
+          data = JSON.parse(text);
+        } catch (e) {
+          showToast(`Failed to ${isCreate ? 'add' : 'update'} record.`, 'warning');
+          return;
+        }
+
+        if (data.success) {
+          document.getElementById('edit-record-modal').classList.add('hidden');
+          showToast(isCreate ? 'Past record added successfully!' : 'Record updated successfully!');
+          switchTab('history');
+          await loadHistoryData();
+        } else {
+          showToast(data.error || `Failed to ${isCreate ? 'add' : 'update'} record.`, 'warning');
+        }
+      })
+      .catch(error => {
+        console.warn(`Failed to ${isCreate ? 'add' : 'update'} record:`, error);
+        showToast(`Failed to ${isCreate ? 'add' : 'update'} record.`, 'warning');
+      });
+  });
 }
 
 function updateHistoryStats(records) {
@@ -566,8 +593,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // Edit name button
-  document.getElementById('edit-name-btn').addEventListener('click', () => {
+  // Edit name button / name text (both open the profile modal)
+  const openEditNameModal = () => {
     const currentName = getCookie(USER_NAME_COOKIE);
     const currentEmail = getCookie(USER_EMAIL_COOKIE);
     document.getElementById('user-name-input').value = currentName || '';
@@ -576,6 +603,13 @@ document.addEventListener('DOMContentLoaded', () => {
     state.pendingAction = () => {
       showToast("Profile updated!");
     };
+  };
+  document.getElementById('user-badge').addEventListener('click', openEditNameModal);
+
+  document.getElementById('name-modal-close-btn').addEventListener('click', () => {
+    if (!getCookie(USER_NAME_COOKIE) || !getCookie(USER_EMAIL_COOKIE)) return;
+    state.pendingAction = null;
+    document.getElementById('name-modal').classList.add('hidden');
   });
 
   // 6. Step 1: Submit Daily Plan
@@ -691,6 +725,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // 10. Tab Navigation
   document.getElementById('tab-today').addEventListener('click', () => switchTab('today'));
   document.getElementById('tab-history').addEventListener('click', () => switchTab('history'));
+  document.getElementById('tab-add-record').addEventListener('click', () => openAddPastRecordModal());
 
   // 11. History User Filter
   document.getElementById('user-filter').addEventListener('change', async (e) => {
@@ -721,6 +756,10 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   document.getElementById('edit-record-cancel-btn').addEventListener('click', () => {
+    document.getElementById('edit-record-modal').classList.add('hidden');
+  });
+
+  document.getElementById('edit-record-modal-close-btn').addEventListener('click', () => {
     document.getElementById('edit-record-modal').classList.add('hidden');
   });
 

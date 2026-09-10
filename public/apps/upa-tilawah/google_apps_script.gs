@@ -123,11 +123,12 @@ function saveReadingProgress(userId, data) {
   const progressId = generateId("PRG");
   const now = getCurrentTimestamp();
   const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
+  const recordDate = data.date || today;
 
   const row = [
     progressId,
     userId,
-    today,
+    recordDate,
     data.surah || "",
     data.ayah || "",
     data.notes || "",
@@ -313,7 +314,8 @@ function doPost(e) {
       ayah: data.ayah || "",
       notes: data.notes || "",
       checkpointsCompleted: data.checkpointsCompleted || 0,
-      totalPages: data.totalPages || 0
+      totalPages: data.totalPages || 0,
+      date: data.date || ""
     });
 
     return jsonResponse({
