@@ -10,6 +10,14 @@
   @apply my-6 font-article font-extralight text-gray;
 }
 
+.markdown blockquote {
+  @apply border-l-4 border-candy-pink/40 bg-neutral-50 py-2 pl-5 pr-4 italic text-gray/80;
+
+  p {
+    @apply my-0;
+  }
+}
+
 .markdown code {
   @apply bg-neutral-100;
 }
