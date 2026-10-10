@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RunIT - Balke Test Mileage & Training Planner</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- html2pdf.js CDN for direct PDF generation in sandboxed environments -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  
+  <script src="/apps/run-it/js/tailwind-config.js"></script>
+
+  <link rel="stylesheet" href="/apps/run-it/css/styles.css">
+</head>
+
+<body class="bg-black text-gray-100 font-sans min-h-screen flex flex-col selection:bg-magenta-500 selection:text-white antialiased">
+  
+  <!-- Header / Navigation Bar -->
+  <header class="border-b border-surface-border bg-surface/90 backdrop-blur sticky top-0 z-40">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-magenta-600 via-magenta-500 to-pink-400 flex items-center justify-center shadow-neon">
+          <!-- Runner Icon SVG -->
+          <svg class="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+          </svg>
+        </div>
+        <div>
+          <div class="flex items-center space-x-2">
+            <h1 class="text-xl font-bold tracking-tight text-white flex items-center gap-0.5">
+              RUN<span class="text-transparent bg-clip-text bg-gradient-to-r from-magenta-400 to-pink-500">IT</span>
+            </h1>
+            <span class="px-2 py-0.5 text-xs font-semibold rounded-full bg-magenta-500/10 text-magenta-300 border border-magenta-500/30">
+              VO₂ Mileage Engine
+            </span>
+          </div>
+          <p class="text-xs text-gray-400 hidden sm:block">Scientific Running Volume & Pace Periodization</p>
+        </div>
+      </div>
+
+      <div class="flex items-center space-x-3">
+        <!-- Quick Unit Switcher -->
+        <div class="flex bg-black/60 p-1 rounded-lg border border-surface-border text-xs">
+          <button id="unit-km" class="px-3 py-1 rounded font-medium transition-all bg-magenta-600 text-white shadow-sm">KM</button>
+          <button id="unit-mi" class="px-3 py-1 rounded font-medium transition-all text-gray-400 hover:text-white">MILES</button>
+        </div>
+
+        <!-- Export to PDF Button -->
+        <button id="btn-export-pdf" class="flex items-center space-x-2 px-4 py-2 rounded-xl bg-gradient-to-r from-magenta-600 to-pink-600 hover:from-magenta-500 hover:to-pink-500 text-white font-semibold text-sm shadow-neon hover:shadow-neon-lg transition-all transform active:scale-95">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+          </svg>
+          <span class="hidden sm:inline">Export PDF</span>
+          <span class="sm:hidden">PDF</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Notification Banner / Toast for Actions -->
+  <div id="toast" class="fixed bottom-6 right-6 z-50 transform translate-y-24 opacity-0 transition-all duration-300 pointer-events-none">
+    <div class="bg-surface-card border border-magenta-500 text-white px-4 py-3 rounded-xl shadow-neon flex items-center space-x-3">
+      <svg class="w-5 h-5 text-magenta-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+      </svg>
+      <span id="toast-message" class="text-sm font-medium">Ready</span>
+    </div>
+  </div>
+
+  <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+    
+    <!-- Hero / Explanatory Section -->
+    <div class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-surface via-surface-card to-black border border-surface-border p-6 md:p-8 shadow-2xl">
+      <div class="absolute -right-16 -top-16 w-64 h-64 bg-magenta-600/10 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="relative z-10 grid grid-cols-1 lg:grid-cols-3 gap-6 items-center">
+        <div class="lg:col-span-2 space-y-2">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-magenta-500/10 text-magenta-400 border border-magenta-500/20">
+            <span>Standard Protocol</span>
+            <span class="w-1.5 h-1.5 rounded-full bg-magenta-400"></span>
+            <span>Dr. Bruno Balke 15-Minute Field Run</span>
+          </div>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+            Calculate Optimal Weekly Mileage & Personalized Paces
+          </h2>
+          <p class="text-gray-400 text-sm leading-relaxed max-w-2xl">
+            Input your total distance achieved during the 15-minute continuous run test. We compute your estimated aerobic capacity (<span class="text-magenta-400 font-mono">VO₂ Max</span>), safe baseline mileage, progression thresholds, and complete 7-day workout distribution.
+          </p>
+        </div>
+
+        <!-- Quick Info Card -->
+        <div class="bg-black/50 border border-magenta-500/20 rounded-2xl p-4 flex flex-col justify-between space-y-3">
+          <div class="flex items-center justify-between text-xs text-gray-400">
+            <span>Balke Formula:</span>
+            <span class="text-magenta-400 font-mono">VO₂ = ((d/15 - 133) × 0.172) + 33.3</span>
+          </div>
+          <div class="text-xs text-gray-300">
+            Optimal weekly volume balances aerobic capacity ceiling with orthopedic injury prevention rules (80/20 principle).
+          </div>
+          <div class="flex items-center gap-2 text-[11px] text-magenta-300/80">
+            <span class="inline-block w-2 h-2 rounded-full bg-magenta-500 animate-pulse"></span>
+            Validated for 5K to Marathon Preparation
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main 2-Column Grid: Form Inputs & Results -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+      
+      <!-- LEFT COLUMN: Test Input & Parameters (lg:col-span-5) -->
+      <section class="lg:col-span-5 space-y-6 interactive-controls">
+        
+        <!-- Input Card -->
+        <div class="bg-surface-card border border-surface-border rounded-2xl p-6 shadow-xl space-y-6">
+          <div class="border-b border-surface-border/60 pb-4 flex items-center justify-between">
+            <div class="flex items-center space-x-2">
+              <span class="p-2 rounded-lg bg-magenta-500/10 text-magenta-400">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </span>
+              <h3 class="font-bold text-white text-lg">Balke Test Results</h3>
+            </div>
+            <span class="text-xs text-gray-400">15-Minute Protocol</span>
+          </div>
+
+          <!-- Distance Input -->
+          <div class="space-y-2">
+            <div class="flex items-center justify-between">
+              <label for="test-distance" class="text-sm font-semibold text-gray-200">
+                Total Distance Covered in 15 Minutes
+              </label>
+              <button type="button" id="btn-track-helper" class="text-xs text-magenta-400 hover:text-magenta-300 underline underline-offset-2">
+                Use 400m Track Calculator
+              </button>
+            </div>
+            
+            <div class="relative rounded-xl overflow-hidden shadow-inner">
+              <input 
+                type="number" 
+                id="test-distance" 
+                step="10" 
+                min="1200" 
+                max="6000" 
+                value="3400"
+                class="w-full bg-black/80 border border-surface-border focus:border-magenta-500 focus:ring-1 focus:ring-magenta-500 text-white font-mono text-xl py-3 px-4 rounded-xl transition duration-150 outline-none"
+              >
+              <div class="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none text-gray-400 font-mono text-sm font-semibold" id="distance-unit-label">
+                Meters
+              </div>
+            </div>
+            <p class="text-xs text-gray-400 flex justify-between">
+              <span>Standard recreational: 2,600m – 3,400m</span>
+              <span class="text-magenta-400 font-mono">15:00 min</span>
+            </p>
+          </div>
+
+          <!-- Quick Track Modal / Helper Popdown -->
+          <div id="track-helper-panel" class="hidden p-4 rounded-xl bg-black/90 border border-magenta-500/40 space-y-3 text-xs">
+            <div class="flex justify-between items-center text-magenta-300 font-semibold">
+              <span>400m Track Quick Calculator</span>
+              <button id="btn-close-helper" class="text-gray-400 hover:text-white">&times;</button>
+            </div>
+            <div class="grid grid-cols-2 gap-3">
+              <div>
+                <label class="block text-gray-400 mb-1">Full Laps completed:</label>
+                <input type="number" id="input-laps" min="0" max="20" value="8" class="w-full bg-surface-card border border-surface-border text-white p-2 rounded text-center font-mono">
+              </div>
+              <div>
+                <label class="block text-gray-400 mb-1">Additional Meters:</label>
+                <input type="number" id="input-extra-meters" min="0" max="399" value="200" class="w-full bg-surface-card border border-surface-border text-white p-2 rounded text-center font-mono">
+              </div>
+            </div>
+            <button id="btn-apply-laps" class="w-full py-1.5 bg-magenta-600/80 hover:bg-magenta-600 text-white rounded font-medium transition">
+              Apply Total Distance
+            </button>
+          </div>
+
+          <!-- Experience & Training History -->
+          <div class="space-y-2">
+            <label for="runner-level" class="text-sm font-semibold text-gray-200">
+              Runner Experience Level
+            </label>
+            <select id="runner-level" class="w-full bg-black/80 border border-surface-border focus:border-magenta-500 focus:ring-1 focus:ring-magenta-500 text-white text-sm py-3 px-3 rounded-xl transition duration-150 outline-none">
+              <option value="beginner">Beginner / Novice (&lt; 1 year consistent running)</option>
+              <option value="intermediate" selected>Intermediate (1–3 years running, regular base)</option>
+              <option value="advanced">Advanced (3+ years, competitive age-group)</option>
+              <option value="elite">Elite / High Performance (High training tolerance)</option>
+            </select>
+          </div>
+
+          <!-- Goal Event Target -->
+          <div class="space-y-2">
+            <label for="target-event" class="text-sm font-semibold text-gray-200">
+              Target Event Focus
+            </label>
+            <select id="target-event" class="w-full bg-black/80 border border-surface-border focus:border-magenta-500 focus:ring-1 focus:ring-magenta-500 text-white text-sm py-3 px-3 rounded-xl transition duration-150 outline-none">
+              <option value="5k">5K / 10K Speed Endurance</option>
+              <option value="half" selected>Half Marathon (21.1 km / 13.1 mi)</option>
+              <option value="marathon">Full Marathon (42.2 km / 26.2 mi)</option>
+              <option value="base">General Aerobic Base Building</option>
+            </select>
+          </div>
+
+          <!-- Days per week available -->
+          <div class="space-y-2">
+            <div class="flex justify-between items-center">
+              <label class="text-sm font-semibold text-gray-200">
+                Running Days Available Per Week
+              </label>
+              <span id="days-display" class="text-magenta-400 font-mono font-bold text-sm">5 Days</span>
+            </div>
+            <input 
+              type="range" 
+              id="input-days" 
+              min="3" 
+              max="7" 
+              value="5" 
+              class="w-full accent-magenta-500 h-2 bg-surface rounded-lg cursor-pointer"
+            >
+            <div class="flex justify-between text-[11px] text-gray-500 font-mono">
+              <span>3 d (Low impact)</span>
+              <span>4 d</span>
+              <span>5 d (Balanced)</span>
+              <span>6 d</span>
+              <span>7 d (Streak/Elite)</span>
+            </div>
+          </div>
+
+          <!-- Runner Details for PDF Header -->
+          <div class="pt-2 border-t border-surface-border/40 grid grid-cols-2 gap-3">
+            <div>
+              <label class="text-xs text-gray-400 block mb-1">Athlete Name</label>
+              <input type="text" id="athlete-name" value="Jane Doe" class="w-full bg-black/60 border border-surface-border text-white text-xs px-3 py-2 rounded-lg">
+            </div>
+            <div>
+              <label class="text-xs text-gray-400 block mb-1">Target Date / Race</label>
+              <input type="text" id="target-date" value="Upcoming Season" class="w-full bg-black/60 border border-surface-border text-white text-xs px-3 py-2 rounded-lg">
+            </div>
+          </div>
+
+          <!-- Volume Adjustment Tuning -->
+          <div class="p-4 rounded-xl bg-gradient-to-b from-surface to-black border border-surface-border/80 space-y-2">
+            <div class="flex justify-between items-center">
+              <span class="text-xs font-semibold text-gray-300">Volume Intensity Fine-Tuning</span>
+              <span id="intensity-percent-label" class="text-xs font-mono text-magenta-400 font-bold">100% (Target)</span>
+            </div>
+            <input 
+              type="range" 
+              id="intensity-slider" 
+              min="80" 
+              max="120" 
+              value="100" 
+              step="5"
+              class="w-full accent-pink-500 h-2 bg-surface-card rounded cursor-pointer"
+            >
+            <div class="flex justify-between text-[10px] text-gray-500">
+              <span>-20% Conservative</span>
+              <span>Baseline</span>
+              <span>+20% Aggressive</span>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- VO2 Max Gauge Card -->
+        <div class="bg-surface-card border border-surface-border rounded-2xl p-6 shadow-xl space-y-4">
+          <div class="flex items-center justify-between">
+            <h4 class="font-bold text-white text-base">Aerobic Fitness Index</h4>
+            <span id="fitness-badge" class="px-2.5 py-1 text-xs font-bold rounded-full bg-magenta-500/20 text-magenta-300 border border-magenta-500/40">
+              Excellent
+            </span>
+          </div>
+
+          <div class="flex items-center space-x-6">
+            <div class="relative w-28 h-28 flex items-center justify-center">
+              <!-- Radial circle progress -->
+              <svg class="w-28 h-28 transform -rotate-90">
+                <circle cx="56" cy="56" r="46" stroke="#22182b" stroke-width="8" fill="none" />
+                <circle id="radial-progress" cx="56" cy="56" r="46" stroke="url(#magentaGradient)" stroke-width="8" stroke-dasharray="289" stroke-dashoffset="60" stroke-linecap="round" fill="none" class="transition-all duration-700" />
+                <defs>
+                  <linearGradient id="magentaGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#f43f8e" />
+                    <stop offset="100%" stop-color="#a80860" />
+                  </linearGradient>
+                </defs>
+              </svg>
+              <div class="absolute inset-0 flex flex-col items-center justify-center">
+                <span id="vo2-number" class="text-2xl font-black font-mono text-white">52.8</span>
+                <span class="text-[9px] uppercase tracking-wider text-gray-400 font-semibold">ml/kg/min</span>
+              </div>
+            </div>
+
+            <div class="flex-1 space-y-2 text-xs">
+              <div class="flex justify-between py-1 border-b border-surface-border">
+                <span class="text-gray-400">Velocity @ VO₂ Max:</span>
+                <span id="vvo2-val" class="font-mono text-white font-semibold">13.6 km/h</span>
+              </div>
+              <div class="flex justify-between py-1 border-b border-surface-border">
+                <span class="text-gray-400">Cooper Equivalent (12m):</span>
+                <span id="cooper-equiv" class="font-mono text-white font-semibold">2,720 m</span>
+              </div>
+              <div class="flex justify-between py-1">
+                <span class="text-gray-400">Aerobic Power Rating:</span>
+                <span id="aerobic-rating-text" class="text-magenta-400 font-semibold">Top 15%</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- RIGHT COLUMN: Output Dashboard & Weekly Plan (lg:col-span-7) -->
+      <section class="lg:col-span-7 space-y-6" id="printable-area">
+        
+        <!-- Printable PDF Header (Visible on print, hidden in web view) -->
+        <div class="print-only mb-6 border-b-2 border-magenta-500 pb-4">
+          <div class="flex justify-between items-start">
+            <div>
+              <h1 class="text-2xl font-bold text-black uppercase">RunIT &bull; Training Prescription</h1>
+              <p class="text-sm text-gray-600">Generated via Dr. Bruno Balke 15-Minute Protocol Engine</p>
+            </div>
+            <div class="text-right text-xs text-gray-500">
+              <div>Athlete: <span id="print-athlete-name" class="font-bold text-black">Jane Doe</span></div>
+              <div>Date Generated: <span id="print-date"></span></div>
+              <div>Target: <span id="print-target" class="font-bold text-black">Half Marathon</span></div>
+            </div>
+          </div>
+          <div class="grid grid-cols-4 gap-2 mt-4 pt-3 border-t border-gray-200 text-xs text-black">
+            <div><span class="text-gray-500">15-min Distance:</span> <span id="print-dist" class="font-bold">3,400 m</span></div>
+            <div><span class="text-gray-500">Est. VO₂ Max:</span> <span id="print-vo2" class="font-bold text-magenta-600">52.8 ml/kg/min</span></div>
+            <div><span class="text-gray-500">Fitness Tier:</span> <span id="print-tier" class="font-bold">Excellent</span></div>
+            <div><span class="text-gray-500">Prescribed Volume:</span> <span id="print-vol" class="font-bold text-magenta-600">50 km/wk</span></div>
+          </div>
+        </div>
+
+        <!-- Weekly Mileage Hero Metric Card -->
+        <div class="bg-surface-card border border-surface-border rounded-2xl p-6 shadow-xl relative overflow-hidden print-card">
+          <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-4 border-b border-surface-border pb-5">
+            <div>
+              <span class="text-xs uppercase tracking-wider text-magenta-400 font-bold">Recommended Weekly Mileage</span>
+              <div class="flex items-baseline space-x-3 mt-1">
+                <span id="target-mileage" class="text-4xl sm:text-5xl font-black font-mono text-white tracking-tight print-text-dark">
+                  52
+                </span>
+                <span id="mileage-unit-display" class="text-xl font-bold text-gray-400 print-text-muted">
+                  km / week
+                </span>
+              </div>
+            </div>
+
+            <!-- Safe Volume Range Pills -->
+            <div class="bg-black/60 p-3 rounded-xl border border-surface-border text-xs flex gap-4 print-card">
+              <div>
+                <span class="block text-gray-400 text-[10px] uppercase">Safe Baseline</span>
+                <span id="safe-min-mileage" class="font-mono text-white font-semibold print-text-dark">42 km</span>
+              </div>
+              <div class="border-l border-surface-border pl-4">
+                <span class="block text-magenta-400 text-[10px] uppercase font-bold">Recommended</span>
+                <span id="safe-target-mileage" class="font-mono text-magenta-300 font-bold">52 km</span>
+              </div>
+              <div class="border-l border-surface-border pl-4">
+                <span class="block text-gray-400 text-[10px] uppercase">Ceiling Limit</span>
+                <span id="safe-max-mileage" class="font-mono text-white font-semibold print-text-dark">62 km</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- 80/20 Intensity Breakdown Bar -->
+          <div class="mt-5 space-y-2">
+            <div class="flex justify-between text-xs">
+              <span class="text-gray-300 font-medium">Training Volume Distribution (Polarized 80/20)</span>
+              <span class="text-gray-400 font-mono text-[11px]">80% Aerobic Easy / 20% Quality</span>
+            </div>
+            
+            <div class="h-3 w-full bg-black/80 rounded-full overflow-hidden flex p-0.5 border border-surface-border">
+              <div id="bar-easy" class="h-full bg-emerald-500 rounded-l-full transition-all duration-500" style="width: 78%;" title="Easy / Recovery"></div>
+              <div id="bar-tempo" class="h-full bg-yellow-400 transition-all duration-500" style="width: 14%;" title="Tempo / Threshold"></div>
+              <div id="bar-interval" class="h-full bg-magenta-500 rounded-r-full transition-all duration-500" style="width: 8%;" title="VO2 Max Intervals"></div>
+            </div>
+
+            <div class="flex justify-between text-[11px] text-gray-400 pt-1">
+              <div class="flex items-center gap-1.5">
+                <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 inline-block"></span>
+                <span>Easy/Base: <b id="vol-easy-display" class="text-white font-mono">40.5 km</b></span>
+              </div>
+              <div class="flex items-center gap-1.5">
+                <span class="w-2.5 h-2.5 rounded-full bg-yellow-400 inline-block"></span>
+                <span>Threshold: <b id="vol-tempo-display" class="text-white font-mono">7.3 km</b></span>
+              </div>
+              <div class="flex items-center gap-1.5">
+                <span class="w-2.5 h-2.5 rounded-full bg-magenta-500 inline-block"></span>
+                <span>Interval/Speed: <b id="vol-interval-display" class="text-white font-mono">4.2 km</b></span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Calculated Pacing Zones Based on Balke Score -->
+        <div class="bg-surface-card border border-surface-border rounded-2xl p-6 shadow-xl space-y-4 print-card">
+          <div class="flex justify-between items-center border-b border-surface-border pb-3">
+            <div>
+              <h4 class="font-bold text-white text-base print-text-dark">Prescribed Pace Targets</h4>
+              <p class="text-xs text-gray-400 print-text-muted">Derived from Velocity at VO₂ Max (vVO₂)</p>
+            </div>
+            <span class="text-xs font-mono text-magenta-400 font-semibold px-2 py-1 rounded bg-magenta-500/10 border border-magenta-500/30 print-badge">
+              Paces in <span id="pace-unit-label">min/km</span>
+            </span>
+          </div>
+
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
+            <!-- Zone 1: Easy / Long Run -->
+            <div class="p-3 rounded-xl bg-black/60 border border-surface-border print-card">
+              <div class="text-[11px] font-bold uppercase text-emerald-400 mb-1">Easy / Long Run</div>
+              <div id="pace-easy" class="text-lg font-black font-mono text-white print-text-dark">5:45 - 6:15</div>
+              <div class="text-[10px] text-gray-400 mt-1">65% – 75% VO₂ max</div>
+            </div>
+
+            <!-- Zone 2: Marathon / Aerobic -->
+            <div class="p-3 rounded-xl bg-black/60 border border-surface-border print-card">
+              <div class="text-[11px] font-bold uppercase text-blue-400 mb-1">Marathon Pace</div>
+              <div id="pace-marathon" class="text-lg font-black font-mono text-white print-text-dark">5:15 - 5:30</div>
+              <div class="text-[10px] text-gray-400 mt-1">75% – 84% VO₂ max</div>
+            </div>
+
+            <!-- Zone 3: Threshold / Tempo -->
+            <div class="p-3 rounded-xl bg-black/60 border border-surface-border print-card">
+              <div class="text-[11px] font-bold uppercase text-yellow-400 mb-1">Threshold / Tempo</div>
+              <div id="pace-threshold" class="text-lg font-black font-mono text-white print-text-dark">4:40 - 4:52</div>
+              <div class="text-[10px] text-gray-400 mt-1">85% – 90% VO₂ max</div>
+            </div>
+
+            <!-- Zone 4: VO2 Max Intervals -->
+            <div class="p-3 rounded-xl bg-black/60 border border-magenta-500/40 print-card shadow-neon-inner">
+              <div class="text-[11px] font-bold uppercase text-magenta-400 mb-1">VO₂ Max Intervals</div>
+              <div id="pace-vo2" class="text-lg font-black font-mono text-white print-text-dark">4:10 - 4:25</div>
+              <div class="text-[10px] text-gray-400 mt-1">95% – 100% vVO₂</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Weekly Day-by-Day Schedule -->
+        <div class="bg-surface-card border border-surface-border rounded-2xl p-6 shadow-xl space-y-4 print-card">
+          <div class="flex justify-between items-center border-b border-surface-border pb-3">
+            <div>
+              <h4 class="font-bold text-white text-base print-text-dark">Sample 7-Day Training Micro-Cycle</h4>
+              <p class="text-xs text-gray-400 print-text-muted">Balanced recovery, progressive stimulus, and quality distribution</p>
+            </div>
+            <span class="text-xs text-gray-400" id="schedule-days-summary">5 Running Sessions</span>
+          </div>
+
+          <!-- Schedule Table -->
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs">
+              <thead>
+                <tr class="border-b border-surface-border/80 text-gray-400 font-semibold uppercase text-[10px]">
+                  <th class="py-2.5 px-3">Day</th>
+                  <th class="py-2.5 px-3">Workout Session</th>
+                  <th class="py-2.5 px-3">Intensity Focus</th>
+                  <th class="py-2.5 px-3 text-right">Distance</th>
+                </tr>
+              </thead>
+              <tbody id="schedule-tbody" class="divide-y divide-surface-border/40 font-mono text-gray-200">
+                <!-- Dynamically populated via JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- 4-Week Mesocycle Progression Curve -->
+        <div class="bg-surface-card border border-surface-border rounded-2xl p-6 shadow-xl space-y-4 print-card">
+          <div class="flex justify-between items-center border-b border-surface-border pb-3">
+            <div>
+              <h4 class="font-bold text-white text-base print-text-dark">4-Week Progressive Mesocycle (Periodization)</h4>
+              <p class="text-xs text-gray-400 print-text-muted">3-Week overload build followed by a 1-week restorative adaptation deload</p>
+            </div>
+            <span class="text-xs font-mono text-magenta-400">+8% Build / -25% Deload</span>
+          </div>
+
+          <div class="grid grid-cols-4 gap-3">
+            <!-- Week 1 -->
+            <div class="p-3 rounded-xl bg-black/60 border border-surface-border text-center print-card">
+              <span class="text-[10px] text-gray-400 uppercase font-semibold block mb-1">Week 1 (Base)</span>
+              <div id="meso-w1" class="text-lg font-black text-white font-mono print-text-dark">48 km</div>
+              <div class="text-[10px] text-emerald-400 mt-1">Foundation Load</div>
+            </div>
+            <!-- Week 2 -->
+            <div class="p-3 rounded-xl bg-black/60 border border-surface-border text-center print-card">
+              <span class="text-[10px] text-gray-400 uppercase font-semibold block mb-1">Week 2 (+7%)</span>
+              <div id="meso-w2" class="text-lg font-black text-white font-mono print-text-dark">52 km</div>
+              <div class="text-[10px] text-blue-400 mt-1">Overload Stimulus</div>
+            </div>
+            <!-- Week 3 -->
+            <div class="p-3 rounded-xl bg-black/60 border border-magenta-500/30 text-center print-card">
+              <span class="text-[10px] text-magenta-400 uppercase font-semibold block mb-1">Week 3 (+14%)</span>
+              <div id="meso-w3" class="text-lg font-black text-magenta-400 font-mono print-text-dark">56 km</div>
+              <div class="text-[10px] text-magenta-300 mt-1">Peak Volume</div>
+            </div>
+            <!-- Week 4 -->
+            <div class="p-3 rounded-xl bg-black/60 border border-surface-border text-center print-card">
+              <span class="text-[10px] text-gray-400 uppercase font-semibold block mb-1">Week 4 (Deload)</span>
+              <div id="meso-w4" class="text-lg font-black text-emerald-300 font-mono print-text-dark">39 km</div>
+              <div class="text-[10px] text-emerald-400 mt-1">Supercompensation</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Coach Coaching Tips & Safety Guidelines -->
+        <div class="p-5 rounded-2xl bg-gradient-to-r from-surface-card via-black to-surface-card border border-surface-border text-xs space-y-2 text-gray-400 print-card">
+          <div class="flex items-center space-x-2 text-magenta-400 font-bold">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <span class="uppercase tracking-wider">Scientific Coaching Principles</span>
+          </div>
+          <ul class="list-disc list-inside space-y-1 text-gray-300">
+            <li>Never increase overall weekly mileage by more than 10% in consecutive cycles.</li>
+            <li>Maintain at least 75-80% of all running volume in Zone 1 / conversational easy pace.</li>
+            <li>If experiencing orthopedic fatigue or tendon soreness, prioritize cross-training or drop the deload week sooner.</li>
+            <li>Re-test the Balke 15-minute run every 8 to 12 weeks to recalibrate training paces and capacity.</li>
+          </ul>
+        </div>
+
+      </section>
+
+    </div>
+
+  </main>
+
+  <!-- PDF Export Modal (Direct Download & Print options) -->
+  <div id="pdf-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm hidden">
+    <div class="bg-surface-card border border-magenta-500/40 w-full max-w-xl rounded-2xl shadow-neon-lg overflow-hidden flex flex-col max-h-[90vh]">
+      <!-- Modal Header -->
+      <div class="p-5 border-b border-surface-border flex items-center justify-between">
+        <div class="flex items-center space-x-3">
+          <div class="w-8 h-8 rounded-lg bg-magenta-500/20 text-magenta-400 flex items-center justify-center">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+            </svg>
+          </div>
+          <div>
+            <h3 class="text-base font-bold text-white">Save & Export Training Plan</h3>
+            <p class="text-xs text-gray-400">Choose direct PDF file download or browser print</p>
+          </div>
+        </div>
+        <button id="btn-close-pdf-modal" class="text-gray-400 hover:text-white text-xl p-1 leading-none">&times;</button>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="p-5 space-y-4 overflow-y-auto">
+        <div class="bg-black/60 rounded-xl p-4 border border-surface-border space-y-2 text-xs text-gray-300">
+          <div class="flex justify-between">
+            <span class="text-gray-400">Athlete:</span>
+            <span id="modal-athlete-name" class="font-bold text-white">Jane Doe</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-gray-400">Estimated VO₂ Max:</span>
+            <span id="modal-vo2" class="font-bold text-magenta-400">52.8 ml/kg/min</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-gray-400">Weekly Target Volume:</span>
+            <span id="modal-volume" class="font-bold text-white">52 km / week</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-gray-400">Status:</span>
+            <span class="text-emerald-400 font-semibold">Ready for generation</span>
+          </div>
+        </div>
+
+        <div class="space-y-3">
+          <!-- Primary Action: Direct Download PDF -->
+          <button id="btn-direct-download-pdf" class="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-magenta-600 via-magenta-500 to-pink-600 hover:from-magenta-500 hover:to-pink-500 text-white font-bold text-sm shadow-neon flex items-center justify-center space-x-2 transition duration-150">
+            <svg id="download-icon" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+            </svg>
+            <span id="download-text">Download PDF File Directly (.pdf)</span>
+          </button>
+
+          <!-- Secondary Action: Native Browser Print -->
+          <button id="btn-trigger-print" class="w-full py-2.5 px-4 rounded-xl bg-surface border border-surface-border hover:border-magenta-500/50 text-gray-300 hover:text-white font-semibold text-xs flex items-center justify-center space-x-2 transition">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+            </svg>
+            <span>Open Browser Print Dialog (Ctrl / Cmd + P)</span>
+          </button>
+
+          <!-- Direct Pop-out New Window -->
+          <button id="btn-open-print-tab" class="w-full py-2.5 px-4 rounded-xl bg-surface border border-surface-border hover:border-magenta-500/50 text-gray-400 hover:text-white font-medium text-xs flex items-center justify-center space-x-2 transition">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+            </svg>
+            <span>Open Printable Layout in New Window</span>
+          </button>
+        </div>
+
+        <p class="text-[11px] text-gray-500 text-center">
+          Direct Download creates a standalone high-resolution PDF file directly without relying on browser popup permissions.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="border-t border-surface-border bg-surface mt-12 py-6 text-center text-xs text-gray-500 no-print">
+    <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row justify-between items-center gap-3">
+      <div class="flex items-center space-x-2">
+        <span class="w-2 h-2 rounded-full bg-magenta-500"></span>
+        <span class="text-gray-400">RunIT &copy; 2026.</span>
+      </div>
+      <div class="text-gray-500">
+        Based on Dr. Bruno Balke 15-minute field aerobic protocol.
+      </div>
+    </div>
+  </footer>
+
+  <script src="/apps/run-it/js/calculations.js"></script>
+  <script src="/apps/run-it/js/app.js"></script>
+  <script src="/apps/run-it/js/report-styles.js"></script>
+  <script src="/apps/run-it/js/report.js"></script>
+</body>
+</html>

@@ -1,0 +1,53 @@
+/* Custom scrollbars */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #0d0d12;
+}
+::-webkit-scrollbar-thumb {
+  background: #2b1836;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #d946ef;
+}
+
+/* Print styles optimized for PDF output */
+@media print {
+  body {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+    font-size: 10pt;
+  }
+  .no-print, nav, #print-action-bar, .interactive-controls {
+    display: none !important;
+  }
+  .print-only {
+    display: block !important;
+  }
+  .print-page-break {
+    page-break-before: always;
+  }
+  .print-card {
+    border: 1px solid #d1d5db !important;
+    background-color: #ffffff !important;
+    color: #111827 !important;
+    box-shadow: none !important;
+  }
+  .print-text-dark {
+    color: #111827 !important;
+  }
+  .print-text-muted {
+    color: #4b5563 !important;
+  }
+  .print-badge {
+    border: 1px solid #ec4899 !important;
+    background-color: #fdf2f8 !important;
+    color: #be185d !important;
+  }
+}
+.print-only {
+  display: none;
+}
