@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hybrid Athlete Protocol | Run First, Upper Lift</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Phosphor Icons -->
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="/apps/tsara-hybrid-plan/css/style.css">
+  <script src="/apps/tsara-hybrid-plan/js/tailwind-config.js"></script>
+</head>
+<body class="selection:bg-brand-magenta selection:text-white antialiased custom-scrollbar">
+
+  <!-- Background Ambient Glow Accents -->
+  <div class="fixed inset-0 pointer-events-none overflow-hidden z-0">
+    <div class="absolute -top-40 -left-40 w-96 h-96 bg-brand-magenta/15 rounded-full blur-[130px]"></div>
+    <div class="absolute top-1/2 -right-40 w-[500px] h-[500px] bg-brand-magenta/10 rounded-full blur-[150px]"></div>
+    <div class="absolute bottom-10 left-1/3 w-80 h-80 bg-brand-magentaGlow/10 rounded-full blur-[120px]"></div>
+    <!-- Fine dot grid overlay -->
+    <div class="absolute inset-0 bg-[radial-gradient(#ff007f_1px,transparent_1px)] [background-size:32px_32px] opacity-[0.06]"></div>
+  </div>
+
+  <!-- Top Navigation Bar -->
+  <nav class="relative z-20 border-b border-brand-border bg-brand-black/90 backdrop-blur-md sticky top-0 px-4 sm:px-8 py-3.5 flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <div class="w-9 h-9 rounded-lg bg-brand-card border border-brand-magenta/60 flex items-center justify-center text-brand-magenta shadow-neon">
+        <i class="ph-bold ph-barbell text-xl"></i>
+      </div>
+      <div>
+        <span class="font-heading font-bold text-lg tracking-wider text-white">HYBRID<span class="text-brand-magenta text-glow">PROTOCOL</span></span>
+        <span class="hidden sm:inline-block ml-2 text-xs uppercase tracking-widest px-2 py-0.5 rounded-full bg-brand-magenta/10 border border-brand-magenta/30 text-brand-magentaLight">7-Day Matrix</span>
+      </div>
+    </div>
+
+    <!-- Quick Actions / Tracker Status -->
+    <div class="flex items-center gap-3">
+      <div id="completionBadge" class="text-xs font-mono px-3 py-1.5 rounded-lg bg-brand-surface border border-brand-border text-gray-300 flex items-center gap-2">
+        <span class="w-2 h-2 rounded-full bg-brand-magenta animate-pulse"></span>
+        <span>Completed: <span id="completedCount" class="text-brand-magenta font-bold">0</span>/7 Days</span>
+      </div>
+      <button onclick="resetProgress()" title="Reset Tracker" class="p-2 text-xs rounded-lg bg-brand-surface border border-brand-border hover:border-brand-magenta text-gray-400 hover:text-white transition-colors">
+        <i class="ph ph-arrow-counter-clockwise text-base"></i>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <header class="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 pt-12 pb-10 text-center">
+    <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-brand-magenta/10 border border-brand-magenta/40 text-brand-magenta text-xs font-medium tracking-wide mb-6">
+      <i class="ph-fill ph-lightning text-sm"></i>
+      <span>Optimal Aerobic & Strength Synergy</span>
+    </div>
+
+    <h1 class="font-heading text-4xl sm:text-6xl font-extrabold tracking-tight text-white uppercase leading-tight mb-5">
+      The <span class="text-brand-magenta text-glow">Run-First</span> Hybrid Blueprint
+    </h1>
+
+    <p class="max-w-3xl mx-auto text-base sm:text-lg text-gray-300 font-light leading-relaxed mb-8">
+      Running prior to upper body work keeps your legs entirely fresh for quality aerobic volume, while leaving your pressing and pulling capacity largely intact (since upper musculature isn't involved in running mechanics).
+    </p>
+
+    <!-- Quick Meta Metrics -->
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 max-w-3xl mx-auto">
+      <div class="p-3.5 rounded-xl bg-brand-card/90 border border-brand-border hover:border-brand-magenta/40 transition">
+        <div class="text-xs font-mono text-gray-400 uppercase">Weekly Cadence</div>
+        <div class="text-base font-heading font-bold text-white mt-1">7 Full Days</div>
+      </div>
+      <div class="p-3.5 rounded-xl bg-brand-card/90 border border-brand-border hover:border-brand-magenta/40 transition">
+        <div class="text-xs font-mono text-gray-400 uppercase">Run-First Sessions</div>
+        <div class="text-base font-heading font-bold text-brand-magenta mt-1">Tue & Thu</div>
+      </div>
+      <div class="p-3.5 rounded-xl bg-brand-card/90 border border-brand-border hover:border-brand-magenta/40 transition">
+        <div class="text-xs font-mono text-gray-400 uppercase">Lower Heavy Lifts</div>
+        <div class="text-base font-heading font-bold text-white mt-1">Mon & Wed</div>
+      </div>
+      <div class="p-3.5 rounded-xl bg-brand-card/90 border border-brand-border hover:border-brand-magenta/40 transition">
+        <div class="text-xs font-mono text-gray-400 uppercase">Endurance Anchor</div>
+        <div class="text-base font-heading font-bold text-brand-magenta mt-1">Friday Long Run</div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Section 1: Weekly Overview Logic -->
+  <section class="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 py-8">
+    <div class="flex items-center gap-3 mb-6">
+      <div class="h-6 w-1.5 bg-brand-magenta rounded-full shadow-neon"></div>
+      <h2 class="font-heading text-2xl font-bold tracking-wide uppercase text-white">
+        Weekly Overview: The Logic
+      </h2>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+      <!-- Logic 1 -->
+      <div class="group relative rounded-2xl bg-brand-card border border-brand-border p-6 hover:border-brand-magenta transition-all duration-300 hover:shadow-neon flex flex-col justify-between">
+        <div class="absolute top-0 right-0 w-24 h-24 bg-brand-magenta/5 rounded-bl-full pointer-events-none group-hover:bg-brand-magenta/10 transition"></div>
+        <div>
+          <div class="w-10 h-10 rounded-xl bg-brand-surface border border-brand-border group-hover:border-brand-magenta flex items-center justify-center text-brand-magenta mb-4 transition">
+            <i class="ph-bold ph-sneaker-move text-xl"></i>
+          </div>
+          <span class="text-xs font-mono uppercase tracking-wider text-brand-magenta font-semibold">Tuesdays & Thursdays</span>
+          <h3 class="font-heading text-xl font-bold text-white mt-1 mb-2">Run-First Architecture</h3>
+          <p class="text-gray-300 text-sm leading-relaxed">
+            Scheduled on Tuesday and Thursday, immediately followed by upper-body strength. Running first keeps legs primed without draining upper pressing and pulling strength.
+          </p>
+        </div>
+        <div class="mt-4 pt-3 border-t border-brand-border/60 flex items-center text-xs text-brand-magentaLight font-medium">
+          <i class="ph ph-check-circle mr-1.5"></i> Zero interference on upper power
+        </div>
+      </div>
+
+      <!-- Logic 2 -->
+      <div class="group relative rounded-2xl bg-brand-card border border-brand-border p-6 hover:border-brand-magenta transition-all duration-300 hover:shadow-neon flex flex-col justify-between">
+        <div class="absolute top-0 right-0 w-24 h-24 bg-brand-magenta/5 rounded-bl-full pointer-events-none group-hover:bg-brand-magenta/10 transition"></div>
+        <div>
+          <div class="w-10 h-10 rounded-xl bg-brand-surface border border-brand-border group-hover:border-brand-magenta flex items-center justify-center text-brand-magenta mb-4 transition">
+            <i class="ph-bold ph-barbell text-xl"></i>
+          </div>
+          <span class="text-xs font-mono uppercase tracking-wider text-brand-magenta font-semibold">Mondays & Wednesdays</span>
+          <h3 class="font-heading text-xl font-bold text-white mt-1 mb-2">Lower Power Realignment</h3>
+          <p class="text-gray-300 text-sm leading-relaxed">
+            Heavy squats on Monday and deadlifts moved to Wednesday. Deadlifting fresh mid-week shields your posterior chain and eliminates pre-weekend fatigue.
+          </p>
+        </div>
+        <div class="mt-4 pt-3 border-t border-brand-border/60 flex items-center text-xs text-brand-magentaLight font-medium">
+          <i class="ph ph-shield-check mr-1.5"></i> Mid-week spine protection
+        </div>
+      </div>
+
+      <!-- Logic 3 -->
+      <div class="group relative rounded-2xl bg-brand-card border border-brand-border p-6 hover:border-brand-magenta transition-all duration-300 hover:shadow-neon flex flex-col justify-between">
+        <div class="absolute top-0 right-0 w-24 h-24 bg-brand-magenta/5 rounded-bl-full pointer-events-none group-hover:bg-brand-magenta/10 transition"></div>
+        <div>
+          <div class="w-10 h-10 rounded-xl bg-brand-surface border border-brand-border group-hover:border-brand-magenta flex items-center justify-center text-brand-magenta mb-4 transition">
+            <i class="ph-bold ph-heartbeat text-xl"></i>
+          </div>
+          <span class="text-xs font-mono uppercase tracking-wider text-brand-magenta font-semibold">Fridays</span>
+          <h3 class="font-heading text-xl font-bold text-white mt-1 mb-2">Friday Long Run Freedom</h3>
+          <p class="text-gray-300 text-sm leading-relaxed">
+            Legs are completely free to tackle endurance volume without dreading heavy deadlifts the next morning, followed by weekend active recovery and total rest.
+          </p>
+        </div>
+        <div class="mt-4 pt-3 border-t border-brand-border/60 flex items-center text-xs text-brand-magentaLight font-medium">
+          <i class="ph ph-clock-counter-clockwise mr-1.5"></i> Clean weekend recovery ramp
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 2: Full 7-Day Training Schedule -->
+  <section class="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 py-10">
+    <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
+      <div>
+        <div class="flex items-center gap-3 mb-2">
+          <div class="h-6 w-1.5 bg-brand-magenta rounded-full shadow-neon"></div>
+          <h2 class="font-heading text-2xl sm:text-3xl font-bold tracking-wide uppercase text-white">
+            Full 7-Day Training Schedule
+          </h2>
+        </div>
+        <p class="text-sm text-gray-400">Click a card to mark the workout complete for your weekly cycle.</p>
+      </div>
+
+      <!-- Filter Buttons -->
+      <div class="flex flex-wrap items-center gap-2">
+        <button onclick="filterDays('all')" id="filter-all" class="filter-btn text-xs font-medium px-3.5 py-1.5 rounded-lg bg-brand-magenta text-white transition">All 7 Days</button>
+        <button onclick="filterDays('lift')" id="filter-lift" class="filter-btn text-xs font-medium px-3.5 py-1.5 rounded-lg bg-brand-card border border-brand-border text-gray-300 hover:border-brand-magenta transition">Heavy Lifting</button>
+        <button onclick="filterDays('hybrid')" id="filter-hybrid" class="filter-btn text-xs font-medium px-3.5 py-1.5 rounded-lg bg-brand-card border border-brand-border text-gray-300 hover:border-brand-magenta transition">Run + Lift</button>
+        <button onclick="filterDays('recovery')" id="filter-recovery" class="filter-btn text-xs font-medium px-3.5 py-1.5 rounded-lg bg-brand-card border border-brand-border text-gray-300 hover:border-brand-magenta transition">Rest & Base</button>
+      </div>
+    </div>
+
+    <!-- 7-Day Cards Container -->
+    <div id="scheduleGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+      <!-- MONDAY -->
+      <article data-category="lift" id="day-mon" class="day-card group relative bg-brand-card rounded-2xl border border-brand-border hover:border-brand-magenta/80 transition-all duration-300 flex flex-col justify-between overflow-hidden">
+        <div class="p-6">
+          <div class="flex items-start justify-between mb-4">
+            <div>
+              <span class="font-mono text-xs font-bold uppercase tracking-widest text-brand-magenta">Day 01</span>
+              <h3 class="font-heading text-2xl font-bold text-white mt-0.5">Monday</h3>
+            </div>
+            <span class="px-2.5 py-1 rounded-md text-[11px] font-semibold tracking-wider uppercase bg-brand-surface border border-brand-magenta/40 text-brand-magentaLight">
+              Lower Power
+            </span>
+          </div>
+
+          <div class="p-3 rounded-xl bg-brand-surface/70 border border-brand-border mb-3">
+            <span class="text-xs font-mono text-gray-400 block mb-1">Target Focus</span>
+            <span class="text-sm font-semibold text-white">Heavy Squat + Lower Power</span>
+          </div>
+
+          <div class="p-2.5 rounded-lg bg-brand-black/50 border border-brand-border/60 mb-4 text-xs text-gray-400">
+            <span class="text-brand-magenta font-semibold font-mono uppercase">Strategic Adjustment:</span> Unchanged. Maximally fresh after Sunday rest.
+          </div>
+
+          <div class="space-y-3.5 text-sm">
+            <div class="flex items-start gap-2.5">
+              <span class="w-1.5 h-1.5 rounded-full bg-brand-magenta mt-2 flex-shrink-0"></span>
+              <div>
+                <strong class="text-white block font-medium">Primary:</strong>
+                <span class="text-gray-300">Back Squat (3–4 sets × 3–5 reps, RPE 8)</span>
+              </div>
+            </div>
+
+            <div class="flex items-start gap-2.5">
+              <span class="w-1.5 h-1.5 rounded-full bg-brand-magenta mt-2 flex-shrink-0"></span>
+              <div>
+                <strong class="text-white block font-medium">Secondary Quad:</strong>
+                <span class="text-gray-300">Bulgarian Split Squats or Front Squats (3 × 6–8 reps)</span>
+              </div>
+            </div>
+
+            <div class="flex items-start gap-2.5">
+              <span class="w-1.5 h-1.5 rounded-full bg-brand-magenta mt-2 flex-shrink-0"></span>
+              <div>
+                <strong class="text-white block font-medium">Accessories:</strong>
+                <span class="text-gray-300">Hamstring Curls, Calf Raises, Core Bracing</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="px-6 py-4 bg-brand-surface/90 border-t border-brand-border flex items-center justify-between">
+          <div class="text-xs text-brand-magentaLight font-mono flex items-center gap-1.5">
+            <i class="ph-bold ph-prohibit"></i>
+            <span>No running • Prioritize raw force</span>
+          </div>
+          <button onclick="toggleDay('mon')" class="check-toggle px-3 py-1 text-xs rounded-lg border border-brand-border hover:border-brand-magenta text-gray-300 transition flex items-center gap-1.5">
+            <i class="ph ph-circle text-sm icon-state"></i>
+            <span class="btn-text">Done</span>
+          </button>
+        </div>
+      </article>
+
+      <!-- TUESDAY -->
+      <article data-category="hybrid" id="day-tue" class="day-card group relative bg-brand-card rounded-2xl border border-brand-magenta/40 hover:border-brand-magenta transition-all duration-300 flex flex-col justify-between overflow-hidden shadow-inner-glow">
+        <div class="p-6">
+          <div class="flex items-start justify-between mb-4">
+            <div>
+              <span class="font-mono text-xs font-bold uppercase tracking-widest text-brand-magenta">Day 02</span>
+              <h3 class="font-heading text-2xl font-bold text-white mt-0.5">Tuesday</h3>
+            </div>
+            <span class="px-2.5 py-1 rounded-md text-[11px] font-semibold tracking-wider uppercase bg-brand-magenta/20 border border-brand-magenta text-brand-magentaLight">
+              Run + Push
+            </span>
+          </div>
+
+          <div class="p-3 rounded-xl bg-brand-surface/70 border border-brand-border mb-3">
+            <span class="text-xs font-mono text-gray-400 block mb-1">Target Focus</span>
+            <span class="text-sm font-semibold text-white">Run First → Upper Push Focus</span>
+          </div>
+
+          <div class="p-2.5 rounded-lg bg-brand-black/50 border border-brand-border/60 mb-4 text-xs text-gray-400">
+            <span class="text-brand-magenta font-semibold font-mono uppercase">Strategic Adjustment:</span> 40 min strictly Zone 2. Keep it easy to prep for Wednesday.
+          </div>
+
+          <div class="space-y-3.5 text-sm">
+            <div class="p-2.5 rounded-lg bg-brand-surface border border-brand-border/60">
+              <span class="text-xs font-mono text-brand-magenta font-semibold uppercase block mb-1">Part 1 (Run)</span>
+              <span class="text-gray-200">40–50 min Zone 2 Easy Run <span class="text-gray-400 text-xs block">(Aerobic base builder)</span></span>
+            </div>
+
+            <div class="p-2 rounded-lg bg-brand-black/60 border border-dashed border-brand-border/80 text-xs text-gray-300 flex items-center gap-2">
+              <i class="ph-bold ph-timer text-brand-magenta"></i>
+              <span>5–10 min transition (hydrate, light snack like a banana)</span>
+            </div>
+
+            <div class="p-2.5 rounded-lg bg-brand-surface border border-brand-border/60">
+              <span class="text-xs font-mono text-brand-magenta font-semibold uppercase block mb-1">Part 2 (Lift)</span>
+              <span class="text-gray-200 leading-snug">Flat Barbell Bench Press (4 × 5 reps) + Incline DB Press (3 × 8–10 reps) + Overhead DB Press (3 × 8 reps) + Triceps/Lateral Raises</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="px-6 py-4 bg-brand-surface/90 border-t border-brand-border flex items-center justify-between">
+          <div class="text-xs text-brand-magenta font-mono flex items-center gap-1.5">
+            <i class="ph-bold ph-lightning"></i>
+            <span>Run First Session</span>
+          </div>
+          <button onclick="toggleDay('tue')" class="check-toggle px-3 py-1 text-xs rounded-lg border border-brand-border hover:border-brand-magenta text-gray-300 transition flex items-center gap-1.5">
+            <i class="ph ph-circle text-sm icon-state"></i>
+            <span class="btn-text">Done</span>
+          </button>
+        </div>
+      </article>
+
+      <!-- WEDNESDAY -->
+      <article data-category="lift" id="day-wed" class="day-card group relative bg-brand-card rounded-2xl border border-brand-border hover:border-brand-magenta/80 transition-all duration-300 flex flex-col justify-between overflow-hidden">
+        <div class="p-6">
+          <div class="flex items-start justify-between mb-4">
+            <div>
+              <span class="font-mono text-xs font-bold uppercase tracking-widest text-brand-magenta">Day 03</span>
+              <h3 class="font-heading text-2xl font-bold text-white mt-0.5">Wednesday</h3>
+            </div>
+            <span class="px-2.5 py-1 rounded-md text-[11px] font-semibold tracking-wider uppercase bg-brand-surface border border-brand-magenta/40 text-brand-magentaLight">
+              Posterior
+            </span>
+          </div>
+
+          <div class="p-3 rounded-xl bg-brand-surface/70 border border-brand-border mb-3">
+            <span class="text-xs font-mono text-gray-400 block mb-1">Target Focus</span>
+            <span class="text-sm font-semibold text-white">Heavy Deadlift (Moved here)</span>
+          </div>
+
+          <div class="p-2.5 rounded-lg bg-brand-black/50 border border-brand-border/60 mb-4 text-xs text-gray-400">
+            <span class="text-brand-magenta font-semibold font-mono uppercase">Strategic Adjustment:</span> Move Deadlifts to Wednesday. Deadlifting fresh mid-week protects your lower back.
+          </div>
+
+          <div class="space-y-3.5 text-sm">
+            <div class="flex items-start gap-2.5">
+              <span class="w-1.5 h-1.5 rounded-full bg-brand-magenta mt-2 flex-shrink-0"></span>
+              <div>
+                <strong class="text-white block font-medium">Primary:</strong>
+                <span class="text-gray-300">Conventional / Sumo Deadlift (3–4 sets × 3–5 reps, RPE 8)</span>
+              </div>
+            </div>
+
+            <div class="flex items-start gap-2.5">
+              <span class="w-1.5 h-1.5 rounded-full bg-brand-magenta mt-2 flex-shrink-0"></span>
+              <div>
+                <strong class="text-white block font-medium">Secondary:</strong>
+                <span class="text-gray-300">Romanian Deadlifts (RDLs) or Hip Thrusts (3 × 6–8 reps)</span>
+              </div>
+            </div>
+
+            <div class="flex items-start gap-2.5">
+              <span class="w-1.5 h-1.5 rounded-full bg-brand-magenta mt-2 flex-shrink-0"></span>
+              <div>
+                <strong class="text-white block font-medium">Accessories:</strong>
+                <span class="text-gray-300">Walking Lunges, Hanging Leg Raises</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="px-6 py-4 bg-brand-surface/90 border-t border-brand-border flex items-center justify-between">
+          <div class="text-xs text-brand-magentaLight font-mono flex items-center gap-1.5">
+            <i class="ph-bold ph-prohibit"></i>
+            <span>No running • Legs & back take full load</span>
+          </div>
+          <button onclick="toggleDay('wed')" class="check-toggle px-3 py-1 text-xs rounded-lg border border-brand-border hover:border-brand-magenta text-gray-300 transition flex items-center gap-1.5">
+            <i class="ph ph-circle text-sm icon-state"></i>
+            <span class="btn-text">Done</span>
+          </button>
+        </div>
+      </article>
+
+      <!-- THURSDAY -->
+      <article data-category="hybrid" id="day-thu" class="day-card group relative bg-brand-card rounded-2xl border border-brand-magenta/40 hover:border-brand-magenta transition-all duration-300 flex flex-col justify-between overflow-hidden shadow-inner-glow">
+        <div class="p-6">
+          <div class="flex items-start justify-between mb-4">
+            <div>
+              <span class="font-mono text-xs font-bold uppercase tracking-widest text-brand-magenta">Day 04</span>
+              <h3 class="font-heading text-2xl font-bold text-white mt-0.5">Thursday</h3>
+            </div>
+            <span class="px-2.5 py-1 rounded-md text-[11px] font-semibold tracking-wider uppercase bg-brand-magenta/20 border border-brand-magenta text-brand-magentaLight">
+              Run + Pull
+            </span>
+          </div>
+
+          <div class="p-3 rounded-xl bg-brand-surface/70 border border-brand-border mb-3">
+            <span class="text-xs font-mono text-gray-400 block mb-1">Target Focus</span>
+            <span class="text-sm font-semibold text-white">Run First → Upper Pull Focus</span>
+          </div>
+
+          <div class="p-2.5 rounded-lg bg-brand-black/50 border border-brand-border/60 mb-4 text-xs text-gray-400">
+            <span class="text-brand-magenta font-semibold font-mono uppercase">Strategic Adjustment:</span> 40 min strictly Zone 2 + Upper Pull volume.
+          </div>
+
+          <div class="space-y-3.5 text-sm">
+            <div class="p-2.5 rounded-lg bg-brand-surface border border-brand-border/60">
+              <span class="text-xs font-mono text-brand-magenta font-semibold uppercase block mb-1">Part 1 (Run)</span>
+              <span class="text-gray-200">40–45 min Zone 2 Easy Run <span class="text-gray-400 text-xs block">(or easy conversational intervals)</span></span>
+            </div>
+
+            <div class="p-2 rounded-lg bg-brand-black/60 border border-dashed border-brand-border/80 text-xs text-gray-300 flex items-center gap-2">
+              <i class="ph-bold ph-timer text-brand-magenta"></i>
+              <span>5–10 min transition</span>
+            </div>
+
+            <div class="p-2.5 rounded-lg bg-brand-surface border border-brand-border/60">
+              <span class="text-xs font-mono text-brand-magenta font-semibold uppercase block mb-1">Part 2 (Lift)</span>
+              <span class="text-gray-200 leading-snug">Weighted Pull-Ups / Lat Pulldowns (4 × 5–8 reps) + Barbell or Chest-Supported Rows (4 × 8 reps) + Rear Delt Flyes + Biceps</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="px-6 py-4 bg-brand-surface/90 border-t border-brand-border flex items-center justify-between">
+          <div class="text-xs text-brand-magenta font-mono flex items-center gap-1.5">
+            <i class="ph-bold ph-lightning"></i>
+            <span>Run First Session</span>
+          </div>
+          <button onclick="toggleDay('thu')" class="check-toggle px-3 py-1 text-xs rounded-lg border border-brand-border hover:border-brand-magenta text-gray-300 transition flex items-center gap-1.5">
+            <i class="ph ph-circle text-sm icon-state"></i>
+            <span class="btn-text">Done</span>
+          </button>
+        </div>
+      </article>
+
+      <!-- FRIDAY -->
+      <article data-category="recovery" id="day-fri" class="day-card group relative bg-brand-card rounded-2xl border border-brand-magenta/40 hover:border-brand-magenta transition-all duration-300 flex flex-col justify-between overflow-hidden shadow-inner-glow">
+        <div class="p-6">
+          <div class="flex items-start justify-between mb-4">
+            <div>
+              <span class="font-mono text-xs font-bold uppercase tracking-widest text-brand-magenta">Day 05</span>
+              <h3 class="font-heading text-2xl font-bold text-white mt-0.5">Friday</h3>
+            </div>
+            <span class="px-2.5 py-1 rounded-md text-[11px] font-semibold tracking-wider uppercase bg-brand-magenta/15 border border-brand-magenta/40 text-brand-magentaLight">
+              Endurance
+            </span>
+          </div>
+
+          <div class="p-3 rounded-xl bg-brand-surface/70 border border-brand-border mb-3">
+            <span class="text-xs font-mono text-gray-400 block mb-1">Target Focus</span>
+            <span class="text-sm font-semibold text-white">Long Run (Z2 with Z3 block)</span>
+          </div>
+
+          <div class="p-2.5 rounded-lg bg-brand-black/50 border border-brand-border/60 mb-4 text-xs text-gray-400">
+            <span class="text-brand-magenta font-semibold font-mono uppercase">Strategic Adjustment:</span> Now your legs are free to run without dreading heavy deadlifts the next morning.
+          </div>
+
+          <div class="space-y-4 text-sm">
+            <div class="p-3 rounded-lg bg-brand-surface border border-brand-border">
+              <span class="text-xs font-mono text-brand-magenta block mb-1 font-semibold">Volume Goal</span>
+              <p class="text-white font-medium">60–80 min Zone 2 with Z3 tempo block (LSD)</p>
+            </div>
+            <div class="text-xs text-gray-300 leading-relaxed">
+              <i class="ph-bold ph-heart text-brand-magenta mr-1"></i>
+              Pure low-intensity cardiovascular volume. Keep heart rate strictly in base zone.
+            </div>
+          </div>
+        </div>
+
+        <div class="px-6 py-4 bg-brand-surface/90 border-t border-brand-border flex items-center justify-between">
+          <div class="text-xs text-brand-magentaLight font-mono flex items-center gap-1.5">
+            <i class="ph-bold ph-path"></i>
+            <span>Pure Base Aerobic</span>
+          </div>
+          <button onclick="toggleDay('fri')" class="check-toggle px-3 py-1 text-xs rounded-lg border border-brand-border hover:border-brand-magenta text-gray-300 transition flex items-center gap-1.5">
+            <i class="ph ph-circle text-sm icon-state"></i>
+            <span class="btn-text">Done</span>
+          </button>
+        </div>
+      </article>
+
+      <!-- SATURDAY -->
+      <article data-category="recovery" id="day-sat" class="day-card group relative bg-brand-card rounded-2xl border border-brand-border hover:border-brand-magenta/80 transition-all duration-300 flex flex-col justify-between overflow-hidden">
+        <div class="p-6">
+          <div class="flex items-start justify-between mb-4">
+            <div>
+              <span class="font-mono text-xs font-bold uppercase tracking-widest text-brand-magenta">Day 06</span>
+              <h3 class="font-heading text-2xl font-bold text-white mt-0.5">Saturday</h3>
+            </div>
+            <span class="px-2.5 py-1 rounded-md text-[11px] font-semibold tracking-wider uppercase bg-brand-surface border border-gray-700 text-gray-300">
+              Recovery
+            </span>
+          </div>
+
+          <div class="p-3 rounded-xl bg-brand-surface/70 border border-brand-border mb-3">
+            <span class="text-xs font-mono text-gray-400 block mb-1">Target Focus</span>
+            <span class="text-sm font-semibold text-white">Active Recovery / Rest or Lighter Accessories</span>
+          </div>
+
+          <div class="p-2.5 rounded-lg bg-brand-black/50 border border-brand-border/60 mb-4 text-xs text-gray-400">
+            <span class="text-brand-magenta font-semibold font-mono uppercase">Strategic Adjustment:</span> 30–45 min easy mobility, walk, or light upper-body arm/core pump.
+          </div>
+
+          <div class="space-y-4 text-sm">
+            <div class="flex items-start gap-2.5">
+              <span class="w-1.5 h-1.5 rounded-full bg-brand-magenta mt-2 flex-shrink-0"></span>
+              <p class="text-gray-200">
+                30–45 min light walk, mobility routine, or light pump work.
+              </p>
+            </div>
+            <div class="p-3 rounded-lg bg-brand-surface/60 border border-brand-border/60 text-xs text-gray-400 leading-relaxed">
+              <i class="ph ph-sparkle text-brand-magenta mr-1"></i>
+              Keeps nervous system fresh before the second training block.
+            </div>
+          </div>
+        </div>
+
+        <div class="px-6 py-4 bg-brand-surface/90 border-t border-brand-border flex items-center justify-between">
+          <div class="text-xs text-gray-400 font-mono flex items-center gap-1.5">
+            <i class="ph-bold ph-bed"></i>
+            <span>Active Rest / Mobility</span>
+          </div>
+          <button onclick="toggleDay('sat')" class="check-toggle px-3 py-1 text-xs rounded-lg border border-brand-border hover:border-brand-magenta text-gray-300 transition flex items-center gap-1.5">
+            <i class="ph ph-circle text-sm icon-state"></i>
+            <span class="btn-text">Done</span>
+          </button>
+        </div>
+      </article>
+
+      <!-- SUNDAY -->
+      <article data-category="recovery" id="day-sun" class="day-card group relative bg-brand-card rounded-2xl border border-brand-border hover:border-brand-magenta/80 transition-all duration-300 flex flex-col justify-between overflow-hidden md:col-span-2 lg:col-span-3">
+        <div class="p-6">
+          <div class="flex items-start justify-between mb-4">
+            <div>
+              <span class="font-mono text-xs font-bold uppercase tracking-widest text-brand-magenta">Day 07</span>
+              <h3 class="font-heading text-2xl font-bold text-white mt-0.5">Sunday</h3>
+            </div>
+            <span class="px-2.5 py-1 rounded-md text-[11px] font-semibold tracking-wider uppercase bg-brand-surface border border-gray-700 text-gray-300">
+              Complete Rest
+            </span>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="p-4 rounded-xl bg-brand-surface border border-brand-border">
+              <span class="text-xs font-mono text-gray-400 block mb-1">Target Focus</span>
+              <span class="text-base font-semibold text-white">Full Rest</span>
+              <p class="text-sm text-gray-300 mt-2">Zero structured lifting or running.</p>
+            </div>
+            <div class="p-4 rounded-xl bg-brand-surface border border-brand-border flex flex-col justify-center">
+              <span class="text-xs font-mono text-brand-magenta block mb-1">Strategic Adjustment & Recovery</span>
+              <p class="text-sm text-gray-300">
+                Recharges quads and nervous system for Monday squats. Eat at maintenance, prioritize hydration and sleep.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="px-6 py-4 bg-brand-surface/90 border-t border-brand-border flex items-center justify-between">
+          <div class="text-xs text-gray-400 font-mono flex items-center gap-1.5">
+            <i class="ph-bold ph-moon-stars"></i>
+            <span>System Reset Protocol</span>
+          </div>
+          <button onclick="toggleDay('sun')" class="check-toggle px-3 py-1 text-xs rounded-lg border border-brand-border hover:border-brand-magenta text-gray-300 transition flex items-center gap-1.5">
+            <i class="ph ph-circle text-sm icon-state"></i>
+            <span class="btn-text">Done</span>
+          </button>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- Section 3: Key Execution Rules -->
+  <section class="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 py-12">
+    <div class="flex items-center gap-3 mb-8">
+      <div class="h-6 w-1.5 bg-brand-magenta rounded-full shadow-neon"></div>
+      <h2 class="font-heading text-2xl sm:text-3xl font-bold tracking-wide uppercase text-white">
+        Key Execution Rules for <span class="text-brand-magenta text-glow">"Run First, Then Upper"</span>
+      </h2>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+      <!-- Rule 1 -->
+      <div class="relative bg-brand-card rounded-2xl border border-brand-border p-6 hover:border-brand-magenta/80 transition-all duration-300 flex flex-col justify-between">
+        <div class="mb-4">
+          <div class="flex items-center justify-between mb-4">
+            <span class="w-8 h-8 rounded-lg bg-brand-magenta/20 border border-brand-magenta/50 text-brand-magenta flex items-center justify-center font-heading font-bold text-sm">
+              01
+            </span>
+            <i class="ph-bold ph-shield-warning text-xl text-brand-magentaLight"></i>
+          </div>
+          <h3 class="font-heading text-lg font-bold text-white mb-3">
+            Keep Upper-Body Form Strict After the Run
+          </h3>
+          <p class="text-sm text-gray-300 leading-relaxed">
+            Running elevates core body temperature and taxes your cardiovascular system. When setting up for your heavy bench presses or overhead presses, take an extra minute of rest before your first working set so your breathing is fully settled.
+          </p>
+        </div>
+        <div class="mt-4 pt-3 border-t border-brand-border text-xs text-gray-400 font-mono">
+          <span class="text-brand-magenta">Tip:</span> Heart rate below 110 BPM before Set 1
+        </div>
+      </div>
+
+      <!-- Rule 2 -->
+      <div class="relative bg-brand-card rounded-2xl border border-brand-border p-6 hover:border-brand-magenta/80 transition-all duration-300 flex flex-col justify-between">
+        <div class="mb-4">
+          <div class="flex items-center justify-between mb-4">
+            <span class="w-8 h-8 rounded-lg bg-brand-magenta/20 border border-brand-magenta/50 text-brand-magenta flex items-center justify-center font-heading font-bold text-sm">
+              02
+            </span>
+            <i class="ph-bold ph-drop text-xl text-brand-magentaLight"></i>
+          </div>
+          <h3 class="font-heading text-lg font-bold text-white mb-3">
+            Transition Fueling Protocol
+          </h3>
+          <p class="text-sm text-gray-300 leading-relaxed">
+            Have 20–30 grams of fast-digesting carbohydrates (such as an energy chew, dates, or a sports drink) between the run and the upper-body lift to restock circulating blood glucose.
+          </p>
+        </div>
+        <div class="mt-4 pt-3 border-t border-brand-border text-xs text-gray-400 font-mono">
+          <span class="text-brand-magenta">Fuel:</span> 20–30g Rapid-Carbs + Electrolytes
+        </div>
+      </div>
+
+      <!-- Rule 3 -->
+      <div class="relative bg-brand-card rounded-2xl border border-brand-border p-6 hover:border-brand-magenta/80 transition-all duration-300 flex flex-col justify-between">
+        <div class="mb-4">
+          <div class="flex items-center justify-between mb-4">
+            <span class="w-8 h-8 rounded-lg bg-brand-magenta/20 border border-brand-magenta/50 text-brand-magenta flex items-center justify-center font-heading font-bold text-sm">
+              03
+            </span>
+            <i class="ph-bold ph-person-simple text-xl text-brand-magentaLight"></i>
+          </div>
+          <h3 class="font-heading text-lg font-bold text-white mb-3">
+            Protect Lower Back on Upper Pull Days
+          </h3>
+          <p class="text-sm text-gray-300 leading-relaxed">
+            Because your core and spinal stabilizers work to keep your posture upright during the run, opt for chest-supported rows rather than unsupported bent-over barbell rows on Thursday if your lower back feels tired.
+          </p>
+        </div>
+        <div class="mt-4 pt-3 border-t border-brand-border text-xs text-gray-400 font-mono">
+          <span class="text-brand-magenta">Adjustment:</span> Chest-Supported Row alternative
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="relative z-10 border-t border-brand-border bg-brand-surface/90 py-8 px-4 text-center">
+    <div class="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-gray-500 font-mono">
+      <div class="flex items-center gap-2">
+        <span class="w-2 h-2 rounded-full bg-brand-magenta"></span>
+        <span class="text-gray-300 font-medium">RUN FIRST // UPPER LIFT PROTOCOL</span>
+      </div>
+      <div>Designed for hybrid athletic performance & structural longevity</div>
+      <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="text-brand-magenta hover:underline flex items-center gap-1">
+        Back to top <i class="ph ph-arrow-up"></i>
+      </button>
+    </div>
+  </footer>
+
+  <!-- Interactive JavaScript Logic -->
+  <script src="/apps/tsara-hybrid-plan/js/main.js"></script>
+</body>
+</html>

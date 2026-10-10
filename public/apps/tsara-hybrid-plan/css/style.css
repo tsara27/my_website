@@ -1,0 +1,23 @@
+body {
+  background-color: #070709;
+  color: #f1f5f9;
+  font-family: 'Inter', sans-serif;
+  overflow-x: hidden;
+}
+.text-glow {
+  text-shadow: 0 0 12px rgba(255, 0, 127, 0.65);
+}
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #0d0d12;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #3d1430;
+  border-radius: 9999px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #ff007f;
+}
